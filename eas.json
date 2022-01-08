@@ -1,0 +1,21 @@
+{
+  "cli": {
+    "version": ">= 0.43.0"
+  },
+  "build": {
+    "preview": {
+      "extends": "production",
+      "distribution": "internal"
+    },
+    "production": {
+      "env": {
+        "GOOGLE_SERVICES_FILE": "true",
+        "API_URL": "http://api.notif.jdjfisher.dev:8000",
+        "SENTRY_DSN": "https://01228cab7d274e2f899ae2ddedcfaf01@o1070882.ingest.sentry.io/6067288"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

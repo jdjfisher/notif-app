@@ -1,0 +1,91 @@
+import create from 'zustand';
+import { persist } from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CliDevice, Ping } from './types';
+import { ColorSchemeName } from 'react-native';
+
+interface State {
+  serverStatus: 'connected' | 'disconnected' | 'maintenance';
+
+  confirmNewDevices: boolean;
+  toggleConfirmNewDevices: () => void;
+
+  mobileDeviceName: string;
+  setMobileDeviceName: (name: string) => void;
+
+  silentMode: boolean;
+  toggleSilentMode: () => void;
+
+  deviceTheme: ColorSchemeName; 
+  setDeviceTheme: (theme: ColorSchemeName) => void;
+
+  devices: CliDevice[],
+  addDevice: (device: CliDevice) => void,
+  removeDevice: (device: CliDevice) => void,
+  recordBrokenLink: (device: CliDevice) => void,
+  clearDevices: () => void,
+
+  pings: {[deviceToken: string]: Ping[]},
+  recordPing: (deviceToken: string, ping: Ping) => void,
+  clearPings: (deviceToken: string) => void,
+  clearAllPings: () => void,
+}
+
+// TODO: Store slices ;) 
+
+const useStore = create<State>(
+  persist(
+    (set, get) => ({
+      serverStatus: 'connected', // Assume we're connected to start with
+
+      confirmNewDevices: false,
+      toggleConfirmNewDevices: () => set((state) => ({ confirmNewDevices: !state.confirmNewDevices })),
+
+      mobileDeviceName: '',
+      setMobileDeviceName: (name) => set({ mobileDeviceName: name }),
+
+      silentMode: false,
+      toggleSilentMode: () => set((state) => ({ silentMode: !state.silentMode })),
+
+      deviceTheme: 'light', // TODO: Change back to null
+      setDeviceTheme: (deviceTheme) => set({ deviceTheme }),
+
+      devices: [],
+      addDevice: (device) => set((state) => ({ devices: state.devices.concat(device) })),
+      removeDevice: (device) => {
+        set((state) => ({ devices: state.devices.filter(d => d.token !== device.token) }));
+        get().clearPings(device.token);
+      },
+      // TODO: Tidy
+      recordBrokenLink: (device) => {
+        const clone = get().devices.filter(d => d.token !== device.token);
+        clone.push({...device, linkBroken: true });
+        set({ devices: clone });
+      },
+      clearDevices: () => {
+        set({ devices: [] });
+        get().clearAllPings();
+      },
+
+      // TODO: Tidy
+      pings: {},
+      recordPing: (deviceToken, ping) => {
+        const clone = {...get().pings};
+        clone[deviceToken] = (clone[deviceToken] ?? []).concat(ping);
+        set({ pings: clone });
+      },
+      clearPings: (deviceToken) => {
+        const clone = {...get().pings};
+        delete clone[deviceToken];
+        set({ pings: clone });
+      },
+      clearAllPings: () => set({ pings: {} }), 
+    }),
+    {
+      name: 'notif',
+      getStorage: () => AsyncStorage,
+    }
+  )
+);
+
+export default useStore;

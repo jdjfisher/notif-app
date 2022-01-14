@@ -7,9 +7,34 @@
    viewBox="0 0 174.05165 174.05166"
    version="1.1"
    id="svg5"
+   sodipodi:docname="icon.svg"
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   inkscape:export-filename="D:\Stephen\Programming\TypeScript Projects\notif\app\assets\images\icon.png"
+   inkscape:export-xdpi="149.44"
+   inkscape:export-ydpi="149.44"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview32"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="1.0367373"
+     inkscape:cx="329.39879"
+     inkscape:cy="329.39879"
+     inkscape:window-width="1858"
+     inkscape:window-height="1057"
+     inkscape:window-x="54"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5" />
   <defs
      id="defs2">
     <linearGradient
@@ -78,7 +103,8 @@
        gradientTransform="translate(1249.5685,-719.97154)" />
   </defs>
   <g
-     id="layer1">
+     id="layer1"
+     transform="matrix(0.9,0,0,0.9,8.7025812,8.702582)">
     <g
        id="g18933"
        transform="matrix(0.02177789,1.6052961,-1.6052961,0.02177789,478.23987,107.37652)" />

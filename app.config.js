@@ -5,7 +5,7 @@ export default {
   slug: "notif",
   version: "0.1.0",
   orientation: "portrait",
-  icon: "./assets/images/icon.png",
+  icon: "./assets/images/icon/icon.png",
   scheme: "notif",
   githubUrl: "https://github.com/jdjfisher/notif",
   userInterfaceStyle: "automatic",
@@ -36,6 +36,10 @@ export default {
     ],
     useNextNotificationsApi: true,
     googleServicesFile: "./google-services.json",
+    adaptiveIcon: {
+      foregroundImage: "./assets/images/icon/adaptive-icon.png",
+      backgroundColor: "#ffffff"
+    }
   },
   // ios: {
   //   supportsTablet: true,

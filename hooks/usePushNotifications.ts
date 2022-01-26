@@ -1,5 +1,5 @@
 
-import Constants from 'expo-constants';
+import Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import * as TaskManager from 'expo-task-manager';
 import { Platform, unstable_batchedUpdates } from 'react-native';
@@ -9,14 +9,14 @@ import { navigationRef } from '../navigation/index';
 
 const BACKGROUND_NOTIFICATION_TASK: string = 'BACKGROUND-NOTIFICATION-TASK';
 
-TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error, executionInfo }: any) => {;
+TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error, executionInfo }: any) => {
   handlePing(data.notification);
 });
 
 Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
 
 export default async () => {
-  if (!Constants.isDevice) {
+  if (!Device.isDevice) {
     alert('Must use physical device for Push Notifications');
     return;
   }

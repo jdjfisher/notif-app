@@ -113,7 +113,7 @@ export default function AddDeviceScreen({ navigation }: ModalScreenProps<'Add De
       Sentry.Native.captureException(error);
 
       Alert.alert('Alert', 'Failed to connect to server', [
-        { text: 'OK', onPress: () => setScanned(false) },
+        { text: 'OK' },
       ]);
     } finally {
       navigation.popToTop();

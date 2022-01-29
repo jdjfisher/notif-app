@@ -11,7 +11,13 @@ export default () => {
     checkServerStatus();
   }, []);
 
-  const checkServerStatus = () => api.get('/health');
+  const checkServerStatus = async () => {
+    try {
+      await api.get('/health');
+    } catch (error) {
+      // console.debug(error);     
+    }
+  }
 
   if (serverStatus !== 'connected')
     return (

@@ -1,5 +1,5 @@
 
-import Device from 'expo-device';
+import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import * as TaskManager from 'expo-task-manager';
 import { Platform, unstable_batchedUpdates } from 'react-native';

@@ -1,20 +1,25 @@
-import axios from "axios";
+import axios from 'axios';
 import Constants from 'expo-constants';
 import store from './store';
 
 const client = axios.create({
-  baseURL: Constants.manifest?.extra?.apiUrl
+  baseURL: Constants.manifest?.extra?.apiUrl,
 });
 
-client.interceptors.response.use(response => {
-  store.setState({ serverStatus: 'connected' });
-  return response;
-}, error => {
-  store.setState({ 
-    serverStatus: error.response?.status === 503 ? 'maintenance' : 'disconnected' 
-  });
+client.interceptors.response.use(
+  (response) => {
+    store.setState({ serverStatus: 'connected' });
+    return response;
+  },
+  (error) => {
+    if (error.response === undefined || error.response.status === 502) {
+      store.setState({ serverStatus: 'disconnected' });
+    } else if (error.response.status === 503) {
+      store.setState({ serverStatus: 'maintenance' });
+    }
 
-  return Promise.reject(error);
-});
+    return Promise.reject(error);
+  }
+);
 
 export default client;

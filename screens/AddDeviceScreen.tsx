@@ -112,7 +112,7 @@ export default function AddDeviceScreen({ navigation }: ModalScreenProps<'Add De
     } catch (error) {
       Sentry.Native.captureException(error);
 
-      Alert.alert('Alert', 'Failed to connect to server', [
+      Alert.alert('Alert', 'Failed to link device', [
         { text: 'OK' },
       ]);
     } finally {

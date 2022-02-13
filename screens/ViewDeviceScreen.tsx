@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button, Pressable, Alert, View as DefaultView } from 'react-native';
+import { Button, Pressable, Alert, FlatList, View as DefaultView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import shallow from 'zustand/shallow';
 import dayjs from 'dayjs';
@@ -64,53 +64,51 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
   };
 
   return (
-    <DefaultView style={tw`flex-grow justify-between`}>
-      <DefaultView>
-        <View style={tw`p-4 flex flex-row justify-between items-center mb-2`}>
-          <Text style={tw`text-2xl`}>{device.name}</Text>
-          {device.linkBroken ? (
-            <View style={tw`flex-row items-center`}>
-              <MaterialIcons name={'link-off'} size={15} color={tw.color('red-400')} />
-              <Text style={tw`text-red-400 ml-1`}>Link Broken</Text>
-            </View>
-          ) : (
-            <Text style={tw`text-right text-gray-500`}>
-              Linked {dayjs(device.linkedAt).fromNow()}
-            </Text>
-          )}
-        </View>
+    <DefaultView style={tw`h-full`}>
+      <View style={tw`p-4 flex flex-row justify-between items-center shadow-sm mb-1`}>
+        <Text style={tw`text-2xl`}>{device.name}</Text>
+        {device.linkBroken ? (
+          <View style={tw`flex-row items-center`}>
+            <MaterialIcons name={'link-off'} size={15} color={tw.color('red-400')} />
+            <Text style={tw`text-red-400 ml-1`}>Link Broken</Text>
+          </View>
+        ) : (
+          <Text style={tw`text-right text-gray-500`}>
+            Linked {dayjs(device.linkedAt).fromNow()}
+          </Text>
+        )}
+      </View>
+      
+      <View style={tw`p-4 flex-1 shadow-sm mb-1`}>
+        <Text style={tw`text-xl mb-2`}>Pings</Text>
 
-        <View style={tw`p-4`}>
-          <Text style={tw`text-xl mb-2`}>Pings</Text>
-
-          {pings.length ? (
-            <>
-              {pings.map((ping: any) => (
-                <Pressable
-                  key={ping.id}
-                  style={tw`border-b border-gray-200 py-3`}
-                  onPress={() => navigation.navigate('Ping', { ping })}
-                >
-                  {ping.message ? (
-                    <Text numberOfLines={1} ellipsizeMode="tail">
-                      {ping.message}
-                    </Text>
-                  ) : (
-                    <Text style={tw`text-gray-500 italic`}>No message provided</Text>
-                  )}
-                  <Text style={tw`text-right text-gray-400`}>
-                    {dayjs(ping.timestamp).fromNow()}
+        {pings.length ? (
+          <FlatList
+            data={pings}
+            keyExtractor={(ping) => ping.id}
+            renderItem={({ item: ping }) => (
+              <Pressable
+                style={tw`border-t border-gray-100 py-3 pr-3`}
+                onPress={() => navigation.navigate('Ping', { ping })}
+              >
+                {ping.message ? (
+                  <Text numberOfLines={1} ellipsizeMode="tail">
+                    {ping.message}
                   </Text>
-                </Pressable>
-              ))}
-            </>
-          ) : (
-            <Text style={tw`text-gray-500`}>No ping history</Text>
-          )}
-        </View>
-      </DefaultView>
+                ) : (
+                  <Text style={tw`text-gray-500 italic`}>No message provided</Text>
+                )}
+                <Text style={tw`text-right text-gray-400`}>{dayjs(ping.timestamp).fromNow()}</Text>
+              </Pressable>
+            )}
+          />
+        ) : (
+          <Text style={tw`text-gray-500`}>No ping history</Text>
+        )}
+      </View>
 
-      <View style={tw`p-4 flex-row`}>
+      {/* TODO: Replace with menu */}
+      <View style={tw`p-4 flex-row shadow-sm mb-1`}>
         {pings.length ? (
           <View style={tw`flex-grow mr-2`}>
             <Button title={'Clear Pings'} onPress={() => promptClearPings()} />

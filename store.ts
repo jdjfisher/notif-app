@@ -71,7 +71,7 @@ const useStore = create<State>(
       pings: {},
       recordPing: (deviceToken, ping) => {
         const clone = {...get().pings};
-        clone[deviceToken] = (clone[deviceToken] ?? []).concat(ping);
+        clone[deviceToken] = [ ping, ...(clone[deviceToken] ?? [])];
         set({ pings: clone });
       },
       clearPings: (deviceToken) => {

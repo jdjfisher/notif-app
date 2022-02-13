@@ -11,17 +11,17 @@ export default function HelpScreen() {
 
   return (
     <DefaultView style={tw`py-4 flex-grow items-center justify-between`}>
-      <View style={tw`px-4 py-2 w-full flex items-center`}>
+      <View style={tw`px-4 py-2 w-full flex items-center shadow-sm`}>
         <Text style={tw`text-xl font-bold`}>Install the CLI</Text>
         <Image style={styles.image} source={require('../assets/images/help-install.png')} />
       </View>
 
-      <View style={tw`px-4 py-2 w-full flex items-center`}>
+      <View style={tw`px-4 py-2 w-full flex items-center shadow-sm`}>
         <Text style={tw`text-xl font-bold`}>Link CLI to App</Text>
         <Image style={styles.image} source={require('../assets/images/help-link.png')} />
       </View>
 
-      <View style={tw`px-4 py-2 w-full flex items-center`}>
+      <View style={tw`px-4 py-2 w-full flex items-center shadow-sm`}>
         <Text style={tw`text-xl font-bold`}>Send a Ping</Text>
         <Image style={styles.image} source={require('../assets/images/help-ping.png')} />
       </View>

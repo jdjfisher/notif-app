@@ -1,6 +1,7 @@
 import React from 'react';
 import * as Notifications from 'expo-notifications';
-import { Alert } from 'react-native';
+import { Alert, View as DefaultView } from 'react-native';
+import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import * as Sentry from 'sentry-expo';
 import shallow from 'zustand/shallow';
@@ -9,13 +10,16 @@ import tw from 'twrnc';
 
 import axios from '../api';
 import useStore from '../store';
-import NameModal from '../components/settings/DeviceNameModal';
 import ThemeModal from '../components/settings/DeviceThemeModal';
+import TextInputModal from '../components/ui/TextInputModal';
 import { View, Text, Switch, Pressable } from '../components/Themed';
 
 export default function SettingsScreen() {
   const [
     mobileDeviceName,
+    setMobileDeviceName,
+    // apiUrl,
+    // setApiUrl,
     deviceTheme,
     confirmNewDevices,
     toggleConfirmNewDevices,
@@ -24,6 +28,9 @@ export default function SettingsScreen() {
   ] = useStore(
     (state) => [
       state.mobileDeviceName,
+      state.setMobileDeviceName,
+      // state.apiUrl,
+      // state.setApiUrl,
       state.deviceTheme,
       state.confirmNewDevices,
       state.toggleConfirmNewDevices,
@@ -70,8 +77,8 @@ export default function SettingsScreen() {
   const capitalizeFirstLetter = (string: string) => string.charAt(0).toUpperCase() + string.slice(1);
 
   return (
-    <>
-      <SettingGroup title="Device">
+    <DefaultView style={tw`mt-1`}>
+      <SettingGroup title="General">
         <ThemeModal style={tw`flex flex-row justify-between items-center py-2`} disabled>
           <View style={tw`flex flex-row items-center`}>
             <MaterialCommunityIcons name="theme-light-dark" size={25} color={tw.color('gray-400')} />
@@ -81,7 +88,13 @@ export default function SettingsScreen() {
           <Text style={tw`text-right`}>{deviceTheme ? capitalizeFirstLetter(deviceTheme) : 'System Default'}</Text>
         </ThemeModal>
 
-        <NameModal style={tw`flex flex-row justify-between items-center my-2`}>
+        <TextInputModal 
+          style={tw`flex flex-row justify-between items-center my-2`}
+          title='Device Name'
+          value={mobileDeviceName}
+          setValue={setMobileDeviceName}
+          placeholderValue={Device.deviceName || Device.modelName || undefined}
+        >
           <View style={tw`flex flex-row items-center`}>
             <MaterialIcons name="smartphone" size={25} color={tw.color('gray-400')} />
             <Text style={tw`ml-2`}>Name</Text>
@@ -90,10 +103,18 @@ export default function SettingsScreen() {
           <Text>
             {mobileDeviceName || Device.deviceName || Device.modelName || ''}
           </Text>
-        </NameModal>
+        </TextInputModal>
+
+        <View style={tw`flex flex-row items-center my-2 justify-between`}>
+          <View style={tw`flex flex-row items-center`}>
+            <MaterialIcons name="device-unknown" size={25} color={tw.color('gray-400')} />
+            <Text style={tw`ml-2`}>Confirm new devices</Text>
+          </View>
+          <Switch value={confirmNewDevices} onChange={toggleConfirmNewDevices} />
+        </View>
       </SettingGroup>
 
-      <SettingGroup title="Data">
+      <SettingGroup title="Storage">
         <Pressable
           onPress={() => promptClearAllPings()}
           style={tw`flex flex-row items-center py-2`}
@@ -111,16 +132,25 @@ export default function SettingsScreen() {
         </Pressable>
       </SettingGroup>
 
-      <SettingGroup title="Preferences">
-        <View style={tw`flex flex-row items-center my-2 justify-between`}>
+      {/* wip */}
+      {/* <SettingGroup title="Advanced">
+        <TextInputModal 
+          style={tw`flex flex-row justify-between items-center my-2`}
+          title='Server'
+          value={apiUrl}
+          setValue={setApiUrl}
+          placeholderValue={Constants.manifest?.extra?.apiUrl}
+        >
           <View style={tw`flex flex-row items-center`}>
-            <MaterialIcons name="device-unknown" size={25} color={tw.color('gray-400')} />
-            <Text style={tw`ml-2`}>Confirm new devices</Text>
+            <MaterialIcons name="storage" size={25} color={tw.color('gray-400')} />
+            <Text style={tw`ml-2`}>Server</Text>
           </View>
-          <Switch value={confirmNewDevices} onChange={toggleConfirmNewDevices} />
-        </View>
-      </SettingGroup>
-    </>
+          <Text>
+            {!apiUrl || apiUrl === Constants.manifest?.extra?.apiUrl ? 'Default' : 'Custom'}
+          </Text>
+        </TextInputModal>
+      </SettingGroup> */}
+    </DefaultView>
   );
 }
 

@@ -54,13 +54,20 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
       cliToken: device.token,
     };
 
-    // Unlink server-side
-    await api.post('unlink', payload);
+    try {
+      // Unlink server-side
+      await api.post('unlink', payload);
 
-    // Remove from storage
-    removeDevice(device);
-
-    navigation.popToTop();
+      // Remove from storage
+      removeDevice(device);
+  
+      // Return to devices screen
+      navigation.popToTop();
+    } catch {
+      Alert.alert('Alert', 'Failed to unlink device', [
+        { text: 'OK' },
+      ]);
+    }
   };
 
   return (

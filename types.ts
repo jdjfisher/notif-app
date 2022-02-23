@@ -48,6 +48,7 @@ export type ModalScreenProps<Screen extends keyof ModalParamList> = NativeStackS
 
 export interface CliDevice {
   name: string;
+  icon: 'computer' | 'dns' | 'storage' | 'desktop-mac';
   token: string;
   linkedAt: string;
   linkBroken: boolean;

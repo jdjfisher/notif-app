@@ -12,8 +12,8 @@ import { Text, View, Pressable } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 
 export default function DevicesScreen({ navigation }: RootTabScreenProps<'Devices'>) {
-  const [devices, recordBrokenLink] = useStore(
-    (state) => [state.devices, state.recordBrokenLink],
+  const [devices, latestPing, recordBrokenLink] = useStore(
+    (state) => [state.devices, state.latestPing, state.recordBrokenLink],
     shallow
   );
 
@@ -55,17 +55,34 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'Device
           <Pressable
             key={device.token}
             onPress={() => navigation.navigate('Device', { device })}
-            style={tw`p-4 flex flex-row justify-between border-t border-gray-100 items-center`}
+            style={tw`p-3 flex-row border-t border-gray-100 justify-between items-start`}
           >
-            {/* TODO: Re-design */}
-            <Text style={tw`text-xl`}>{device.name}</Text>
+            <DefaultView style={tw`flex-row items-center`}>
+              <MaterialIcons name={device.icon} size={35} color={tw.color('text-black')} />
 
+              <DefaultView style={tw`ml-3`}>
+                <Text style={tw`text-xl`}>{device.name}</Text>
+                <Text style={tw`text-xs text-gray-400`}>
+                  {latestPing(device.token)?.message ?? '-'}
+                </Text>
+              </DefaultView>
+            </DefaultView>
+
+            <Text style={tw`text-xs text-gray-400 text-right`}>
+              {dayjs(latestPing(device.token)?.timestamp ?? device.linkedAt).fromNow()}
+            </Text>
+
+            {/* TODO: number of unseen pings */}
+            {/* <Text style={tw`text-xs bg-gray-200 rounded-xl p-1 text-center mt-1`}>5</Text> */}
+
+            {/* 
             {device.linkBroken ? (
               <View style={tw`flex-row items-center`}>
                 <MaterialIcons name={'link-off'} size={15} color={tw.color('red-400')} />
                 <Text style={tw`text-red-400 ml-1`}>Link Broken</Text>
               </View>
-            ) : null}
+            ) : null} 
+            */}
           </Pressable>
         )}
       />

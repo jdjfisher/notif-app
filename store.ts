@@ -29,6 +29,7 @@ interface State {
   recordPing: (deviceToken: string, ping: Ping) => void,
   clearPings: (deviceToken: string) => void,
   clearAllPings: () => void,
+  latestPing: (deviceToken: string) => Ping | null, 
 }
 
 // TODO: Store slices ;) 
@@ -80,6 +81,7 @@ const useStore = create<State>(
         set({ pings: clone });
       },
       clearAllPings: () => set({ pings: {} }), 
+      latestPing: (token) => get().pings[token]?.[0] ?? null,
     }),
     {
       name: 'notif',

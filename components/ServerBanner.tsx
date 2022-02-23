@@ -15,7 +15,7 @@ export default () => {
     try {
       await api.get('/health');
     } catch (error) {
-      // console.debug(error);     
+      console.debug(error);     
     }
   }
 

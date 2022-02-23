@@ -6,6 +6,16 @@ const client = axios.create({
   baseURL: Constants.manifest?.extra?.apiUrl,
 });
 
+client.interceptors.request.use((config) => {
+  const customBaseURL = store.getState().customApiUrl; 
+
+  if (customBaseURL) {
+    config.baseURL = customBaseURL;
+  }
+
+  return config;
+});
+
 client.interceptors.response.use(
   (response) => {
     store.setState({ serverStatus: 'connected' });

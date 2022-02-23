@@ -13,6 +13,9 @@ interface State {
   mobileDeviceName: string;
   setMobileDeviceName: (name: string) => void;
 
+  customApiUrl: string | undefined;
+  setCustomApiUrl: (value?: string) => void;
+
   silentMode: boolean;
   toggleSilentMode: () => void;
 
@@ -44,6 +47,9 @@ const useStore = create<State>(
 
       mobileDeviceName: '',
       setMobileDeviceName: (name) => set({ mobileDeviceName: name }),
+
+      customApiUrl: undefined,
+      setCustomApiUrl: (value) => set({ customApiUrl: value }),
 
       silentMode: false,
       toggleSilentMode: () => set((state) => ({ silentMode: !state.silentMode })),

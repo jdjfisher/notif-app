@@ -10,6 +10,7 @@ import { ModalScreenProps } from '../types';
 import { Text, View } from '../components/Themed';
 import api from '../api';
 import useStore from '../state/store';
+import LinkBroken from '../components/device/LinkBroken';
 
 export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps<'Device'>) {
   const [devices, allPings, clearPings, renameDevice, removeDevice, recordBrokenLink] = useStore(
@@ -88,27 +89,31 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
 
   return (
     <DefaultView style={tw`h-full`}>
-      <View style={tw`p-4 flex flex-row justify-between items-center shadow-sm mb-1`}>
-        <TextInputModal
-          title="Rename Device"
-          value={device.name}
-          setValue={(name) => {
-            if (name) renameDevice(device, name);
-          }}
-        >
-          <Text style={tw`text-xl`}>{device.name}</Text>
-        </TextInputModal>
+      <View style={tw`p-3 flex flex-row justify-between items-center shadow-sm mb-1`}>
+        <DefaultView style={tw`flex-row items-center`}>
+          <MaterialIcons
+            name={device.icon}
+            size={35}
+            color={tw.color('text-black')}
+            style={tw`mr-3`}
+          />
 
-        {device.linkBroken ? (
-          <View style={tw`flex-row items-center`}>
-            <MaterialIcons name={'link-off'} size={15} color={tw.color('red-400')} />
-            <Text style={tw`text-red-400 ml-1 text-xs`}>Link Broken</Text>
-          </View>
-        ) : (
-          <Text style={tw`text-right text-gray-500 text-xs`}>
-            Linked {dayjs(device.linkedAt).fromNow()}
-          </Text>
-        )}
+          <DefaultView>
+            <TextInputModal
+              title="Rename Device"
+              value={device.name}
+              setValue={(name) => {
+                if (name) renameDevice(device, name);
+              }}
+            >
+              <Text style={tw`text-xl`}>{device.name}</Text>
+            </TextInputModal>
+
+            <Text style={tw`text-gray-400 text-xs`}>Linked {dayjs(device.linkedAt).fromNow()}</Text>
+          </DefaultView>
+        </DefaultView>
+
+        {device.linkBroken ? <LinkBroken /> : null}
       </View>
 
       <View style={tw`p-4 flex-1 shadow-sm mb-1`}>

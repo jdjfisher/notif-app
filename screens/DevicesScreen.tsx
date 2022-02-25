@@ -10,10 +10,11 @@ import api from '../api';
 import useStore from '../state/store';
 import { Text, View, Pressable } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
+import LinkBroken from '../components/device/LinkBroken';
 
 export default function DevicesScreen({ navigation }: RootTabScreenProps<'Devices'>) {
-  const [devices, latestPing, recordBrokenLink] = useStore(
-    (state) => [state.devices, state.latestPing, state.recordBrokenLink],
+  const [devices, pings, latestPing, recordBrokenLink] = useStore(
+    (state) => [state.devices, state.pings, state.latestPing, state.recordBrokenLink],
     shallow
   );
 
@@ -58,9 +59,14 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'Device
             style={tw`p-3 flex-row border-t border-gray-100 justify-between items-start`}
           >
             <DefaultView style={tw`flex-row items-center`}>
-              <MaterialIcons name={device.icon} size={35} color={tw.color('text-black')} />
+              <MaterialIcons
+                name={device.icon}
+                size={35}
+                color={tw.color('text-black')}
+                style={tw`mr-3`}
+              />
 
-              <DefaultView style={tw`ml-3`}>
+              <DefaultView>
                 <Text style={tw`text-xl`}>{device.name}</Text>
                 <Text style={tw`text-xs text-gray-400`}>
                   {latestPing(device.token)?.message ?? '-'}
@@ -68,21 +74,15 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'Device
               </DefaultView>
             </DefaultView>
 
-            <Text style={tw`text-xs text-gray-400 text-right`}>
-              {dayjs(latestPing(device.token)?.timestamp ?? device.linkedAt).fromNow()}
-            </Text>
+            <DefaultView style={tw`items-end`}>
+              <Text style={tw`text-xs text-gray-400`}>
+                {dayjs(latestPing(device.token)?.timestamp ?? device.linkedAt).fromNow()}
+              </Text>
 
-            {/* TODO: number of unseen pings */}
-            {/* <Text style={tw`text-xs bg-gray-200 rounded-xl p-1 text-center mt-1`}>5</Text> */}
+              {/* sxt style={tw`text-xs bg-gray-200 rounded-xl p-1 text-center mt-1`}>5</Text> */}
 
-            {/* 
-            {device.linkBroken ? (
-              <View style={tw`flex-row items-center`}>
-                <MaterialIcons name={'link-off'} size={15} color={tw.color('red-400')} />
-                <Text style={tw`text-red-400 ml-1`}>Link Broken</Text>
-              </View>
-            ) : null} 
-            */}
+              {device.linkBroken ? <LinkBroken /> : null}
+            </DefaultView>
           </Pressable>
         )}
       />

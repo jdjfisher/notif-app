@@ -1,7 +1,7 @@
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { CliDevice, Ping } from './types';
+import { CliDevice, Ping } from '../types';
 import { ColorSchemeName } from 'react-native';
 
 interface State {

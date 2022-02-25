@@ -9,7 +9,7 @@ import tw from 'twrnc';
 import { ModalScreenProps } from '../types';
 import { Text, View } from '../components/Themed';
 import api from '../api';
-import useStore from '../store';
+import useStore from '../state/store';
 
 export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps<'Device'>) {
   const [devices, allPings, clearPings, renameDevice, removeDevice, recordBrokenLink] = useStore(

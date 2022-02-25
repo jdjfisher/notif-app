@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import tw from 'twrnc';
 
 import api from '../api';
-import useStore from '../store';
+import useStore from '../state/store';
 import { Text, View, Pressable } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 

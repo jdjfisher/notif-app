@@ -12,7 +12,7 @@ import Svg, { Path } from 'react-native-svg';
 
 import { ModalScreenProps, CliDevice } from '../types';
 import { Text, View } from '../components/Themed';
-import useStore from '../store';
+import useStore from '../state/store';
 import api from '../api';
 
 

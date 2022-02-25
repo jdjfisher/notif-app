@@ -9,7 +9,7 @@ import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import tw from 'twrnc';
 
 import axios from '../api';
-import useStore from '../store';
+import useStore from '../state/store';
 import ThemeModal from '../components/settings/DeviceThemeModal';
 import TextInputModal from '../components/ui/TextInputModal';
 import { View, Text, Switch, Pressable } from '../components/Themed';

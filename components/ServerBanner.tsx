@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Text, Pressable } from 'react-native';
-import useStore from '../store';
+import useStore from '../state/store';
 import api from '../api';
 import tw from 'twrnc';
 

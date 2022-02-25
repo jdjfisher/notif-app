@@ -54,7 +54,7 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'Device
         renderItem={({ item: device }) => (
           <Pressable
             key={device.token}
-            onPress={() => navigation.navigate('Device', { device })}
+            onPress={() => navigation.navigate('Device', { cliToken: device.token })}
             style={tw`p-3 flex-row border-t border-gray-100 justify-between items-start`}
           >
             <DefaultView style={tw`flex-row items-center`}>

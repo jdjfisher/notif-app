@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Button, Pressable, Alert, FlatList, View as DefaultView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import TextInputModal from '../components/ui/TextInputModal';
 import shallow from 'zustand/shallow';
 import dayjs from 'dayjs';
 import tw from 'twrnc';
@@ -11,11 +12,25 @@ import api from '../api';
 import useStore from '../store';
 
 export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps<'Device'>) {
-  const device = route.params.device;
-  const [allPings, clearPings, removeDevice, recordBrokenLink] = useStore(
-    (state) => [state.pings, state.clearPings, state.removeDevice, state.recordBrokenLink],
+  const [devices, allPings, clearPings, renameDevice, removeDevice, recordBrokenLink] = useStore(
+    (state) => [
+      state.devices,
+      state.pings,
+      state.clearPings,
+      state.renameDevice,
+      state.removeDevice,
+      state.recordBrokenLink,
+    ],
     shallow
   );
+
+  // Fetch the device data
+  const device = devices.find((d) => d.token === route.params.cliToken);
+
+  if (!device) {
+    navigation.popToTop();
+    return;
+  }
 
   const pings = allPings[device.token] ?? [];
 
@@ -27,12 +42,15 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
       cliToken: device.token,
     };
 
-    api.post('status', payload).then((response) => {
-      if (response?.data?.linked === false) {
-        recordBrokenLink(device);
-        Alert.alert('Link Broken', `${device.name} has been unlinked from this deivce`);
-      }
-    });
+    api
+      .post('status', payload)
+      .then((response) => {
+        if (response?.data?.linked === false) {
+          recordBrokenLink(device);
+          Alert.alert('Link Broken', `${device.name} has been unlinked from this deivce`);
+        }
+      })
+      .catch((error) => {});
   }, []);
 
   const promptClearPings = () => {
@@ -60,32 +78,39 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
 
       // Remove from storage
       removeDevice(device);
-  
+
       // Return to devices screen
       navigation.popToTop();
     } catch {
-      Alert.alert('Alert', 'Failed to unlink device', [
-        { text: 'OK' },
-      ]);
+      Alert.alert('Alert', 'Failed to unlink device', [{ text: 'OK' }]);
     }
   };
 
   return (
     <DefaultView style={tw`h-full`}>
       <View style={tw`p-4 flex flex-row justify-between items-center shadow-sm mb-1`}>
-        <Text style={tw`text-2xl`}>{device.name}</Text>
+        <TextInputModal
+          title="Rename Device"
+          value={device.name}
+          setValue={(name) => {
+            if (name) renameDevice(device, name);
+          }}
+        >
+          <Text style={tw`text-xl`}>{device.name}</Text>
+        </TextInputModal>
+
         {device.linkBroken ? (
           <View style={tw`flex-row items-center`}>
             <MaterialIcons name={'link-off'} size={15} color={tw.color('red-400')} />
-            <Text style={tw`text-red-400 ml-1`}>Link Broken</Text>
+            <Text style={tw`text-red-400 ml-1 text-xs`}>Link Broken</Text>
           </View>
         ) : (
-          <Text style={tw`text-right text-gray-500`}>
+          <Text style={tw`text-right text-gray-500 text-xs`}>
             Linked {dayjs(device.linkedAt).fromNow()}
           </Text>
         )}
       </View>
-      
+
       <View style={tw`p-4 flex-1 shadow-sm mb-1`}>
         <Text style={tw`text-xl mb-2`}>Pings</Text>
 

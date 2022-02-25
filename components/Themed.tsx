@@ -68,12 +68,12 @@ export const Modal = React.forwardRef<ModalActions, ModalProps>((props, ref) => 
               <Text style={tw`text-blue-500 text-right`}>CANCEL</Text>
             </DefaultPressable>
 
-            {onAccept && (
+            {(onAccept || acceptText) && (
               <DefaultPressable
                 style={tw`ml-5`}
                 onPress={() => {
                   setVisible(false);
-                  onAccept();
+                  onAccept?.();
                 }}
               >
                 <Text style={tw`text-blue-500 text-right`}>{acceptText ?? 'OK'}</Text>

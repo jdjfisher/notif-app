@@ -13,6 +13,7 @@ import useStore from '../state/store';
 import LinkBroken from '../components/device/LinkBroken';
 
 export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps<'Device'>) {
+  // State hooks
   const [devices, allPings, clearPings, renameDevice, removeDevice, recordBrokenLink] = useStore(
     (state) => [
       state.devices,
@@ -28,16 +29,9 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
   // Fetch the device data
   const device = devices.find((d) => d.token === route.params.cliToken);
 
-  if (!device) {
-    navigation.popToTop();
-    return;
-  }
-
-  const pings = allPings[device.token] ?? [];
-
   useEffect(() => {
     // We know the link is broken, only this app can correct this, .*. don't verify again
-    if (device.linkBroken) return;
+    if (!device || device.linkBroken) return;
 
     const payload = {
       cliToken: device.token,
@@ -51,8 +45,15 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
           Alert.alert('Link Broken', `${device.name} has been unlinked from this deivce`);
         }
       })
-      .catch((error) => {});
+      .catch((error) => console.debug(error));
   }, []);
+
+  // Abort if the device could not be found
+  if (!device) {
+    return null;
+  }
+
+  const pings = allPings[device.token] ?? [];
 
   const promptClearPings = () => {
     Alert.alert('Clear Pings', `Clear all ping history for ${device.name}`, [

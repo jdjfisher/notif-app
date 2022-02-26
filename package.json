@@ -61,6 +61,7 @@
     "@babel/core": "^7.12.9",
     "@types/axios": "^0.14.0",
     "@types/jest": "^27.0.2",
+    "@types/lodash": "^4.14.179",
     "@types/react": "~17.0.21",
     "@types/react-native": "~0.64.12",
     "@types/react-test-renderer": "^17.0.1",

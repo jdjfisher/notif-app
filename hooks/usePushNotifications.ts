@@ -59,8 +59,10 @@ export default async () => {
     if (cliToken && pingId) {
       const ping = useStore.getState().pings[cliToken]?.find(ping => ping.id === pingId);
 
-      if (ping && navigationRef.isReady())
+      if (ping && navigationRef.isReady()) {  
+        // @ts-ignore
         navigationRef.navigate('Ping', { ping });
+      }
     }
   });
 

@@ -42,6 +42,7 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'Device
     return (
       <DefaultView style={tw`flex-grow justify-center items-center`}>
         <Text style={tw`pb-5 text-2xl`}> No Devices linked </Text>
+        {/* @ts-ignore */}
         <Button title={'Link Device'} onPress={() => navigation.navigate('Add Device')} />
       </DefaultView>
     );
@@ -55,6 +56,7 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'Device
         renderItem={({ item: device }) => (
           <Pressable
             key={device.token}
+            // @ts-ignore
             onPress={() => navigation.navigate('Device', { cliToken: device.token })}
             style={tw`p-3 flex-row border-t border-gray-100 justify-between items-start`}
           >

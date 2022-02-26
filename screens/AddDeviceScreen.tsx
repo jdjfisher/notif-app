@@ -12,7 +12,7 @@ import Svg, { Path } from 'react-native-svg';
 
 import { ModalScreenProps, CliDevice } from '../types';
 import { Text, View } from '../components/Themed';
-import useStore from '../store';
+import useStore from '../state/store';
 import api from '../api';
 
 
@@ -64,6 +64,7 @@ export default function AddDeviceScreen({ navigation }: ModalScreenProps<'Add De
       if (!('name' in device && 'token' in device && 'socketId' in device)) 
         throw 'invalid';
 
+      device.icon = 'computer';
       device.linkBroken = false;
       device.linkedAt = dayjs().toString();
     } catch (error) {

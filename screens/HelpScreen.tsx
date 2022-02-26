@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Feather } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 import { Linking, StyleSheet, Image, Pressable, View as DefaultView } from 'react-native';
 import tw from 'twrnc';
 
@@ -36,7 +36,7 @@ export default function HelpScreen() {
         onPress={() => Linking.openURL('https://github.com/jdjfisher/notif')}
       >
         <Text style={tw`mr-2 font-bold text-white`}>GitHub</Text>
-        <Feather name="github" size={25} color={'white'} />
+        <FontAwesome name="github" size={25} color={'white'} />
       </Pressable>
     </DefaultView>
   );

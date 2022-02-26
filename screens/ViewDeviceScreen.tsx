@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Button, Pressable, Alert, FlatList, View as DefaultView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import TextInputModal from '../components/ui/TextInputModal';
 import shallow from 'zustand/shallow';
 import dayjs from 'dayjs';
 import tw from 'twrnc';
@@ -8,32 +9,51 @@ import tw from 'twrnc';
 import { ModalScreenProps } from '../types';
 import { Text, View } from '../components/Themed';
 import api from '../api';
-import useStore from '../store';
+import useStore from '../state/store';
+import LinkBroken from '../components/device/LinkBroken';
 
 export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps<'Device'>) {
-  const device = route.params.device;
-  const [allPings, clearPings, removeDevice, recordBrokenLink] = useStore(
-    (state) => [state.pings, state.clearPings, state.removeDevice, state.recordBrokenLink],
+  // State hooks
+  const [devices, allPings, clearPings, renameDevice, removeDevice, recordBrokenLink] = useStore(
+    (state) => [
+      state.devices,
+      state.pings,
+      state.clearPings,
+      state.renameDevice,
+      state.removeDevice,
+      state.recordBrokenLink,
+    ],
     shallow
   );
 
-  const pings = allPings[device.token] ?? [];
+  // Fetch the device data
+  const device = devices.find((d) => d.token === route.params.cliToken);
 
   useEffect(() => {
     // We know the link is broken, only this app can correct this, .*. don't verify again
-    if (device.linkBroken) return;
+    if (!device || device.linkBroken) return;
 
     const payload = {
       cliToken: device.token,
     };
 
-    api.post('status', payload).then((response) => {
-      if (response?.data?.linked === false) {
-        recordBrokenLink(device);
-        Alert.alert('Link Broken', `${device.name} has been unlinked from this deivce`);
-      }
-    });
+    api
+      .post('status', payload)
+      .then((response) => {
+        if (response?.data?.linked === false) {
+          recordBrokenLink(device);
+          Alert.alert('Link Broken', `${device.name} has been unlinked from this deivce`);
+        }
+      })
+      .catch((error) => console.debug(error));
   }, []);
+
+  // Abort if the device could not be found
+  if (!device) {
+    return null;
+  }
+
+  const pings = allPings[device.token] ?? [];
 
   const promptClearPings = () => {
     Alert.alert('Clear Pings', `Clear all ping history for ${device.name}`, [
@@ -60,32 +80,43 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
 
       // Remove from storage
       removeDevice(device);
-  
+
       // Return to devices screen
       navigation.popToTop();
     } catch {
-      Alert.alert('Alert', 'Failed to unlink device', [
-        { text: 'OK' },
-      ]);
+      Alert.alert('Alert', 'Failed to unlink device', [{ text: 'OK' }]);
     }
   };
 
   return (
     <DefaultView style={tw`h-full`}>
-      <View style={tw`p-4 flex flex-row justify-between items-center shadow-sm mb-1`}>
-        <Text style={tw`text-2xl`}>{device.name}</Text>
-        {device.linkBroken ? (
-          <View style={tw`flex-row items-center`}>
-            <MaterialIcons name={'link-off'} size={15} color={tw.color('red-400')} />
-            <Text style={tw`text-red-400 ml-1`}>Link Broken</Text>
-          </View>
-        ) : (
-          <Text style={tw`text-right text-gray-500`}>
-            Linked {dayjs(device.linkedAt).fromNow()}
-          </Text>
-        )}
+      <View style={tw`p-3 flex flex-row justify-between items-center shadow-sm mb-1`}>
+        <DefaultView style={tw`flex-row items-center`}>
+          <MaterialIcons
+            name={device.icon}
+            size={35}
+            color={tw.color('text-black')}
+            style={tw`mr-3`}
+          />
+
+          <DefaultView>
+            <TextInputModal
+              title="Rename Device"
+              value={device.name}
+              setValue={(name) => {
+                if (name) renameDevice(device, name);
+              }}
+            >
+              <Text style={tw`text-xl`}>{device.name}</Text>
+            </TextInputModal>
+
+            <Text style={tw`text-gray-400 text-xs`}>Linked {dayjs(device.linkedAt).fromNow()}</Text>
+          </DefaultView>
+        </DefaultView>
+
+        {device.linkBroken ? <LinkBroken /> : null}
       </View>
-      
+
       <View style={tw`p-4 flex-1 shadow-sm mb-1`}>
         <Text style={tw`text-xl mb-2`}>Pings</Text>
 

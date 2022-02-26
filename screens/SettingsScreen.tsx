@@ -9,7 +9,7 @@ import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import tw from 'twrnc';
 
 import axios from '../api';
-import useStore from '../store';
+import useStore from '../state/store';
 import ThemeModal from '../components/settings/DeviceThemeModal';
 import TextInputModal from '../components/ui/TextInputModal';
 import { View, Text, Switch, Pressable } from '../components/Themed';
@@ -18,8 +18,8 @@ export default function SettingsScreen() {
   const [
     mobileDeviceName,
     setMobileDeviceName,
-    // apiUrl,
-    // setApiUrl,
+    customApiUrl,
+    setCustomApiUrl,
     deviceTheme,
     confirmNewDevices,
     toggleConfirmNewDevices,
@@ -29,8 +29,8 @@ export default function SettingsScreen() {
     (state) => [
       state.mobileDeviceName,
       state.setMobileDeviceName,
-      // state.apiUrl,
-      // state.setApiUrl,
+      state.customApiUrl,
+      state.setCustomApiUrl,
       state.deviceTheme,
       state.confirmNewDevices,
       state.toggleConfirmNewDevices,
@@ -132,13 +132,13 @@ export default function SettingsScreen() {
         </Pressable>
       </SettingGroup>
 
-      {/* wip */}
-      {/* <SettingGroup title="Advanced">
+      {/* TODO: Test server health if changed */}
+      <SettingGroup title="Advanced">
         <TextInputModal 
           style={tw`flex flex-row justify-between items-center my-2`}
           title='Server'
-          value={apiUrl}
-          setValue={setApiUrl}
+          value={customApiUrl}
+          setValue={setCustomApiUrl}
           placeholderValue={Constants.manifest?.extra?.apiUrl}
         >
           <View style={tw`flex flex-row items-center`}>
@@ -146,10 +146,10 @@ export default function SettingsScreen() {
             <Text style={tw`ml-2`}>Server</Text>
           </View>
           <Text>
-            {!apiUrl || apiUrl === Constants.manifest?.extra?.apiUrl ? 'Default' : 'Custom'}
+            {customApiUrl && customApiUrl !== Constants.manifest?.extra?.apiUrl ? 'Custom' : 'Default'}
           </Text>
         </TextInputModal>
-      </SettingGroup> */}
+      </SettingGroup>
     </DefaultView>
   );
 }

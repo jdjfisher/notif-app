@@ -3,7 +3,7 @@ import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import * as TaskManager from 'expo-task-manager';
 import { Platform, unstable_batchedUpdates } from 'react-native';
-import useStore from '../store';
+import useStore from '../state/store';
 import { Ping } from '../types';
 import { navigationRef } from '../navigation/index'; 
 
@@ -59,8 +59,10 @@ export default async () => {
     if (cliToken && pingId) {
       const ping = useStore.getState().pings[cliToken]?.find(ping => ping.id === pingId);
 
-      if (ping && navigationRef.isReady())
+      if (ping && navigationRef.isReady()) {  
+        // @ts-ignore
         navigationRef.navigate('Ping', { ping });
+      }
     }
   });
 

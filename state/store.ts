@@ -1,7 +1,7 @@
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { CliDevice, Ping } from './types';
+import { CliDevice, Ping } from '../types';
 import { ColorSchemeName } from 'react-native';
 
 interface State {
@@ -10,8 +10,11 @@ interface State {
   confirmNewDevices: boolean;
   toggleConfirmNewDevices: () => void;
 
-  mobileDeviceName: string;
-  setMobileDeviceName: (name: string) => void;
+  mobileDeviceName: string | undefined;
+  setMobileDeviceName: (name?: string) => void;
+
+  customApiUrl: string | undefined;
+  setCustomApiUrl: (value?: string) => void;
 
   silentMode: boolean;
   toggleSilentMode: () => void;
@@ -21,6 +24,7 @@ interface State {
 
   devices: CliDevice[],
   addDevice: (device: CliDevice) => void,
+  renameDevice: (device: CliDevice, name: string) => void,
   removeDevice: (device: CliDevice) => void,
   recordBrokenLink: (device: CliDevice) => void,
   clearDevices: () => void,
@@ -29,6 +33,7 @@ interface State {
   recordPing: (deviceToken: string, ping: Ping) => void,
   clearPings: (deviceToken: string) => void,
   clearAllPings: () => void,
+  latestPing: (deviceToken: string) => Ping | null, 
 }
 
 // TODO: Store slices ;) 
@@ -44,6 +49,9 @@ const useStore = create<State>(
       mobileDeviceName: '',
       setMobileDeviceName: (name) => set({ mobileDeviceName: name }),
 
+      customApiUrl: undefined,
+      setCustomApiUrl: (value) => set({ customApiUrl: value }),
+
       silentMode: false,
       toggleSilentMode: () => set((state) => ({ silentMode: !state.silentMode })),
 
@@ -52,6 +60,10 @@ const useStore = create<State>(
 
       devices: [],
       addDevice: (device) => set((state) => ({ devices: state.devices.concat(device) })),
+      renameDevice: (device, name) => {
+        const newDevice = { ...device, name };
+        set((state) => ({ devices: [...state.devices.filter(d => d.token !== device.token), newDevice] }));
+      },
       removeDevice: (device) => {
         set((state) => ({ devices: state.devices.filter(d => d.token !== device.token) }));
         get().clearPings(device.token);
@@ -80,6 +92,7 @@ const useStore = create<State>(
         set({ pings: clone });
       },
       clearAllPings: () => set({ pings: {} }), 
+      latestPing: (token) => get().pings[token]?.[0] ?? null,
     }),
     {
       name: 'notif',

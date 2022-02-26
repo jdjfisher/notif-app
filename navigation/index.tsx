@@ -50,8 +50,11 @@ function RootNavigator() {
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
+        {/* @ts-ignore */}
         <Stack.Screen name="Add Device" component={AddDeviceScreen} />
+        {/* @ts-ignore */}
         <Stack.Screen name="Device" component={ViewDeviceScreen} />
+        {/* @ts-ignore */}
         <Stack.Screen name="Ping" component={ViewPingScreen} />
       </Stack.Group>
     </Stack.Navigator>
@@ -81,6 +84,7 @@ function BottomTabNavigator() {
           tabBarIcon: ({ color }) => <TabBarIcon name="devices" color={color} />,
           headerRight: () => (
             <Pressable
+              // @ts-ignore
               onPress={() => navigation.navigate('Add Device')}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,

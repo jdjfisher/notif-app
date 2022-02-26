@@ -1,9 +1,19 @@
 import axios from 'axios';
 import Constants from 'expo-constants';
-import store from './store';
+import store from './state/store';
 
 const client = axios.create({
   baseURL: Constants.manifest?.extra?.apiUrl,
+});
+
+client.interceptors.request.use((config) => {
+  const customBaseURL = store.getState().customApiUrl; 
+
+  if (customBaseURL) {
+    config.baseURL = customBaseURL;
+  }
+
+  return config;
 });
 
 client.interceptors.response.use(

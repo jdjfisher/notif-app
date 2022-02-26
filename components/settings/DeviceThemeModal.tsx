@@ -4,7 +4,7 @@ import { ColorSchemeName } from 'react-native';
 import tw from 'twrnc';
 
 import { View, Modal, Pressable, useThemeColor } from '../Themed';
-import useStore from '../../store';
+import useStore from '../../state/store';
 import shallow from 'zustand/shallow';
 
 export default function ThemeModal(props: any) {

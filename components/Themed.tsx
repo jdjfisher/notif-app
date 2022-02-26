@@ -12,6 +12,7 @@ import {
   TextInput as DefaultTextInput,
   Pressable as DefaultPressable,
 } from 'react-native';
+import { PressableProps } from 'react-native';
 import tw from 'twrnc';
 
 import Colors from '../constants/Colors';
@@ -38,10 +39,10 @@ export function View(props: DefaultView['props']) {
 }
 
 type ModalActions = { show: () => void; hide: () => void };
-type ModalProps = DefaultModal['props'] & { onOk?: () => void };
+type ModalProps = DefaultModal['props'] & { onAccept?: () => void; acceptText?: string };
 
 export const Modal = React.forwardRef<ModalActions, ModalProps>((props, ref) => {
-  const { onOk, ...otherProps } = props;
+  const { onAccept, acceptText, ...otherProps } = props;
   const [visible, setVisible] = React.useState(false);
 
   React.useImperativeHandle(ref, () => ({
@@ -68,15 +69,15 @@ export const Modal = React.forwardRef<ModalActions, ModalProps>((props, ref) => 
               <Text style={tw`text-blue-500 text-right`}>CANCEL</Text>
             </DefaultPressable>
 
-            {onOk && (
+            {(onAccept || acceptText) && (
               <DefaultPressable
                 style={tw`ml-5`}
                 onPress={() => {
                   setVisible(false);
-                  onOk();
+                  onAccept?.();
                 }}
               >
-                <Text style={tw`text-blue-500 text-right`}>OK</Text>
+                <Text style={tw`text-blue-500 text-right`}>{acceptText ?? 'OK'}</Text>
               </DefaultPressable>
             )}
           </View>
@@ -92,7 +93,7 @@ export function Switch(props: DefaultSwitch['props']) {
   return <DefaultSwitch {...otherProps} />;
 }
 
-export function TextInput(props: DefaultTextInput['props']) {
+export const TextInput = React.forwardRef<any, DefaultTextInput['props']>((props, ref) => {
   const { style, ...otherProps } = props;
   const color = useThemeColor('text');
   const placeholderColor = useThemeColor('placeholderText');
@@ -101,16 +102,18 @@ export function TextInput(props: DefaultTextInput['props']) {
     <DefaultTextInput
       placeholderTextColor={placeholderColor}
       style={[{ color }, style]}
+      ref={ref}
       {...otherProps}
     />
   );
-}
+});
 
-export function Pressable(props: any) {
+export function Pressable(props: PressableProps) {
   const { style, ...otherProps } = props;
 
   return (
     <DefaultPressable
+      // @ts-ignore
       style={({ pressed }) => [tw.style({ 'opacity-50': pressed }), style]}
       {...otherProps}
     />

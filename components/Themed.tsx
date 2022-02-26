@@ -12,6 +12,7 @@ import {
   TextInput as DefaultTextInput,
   Pressable as DefaultPressable,
 } from 'react-native';
+import { PressableProps } from 'react-native';
 import tw from 'twrnc';
 
 import Colors from '../constants/Colors';
@@ -107,11 +108,12 @@ export const TextInput = React.forwardRef<any, DefaultTextInput['props']>((props
   );
 });
 
-export function Pressable(props: any) {
+export function Pressable(props: PressableProps) {
   const { style, ...otherProps } = props;
 
   return (
     <DefaultPressable
+      // @ts-ignore
       style={({ pressed }) => [tw.style({ 'opacity-50': pressed }), style]}
       {...otherProps}
     />

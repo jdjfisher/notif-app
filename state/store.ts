@@ -10,8 +10,8 @@ interface State {
   confirmNewDevices: boolean;
   toggleConfirmNewDevices: () => void;
 
-  mobileDeviceName: string;
-  setMobileDeviceName: (name: string) => void;
+  mobileDeviceName: string | undefined;
+  setMobileDeviceName: (name?: string) => void;
 
   customApiUrl: string | undefined;
   setCustomApiUrl: (value?: string) => void;

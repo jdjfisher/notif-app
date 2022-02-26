@@ -1,15 +1,16 @@
 import React, { ElementRef, useRef, useState } from 'react';
+import { PressableProps } from 'react-native';
 import tw from 'twrnc';
 
 import { View, Modal, Pressable, Text, TextInput } from '../Themed';
 
-interface Props {
+type Props = {
   title: string;
   value?: string;
   placeholderValue?: string;
   setValue: (value?: string) => void;
   children?: React.ReactNode;
-}
+} & Omit<PressableProps, 'onPress'>;
 
 // TODO: Fix modal width formatting
 
@@ -41,7 +42,7 @@ export default function TextInputModal({
       {/* The Modal */}
       <Modal
         ref={modalRef}
-        acceptText='SAVE'
+        acceptText="SAVE"
         onAccept={() => setValue(localValue)}
         onShow={() => {
           setTimeout(() => inputRef.current?.focus(), 20); // TODO: Avoid timeout

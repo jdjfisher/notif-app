@@ -55,10 +55,11 @@ export const Modal = React.forwardRef<ModalActions, ModalProps>((props, ref) => 
       animationType="fade"
       transparent={true}
       visible={visible}
+      statusBarTranslucent
       onRequestClose={() => setVisible(false)}
       {...otherProps}
     >
-      <DefaultView style={tw`flex flex-grow items-center justify-center bg-opacity-50 bg-black`}>
+      <DefaultView style={tw`flex-grow justify-center p-10 bg-opacity-30 bg-black`}>
         <View style={tw`p-5 shadow-lg rounded-md`}>
           {/* Modal body */}
           {props.children}

@@ -94,6 +94,7 @@ export default function SettingsScreen() {
           value={mobileDeviceName}
           setValue={setMobileDeviceName}
           placeholderValue={Device.deviceName || Device.modelName || undefined}
+          maxLength={40}
         >
           <View style={tw`flex flex-row items-center`}>
             <MaterialIcons name="smartphone" size={25} color={tw.color('gray-400')} />
@@ -140,6 +141,7 @@ export default function SettingsScreen() {
           value={customApiUrl}
           setValue={setCustomApiUrl}
           placeholderValue={Constants.manifest?.extra?.apiUrl}
+          maxLength={50}
         >
           <View style={tw`flex flex-row items-center`}>
             <MaterialIcons name="storage" size={25} color={tw.color('gray-400')} />

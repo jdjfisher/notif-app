@@ -106,6 +106,7 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
               setValue={(name) => {
                 if (name) renameDevice(device, name);
               }}
+              maxLength={20}
             >
               <Text style={tw`text-xl`}>{device.name}</Text>
             </TextInputModal>

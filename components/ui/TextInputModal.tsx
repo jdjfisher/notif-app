@@ -7,8 +7,9 @@ import { View, Modal, Pressable, Text, TextInput } from '../Themed';
 type Props = {
   title: string;
   value?: string;
-  placeholderValue?: string;
   setValue: (value?: string) => void;
+  placeholderValue?: string;
+  maxLength?: number;
   children?: React.ReactNode;
 } & Omit<PressableProps, 'onPress'>;
 
@@ -19,6 +20,7 @@ export default function TextInputModal({
   value,
   setValue,
   placeholderValue,
+  maxLength,
   children,
   ...other
 }: Props) {
@@ -53,7 +55,7 @@ export default function TextInputModal({
           <TextInput
             ref={inputRef}
             selectTextOnFocus
-            maxLength={30} // TODO: Prop
+            maxLength={maxLength} 
             style={tw`my-3 border-b border-gray-300`}
             onChangeText={setLocalValue}
             value={localValue}

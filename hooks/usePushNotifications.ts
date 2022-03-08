@@ -1,5 +1,6 @@
 
 import * as Device from 'expo-device';
+import * as Sentry from 'sentry-expo';
 import * as Notifications from 'expo-notifications';
 import * as TaskManager from 'expo-task-manager';
 import { Platform, unstable_batchedUpdates } from 'react-native';
@@ -10,6 +11,11 @@ import { navigationRef } from '../navigation/index';
 const BACKGROUND_NOTIFICATION_TASK: string = 'BACKGROUND-NOTIFICATION-TASK';
 
 TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error, executionInfo }: any) => {
+  if (error) {
+    Sentry.Native.captureMessage(error.message);
+    return;
+  } 
+
   handlePing(data.notification);
 });
 
@@ -69,7 +75,7 @@ export default async () => {
   Notifications.addNotificationReceivedListener(handlePing);
 };
 
-const handlePing = async (notification: any) => {
+const handlePing = async (notification: Notifications.Notification) => {
   const date = notification.date;
   const { title, body } = notification.request.content;
   const cliToken = notification.request.content.data.cliToken as string | undefined; // TODO: Replace with an ID
@@ -80,7 +86,7 @@ const handlePing = async (notification: any) => {
 
   const ping: Ping = {
     id: pingId,
-    message: body,
+    message: body || undefined,
     timestamp: date,
   };
 

@@ -1,6 +1,7 @@
 import { FontAwesome } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import * as Sentry from 'sentry-expo';
 import * as React from 'react';
 
 export default function useCachedResources() {
@@ -17,9 +18,9 @@ export default function useCachedResources() {
           ...FontAwesome.font,
           'space-mono': require('../assets/fonts/SpaceMono-Regular.ttf'),
         });
-      } catch (e) {
-        // We might want to provide this error information to an error reporting service
-        console.warn(e);
+      } catch (error) {
+        Sentry.Native.captureException(error);
+        console.warn(error);
       } finally {
         setLoadingComplete(true);
         SplashScreen.hideAsync();

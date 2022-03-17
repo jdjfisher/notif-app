@@ -4,6 +4,10 @@ import tw from 'twrnc';
 
 import { View, Modal, Pressable, Text, TextInput } from '../Themed';
 
+interface Actions {
+  show: () => void;
+}
+
 type Props = {
   title: string;
   value?: string;
@@ -13,9 +17,7 @@ type Props = {
   children?: React.ReactNode;
 } & Omit<PressableProps, 'onPress'>;
 
-// TODO: Fix modal width formatting
-
-export default function TextInputModal({
+const TextInputModal = React.forwardRef<Actions, Props>(({
   title,
   value,
   setValue,
@@ -23,10 +25,14 @@ export default function TextInputModal({
   maxLength,
   children,
   ...other
-}: Props) {
+}, forwardRef) => {
   const [localValue, setLocalValue] = useState(value);
   const modalRef = useRef<ElementRef<typeof Modal>>(null);
   const inputRef = useRef<ElementRef<typeof TextInput>>(null);
+
+  React.useImperativeHandle(forwardRef, () => ({
+    show: () => modalRef.current?.show(),
+  }));
 
   return (
     <>
@@ -65,4 +71,6 @@ export default function TextInputModal({
       </Modal>
     </>
   );
-}
+});
+
+export default TextInputModal;

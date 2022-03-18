@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Button, Pressable, Alert, FlatList, View as DefaultView } from 'react-native';
+import React, { ElementRef, useEffect, useRef } from 'react';
+import { Pressable, Alert, FlatList, View as DefaultView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import TextInputModal from '../components/ui/TextInputModal';
 import shallow from 'zustand/shallow';
@@ -8,11 +8,15 @@ import tw from 'twrnc';
 
 import { ModalScreenProps } from '../types';
 import { Text, View } from '../components/Themed';
+import Menu from '../components/Menu';
 import api from '../api';
 import useStore from '../state/store';
 import LinkBroken from '../components/device/LinkBroken';
 
 export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps<'Device'>) {
+  // Ref hooks
+  const textInputModalRef = useRef<ElementRef<typeof TextInputModal>>(null);
+
   // State hooks
   const [devices, allPings, clearPings, renameDevice, removeDevice, recordBrokenLink] = useStore(
     (state) => [
@@ -25,6 +29,22 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
     ],
     shallow
   );
+
+  //
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Menu
+          options={{
+            'Remove': promptRemove,
+            'Rename': () => textInputModalRef.current?.show(),
+            // 'Change Icon': () => {}, // TODO: Implement
+            ...(pings.length ? { 'Clear Pings': promptClearPings } : {}),
+          }}
+        />
+      ),
+    });
+  }, [ navigation, allPings ]);
 
   // Fetch the device data
   const device = devices.find((d) => d.token === route.params.cliToken);
@@ -101,6 +121,7 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
 
           <DefaultView>
             <TextInputModal
+              ref={textInputModalRef}
               title="Rename Device"
               value={device.name}
               setValue={(name) => {
@@ -144,19 +165,6 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
         ) : (
           <Text style={tw`text-gray-500`}>No ping history</Text>
         )}
-      </View>
-
-      {/* TODO: Replace with menu */}
-      <View style={tw`p-4 flex-row shadow-sm mb-1`}>
-        {pings.length ? (
-          <View style={tw`flex-grow mr-2`}>
-            <Button title={'Clear Pings'} onPress={() => promptClearPings()} />
-          </View>
-        ) : null}
-
-        <View style={tw`flex-grow`}>
-          <Button title={'Remove Device'} onPress={() => promptRemove()} />
-        </View>
       </View>
     </DefaultView>
   );

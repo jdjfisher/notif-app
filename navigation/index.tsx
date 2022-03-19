@@ -8,9 +8,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme, createNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { Pressable } from '../components/Themed';
 
 import Colors from '../constants/Colors';
+import { Pressable } from '../components/Themed';
 import useColorScheme from '../hooks/useColorScheme';
 import AddDeviceScreen from '../screens/AddDeviceScreen';
 import ViewDeviceScreen from '../screens/ViewDeviceScreen';
@@ -75,6 +75,9 @@ function BottomTabNavigator() {
       initialRouteName="Devices"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
+        tabBarHideOnKeyboard: true,
+        tabBarStyle: { height: 60 },
+        tabBarItemStyle: { padding: 8 },
       }}>
       <BottomTab.Screen
         name="Devices"

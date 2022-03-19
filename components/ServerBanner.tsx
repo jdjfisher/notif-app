@@ -5,13 +5,13 @@ import api from '../api';
 import tw from 'twrnc';
 
 export default () => {
-  const serverStatus = useStore(state => state.serverStatus);
+  const apiStatus = useStore(state => state.apiStatus);
 
   useEffect(() => {
-    checkServerStatus();
+    checkApiStatus();
   }, []);
 
-  const checkServerStatus = async () => {
+  const checkApiStatus = async () => {
     try {
       await api.get('/health');
     } catch (error) {
@@ -19,11 +19,11 @@ export default () => {
     }
   }
 
-  if (serverStatus !== 'connected')
+  if (apiStatus !== 'connected')
     return (
-      <Pressable style={tw`bg-red-500 p-4`} onPress={checkServerStatus}>
+      <Pressable style={tw`bg-red-500 p-4`} onPress={checkApiStatus}>
         <Text style={tw`text-center text-white font-bold`}>
-          { serverStatus === 'maintenance' ? 'Server under maintenance' : 'Lost connection to Server' }
+          { apiStatus === 'maintenance' ? 'Server under maintenance' : 'Lost connection to Server' }
         </Text>
       </Pressable>
     );

@@ -18,14 +18,14 @@ client.interceptors.request.use((config) => {
 
 client.interceptors.response.use(
   (response) => {
-    store.setState({ serverStatus: 'connected' });
+    store.setState({ apiStatus: 'connected' });
     return response;
   },
   (error) => {
     if (error.response === undefined || error.response.status === 502) {
-      store.setState({ serverStatus: 'disconnected' });
+      store.setState({ apiStatus: 'disconnected' });
     } else if (error.response.status === 503) {
-      store.setState({ serverStatus: 'maintenance' });
+      store.setState({ apiStatus: 'maintenance' });
     }
 
     return Promise.reject(error);

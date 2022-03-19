@@ -32,6 +32,28 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
     shallow
   );
 
+  // Fetch the device data
+  const cliToken = route.params.cliToken;
+  const device = devices.find((d) => d.token === cliToken);
+  const pings = allPings[cliToken] ?? [];
+
+  useEffect(() => {
+    // We know the link is broken, only this app can correct this, .*. don't verify again
+    if (!device || device.linkBroken) return;
+
+    const payload = { cliToken };
+  
+    api
+      .post('status', payload)
+      .then((response) => {
+        if (response?.data?.linked === false) {
+          recordBrokenLink(device);
+          Alert.alert('Link Broken', `${device.name} has been unlinked from this deivce`);
+        }
+      })
+      .catch((error) => console.debug(error));
+  }, []);
+
   //
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -46,36 +68,12 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
         />
       ),
     });
-  }, [ navigation, allPings ]);
-
-  // Fetch the device data
-  const device = devices.find((d) => d.token === route.params.cliToken);
-
-  useEffect(() => {
-    // We know the link is broken, only this app can correct this, .*. don't verify again
-    if (!device || device.linkBroken) return;
-
-    const payload = {
-      cliToken: device.token,
-    };
-
-    api
-      .post('status', payload)
-      .then((response) => {
-        if (response?.data?.linked === false) {
-          recordBrokenLink(device);
-          Alert.alert('Link Broken', `${device.name} has been unlinked from this deivce`);
-        }
-      })
-      .catch((error) => console.debug(error));
-  }, []);
+  }, [ navigation, pings ]);
 
   // Abort if the device could not be found
   if (!device) {
     return null;
   }
-
-  const pings = allPings[device.token] ?? [];
 
   const promptClearPings = () => {
     Alert.alert('Clear Pings', `Clear all ping history for ${device.name}`, [

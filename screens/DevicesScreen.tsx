@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Button, FlatList, View as DefaultView } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import shallow from 'zustand/shallow';
@@ -61,7 +61,7 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'Device
             style={tw`p-3 flex-row border-t border-gray-100 justify-between items-start`}
           >
             <DefaultView style={tw`flex-row items-center`}>
-              <MaterialIcons
+              <MaterialCommunityIcons
                 name={device.icon}
                 size={35}
                 color={tw.color('text-black')}

@@ -5,6 +5,7 @@
 
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 declare global {
@@ -48,7 +49,7 @@ export type ModalScreenProps<Screen extends keyof ModalParamList> = NativeStackS
 
 export interface CliDevice {
   name: string;
-  icon: 'computer' | 'dns' | 'storage' | 'desktop-mac';
+  icon: keyof typeof MaterialCommunityIcons.glyphMap;
   token: string;
   linkedAt: string;
   linkBroken: boolean;

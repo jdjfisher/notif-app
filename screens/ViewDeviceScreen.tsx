@@ -1,30 +1,52 @@
-import React, { useEffect } from 'react';
-import { Button, Pressable, Alert, FlatList, View as DefaultView } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import React, { ElementRef, useEffect, useRef } from 'react';
+import { Pressable, Alert, FlatList, View as DefaultView } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import TextInputModal from '../components/ui/TextInputModal';
 import shallow from 'zustand/shallow';
 import dayjs from 'dayjs';
 import tw from 'twrnc';
 
-import { ModalScreenProps } from '../types';
+import { CliDevice, ModalScreenProps } from '../types';
 import { Text, View } from '../components/Themed';
+import Menu from '../components/Menu';
 import api from '../api';
 import useStore from '../state/store';
 import LinkBroken from '../components/device/LinkBroken';
+import RadioButtonModal from '../components/ui/RadioButtonModal';
 
 export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps<'Device'>) {
+  // Ref hooks
+  const renameDeviceModalRef = useRef<ElementRef<typeof TextInputModal>>(null);
+  const changeIconModalRef = useRef<ElementRef<typeof RadioButtonModal>>(null);
+
   // State hooks
-  const [devices, allPings, clearPings, renameDevice, removeDevice, recordBrokenLink] = useStore(
+  const [devices, allPings, clearPings, editDevice, removeDevice, recordBrokenLink] = useStore(
     (state) => [
       state.devices,
       state.pings,
       state.clearPings,
-      state.renameDevice,
+      state.editDevice,
       state.removeDevice,
       state.recordBrokenLink,
     ],
     shallow
   );
+
+  //
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Menu
+          options={{
+            'Remove': promptRemove,
+            'Rename': () => renameDeviceModalRef.current?.show(),
+            'Change Icon': () => changeIconModalRef.current?.show(),
+            ...(pings.length ? { 'Clear Pings': promptClearPings } : {}),
+          }}
+        />
+      ),
+    });
+  }, [ navigation, allPings ]);
 
   // Fetch the device data
   const device = devices.find((d) => d.token === route.params.cliToken);
@@ -92,7 +114,7 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
     <DefaultView style={tw`h-full`}>
       <View style={tw`p-3 flex flex-row justify-between items-center shadow-sm mb-1`}>
         <DefaultView style={tw`flex-row items-center`}>
-          <MaterialIcons
+          <MaterialCommunityIcons
             name={device.icon}
             size={35}
             color={tw.color('text-black')}
@@ -101,10 +123,11 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
 
           <DefaultView>
             <TextInputModal
+              ref={renameDeviceModalRef}
               title="Rename Device"
               value={device.name}
               setValue={(name) => {
-                if (name) renameDevice(device, name);
+                if (name) editDevice(device, { name });
               }}
               maxLength={20}
             >
@@ -146,18 +169,24 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
         )}
       </View>
 
-      {/* TODO: Replace with menu */}
-      <View style={tw`p-4 flex-row shadow-sm mb-1`}>
-        {pings.length ? (
-          <View style={tw`flex-grow mr-2`}>
-            <Button title={'Clear Pings'} onPress={() => promptClearPings()} />
-          </View>
-        ) : null}
-
-        <View style={tw`flex-grow`}>
-          <Button title={'Remove Device'} onPress={() => promptRemove()} />
-        </View>
-      </View>
+      {/* TODO: Preview icons */}
+      <RadioButtonModal<CliDevice['icon']> 
+        ref={changeIconModalRef} 
+        value={device.icon}
+        setValue={icon => {
+          if (icon) editDevice(device, { icon });
+        }}
+        options={{
+          'Laptop': 'laptop',
+          'Desktop': 'desktop-tower',
+          'Server': 'server',
+          'Docker': 'docker',
+          'AWS': 'aws',
+          'Google': 'google-cloud',
+          'Azure': 'microsoft-azure',
+          'Digital Ocean': 'digital-ocean',
+        }}
+      />
     </DefaultView>
   );
 }

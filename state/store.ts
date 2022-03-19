@@ -24,7 +24,7 @@ interface State {
 
   devices: CliDevice[],
   addDevice: (device: CliDevice) => void,
-  renameDevice: (device: CliDevice, name: string) => void,
+  editDevice: (device: CliDevice, attributes: { name?: string, icon?: CliDevice['icon'] }) => void,
   removeDevice: (device: CliDevice) => void,
   recordBrokenLink: (device: CliDevice) => void,
   clearDevices: () => void,
@@ -60,8 +60,8 @@ const useStore = create<State>(
 
       devices: [],
       addDevice: (device) => set((state) => ({ devices: state.devices.concat(device) })),
-      renameDevice: (device, name) => {
-        const newDevice = { ...device, name };
+      editDevice: (device, attributes) => {
+        const newDevice = { ...device, ...attributes };
         set((state) => ({ devices: [...state.devices.filter(d => d.token !== device.token), newDevice] }));
       },
       removeDevice: (device) => {

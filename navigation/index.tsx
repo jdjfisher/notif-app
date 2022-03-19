@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme, createNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { Pressable } from 'react-native';
+import { Pressable } from '../components/Themed';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
@@ -83,12 +83,8 @@ function BottomTabNavigator() {
           title: 'Devices',
           tabBarIcon: ({ color }) => <TabBarIcon name="devices" color={color} />,
           headerRight: () => (
-            <Pressable
-              // @ts-ignore
-              onPress={() => navigation.navigate('Add Device')}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}>
+            // @ts-ignore
+            <Pressable onPress={() => navigation.navigate('Add Device')}>
               <MaterialIcons
                 name="add"
                 size={25}

@@ -64,7 +64,7 @@ export default function AddDeviceScreen({ navigation }: ModalScreenProps<'Add De
       if (!('name' in device && 'token' in device && 'socketId' in device)) 
         throw 'invalid';
 
-      device.icon = 'computer';
+      device.icon = 'laptop';
       device.linkBroken = false;
       device.linkedAt = dayjs().toString();
     } catch (error) {

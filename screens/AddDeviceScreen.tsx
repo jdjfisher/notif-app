@@ -1,6 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
 import { Camera } from 'expo-camera';
-import * as Notifications from 'expo-notifications';
 import React, { useEffect, useRef, useState } from 'react';
 import * as Device from 'expo-device';
 import * as Sentry from 'sentry-expo';
@@ -14,6 +13,7 @@ import { ModalScreenProps, CliDevice } from '../types';
 import { Text, View } from '../components/Themed';
 import useStore from '../state/store';
 import api from '../api';
+import { getPushToken } from '../lib/helpers';
 
 
 interface LinkingCliDevice extends CliDevice {
@@ -92,7 +92,7 @@ export default function AddDeviceScreen({ navigation }: ModalScreenProps<'Add De
 
   const handleAddDevice = async (device: LinkingCliDevice) => {
     try {
-      const pushToken = (await Notifications.getExpoPushTokenAsync()).data;
+      const pushToken = await getPushToken();
 
       const payload = {
         socketId: device.socketId,

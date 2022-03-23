@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Button, FlatList, View as DefaultView } from 'react-native';
-import * as Notifications from 'expo-notifications';
 import shallow from 'zustand/shallow';
 import dayjs from 'dayjs';
 import tw from 'twrnc';
@@ -11,6 +10,7 @@ import useStore from '../state/store';
 import { Text, View, Pressable } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 import LinkBroken from '../components/device/LinkBroken';
+import { getPushToken } from '../lib/helpers';
 
 export default function DevicesScreen({ navigation }: RootTabScreenProps<'Devices'>) {
   const [devices, pings, latestPing, recordBrokenLink] = useStore(
@@ -21,7 +21,7 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'Device
   useEffect(() => {
     (async () => {
       const payload = {
-        mobileToken: (await Notifications.getExpoPushTokenAsync()).data,
+        mobileToken: await getPushToken(),
       };
 
       api.post('status', payload).then((response) => {

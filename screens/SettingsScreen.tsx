@@ -1,5 +1,4 @@
 import React from 'react';
-import * as Notifications from 'expo-notifications';
 import { Alert, View as DefaultView } from 'react-native';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
@@ -13,6 +12,7 @@ import useStore from '../state/store';
 import ThemeModal from '../components/settings/DeviceThemeModal';
 import TextInputModal from '../components/ui/TextInputModal';
 import { View, Text, Switch, Pressable } from '../components/Themed';
+import { getPushToken } from '../lib/helpers';
 
 export default function SettingsScreen() {
   const [
@@ -42,7 +42,7 @@ export default function SettingsScreen() {
 
   const unlinkAllDevices = async () => {
     try {
-      const pushToken = (await Notifications.getExpoPushTokenAsync()).data;
+      const pushToken = await getPushToken();
 
       const payload = {
         mobileToken: pushToken,

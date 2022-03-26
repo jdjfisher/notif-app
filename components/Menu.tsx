@@ -15,7 +15,7 @@ const Menu = ({ options }: Props) => {
 
   return (
     <DefaultView>
-      <Pressable onPress={() => setVisible(true)}>
+      <Pressable onPress={() => setVisible(true)} style={tw`p-1`} rippleRadius={16}>
         <MaterialCommunityIcons name="dots-vertical" size={25} />
       </Pressable>
 

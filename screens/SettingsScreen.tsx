@@ -79,38 +79,40 @@ export default function SettingsScreen() {
   return (
     <DefaultView style={tw`mt-1`}>
       <SettingGroup title="General">
-        <ThemeModal style={tw`flex flex-row justify-between items-center py-2`} disabled>
-          <View style={tw`flex flex-row items-center`}>
+        <ThemeModal style={tw`flex-row justify-between items-center py-3 px-4`}>
+          <DefaultView style={tw`flex-row items-center`}>
             <MaterialCommunityIcons name="theme-light-dark" size={25} color={tw.color('gray-400')} />
             <Text style={tw`ml-2`}>Theme</Text>
             <Text style={tw`text-red-500`}> (WIP)</Text>
-          </View>
+          </DefaultView>
+
           <Text style={tw`text-right`}>{deviceTheme ? capitalizeFirstLetter(deviceTheme) : 'System Default'}</Text>
         </ThemeModal>
 
         <TextInputModal 
-          style={tw`flex flex-row justify-between items-center my-2`}
+          style={tw`flex-row justify-between items-center py-3 px-4`}
           title='Device Name'
           value={mobileDeviceName}
           setValue={setMobileDeviceName}
           placeholderValue={Device.deviceName || Device.modelName || undefined}
           maxLength={40}
         >
-          <View style={tw`flex flex-row items-center`}>
+          <DefaultView style={tw`flex-row items-center`}>
             <MaterialIcons name="smartphone" size={25} color={tw.color('gray-400')} />
             <Text style={tw`ml-2`}>Name</Text>
-          </View>
+          </DefaultView>
 
           <Text>
             {mobileDeviceName || Device.deviceName || Device.modelName || ''}
           </Text>
         </TextInputModal>
 
-        <View style={tw`flex flex-row items-center my-2 justify-between`}>
-          <View style={tw`flex flex-row items-center`}>
+        <View style={tw`flex-row justify-between items-center px-4`}>
+          <DefaultView style={tw`flex-row items-center py-3`}>
             <MaterialIcons name="device-unknown" size={25} color={tw.color('gray-400')} />
             <Text style={tw`ml-2`}>Confirm new devices</Text>
-          </View>
+          </DefaultView>
+
           <Switch value={confirmNewDevices} onChange={toggleConfirmNewDevices} />
         </View>
       </SettingGroup>
@@ -118,7 +120,7 @@ export default function SettingsScreen() {
       <SettingGroup title="Storage">
         <Pressable
           onPress={() => promptClearAllPings()}
-          style={tw`flex flex-row items-center py-2`}
+          style={tw`flex-row items-center py-3 px-4`}
         >
           <MaterialIcons name="clear-all" size={25} color={tw.color('gray-400')} />
           <Text style={tw`ml-2`}>Clear ping history</Text>
@@ -126,7 +128,7 @@ export default function SettingsScreen() {
 
         <Pressable
           onPress={() => promptUnlinkAllDevices()}
-          style={tw`flex flex-row items-center py-2`}
+          style={tw`flex-row items-center py-3 px-4`}
         >
           <MaterialIcons name="delete" size={25} color={tw.color('gray-400')} />
           <Text style={tw`ml-2`}>Remove all devices</Text>
@@ -136,17 +138,18 @@ export default function SettingsScreen() {
       {/* TODO: Test server health if changed */}
       <SettingGroup title="Advanced">
         <TextInputModal 
-          style={tw`flex flex-row justify-between items-center my-2`}
+          style={tw`flex-row justify-between items-center py-3 px-4`}
           title='Server'
           value={customApiUrl}
           setValue={setCustomApiUrl}
           placeholderValue={Constants.manifest?.extra?.apiUrl}
           maxLength={50}
         >
-          <View style={tw`flex flex-row items-center`}>
+          <DefaultView style={tw`flex-row items-center`}>
             <MaterialIcons name="storage" size={25} color={tw.color('gray-400')} />
             <Text style={tw`ml-2`}>Server</Text>
-          </View>
+          </DefaultView>
+
           <Text>
             {customApiUrl && customApiUrl !== Constants.manifest?.extra?.apiUrl ? 'Custom' : 'Default'}
           </Text>
@@ -158,8 +161,8 @@ export default function SettingsScreen() {
 
 const SettingGroup = ({ title, children }: { title: string; children: React.ReactNode }) => {
   return (
-    <View style={tw`p-4 mb-4 shadow`}>
-      <Text style={tw`font-bold text-lg mb-2`}>{title}</Text>
+    <View style={tw`py-4 mb-4 shadow`}>
+      <Text style={tw`font-bold text-lg mb-2 mx-4`}>{title}</Text>
       {children}
     </View>
   );

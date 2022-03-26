@@ -7,6 +7,7 @@ export default {
     tint: '#2f95dc',
     tabIconDefault: '#ccc',
     tabIconSelected: '#2f95dc',
+    pressableRipple: '#f1f1f1',
   },
   dark: {
     text: '#fff',
@@ -15,5 +16,6 @@ export default {
     tint: '#fff',
     tabIconDefault: '#ccc',
     tabIconSelected: '#fff',
+    pressableRipple: '#444',
   },
 };

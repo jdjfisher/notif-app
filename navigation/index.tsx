@@ -5,9 +5,15 @@
  */
 import { MaterialIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer, DefaultTheme, DarkTheme, createNavigationContainerRef } from '@react-navigation/native';
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+  createNavigationContainerRef,
+} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
+import tw from 'twrnc';
 
 import Colors from '../constants/Colors';
 import { Pressable } from '../components/Themed';
@@ -78,7 +84,9 @@ function BottomTabNavigator() {
         tabBarHideOnKeyboard: true,
         tabBarStyle: { height: 60 },
         tabBarItemStyle: { padding: 8 },
-      }}>
+        tabBarButton: (props) => <Pressable {...props} />,
+      }}
+    >
       <BottomTab.Screen
         name="Devices"
         component={DevicesScreen}
@@ -86,14 +94,13 @@ function BottomTabNavigator() {
           title: 'Devices',
           tabBarIcon: ({ color }) => <TabBarIcon name="devices" color={color} />,
           headerRight: () => (
-            // @ts-ignore
-            <Pressable onPress={() => navigation.navigate('Add Device')}>
-              <MaterialIcons
-                name="add"
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
-              />
+            <Pressable
+              // @ts-ignore
+              onPress={() => navigation.navigate('Add Device')}
+              rippleRadius={16}
+              style={tw`p-1 mr-4`}
+            >
+              <MaterialIcons name="add" size={25} color={Colors[colorScheme].text} />
             </Pressable>
           ),
         })}

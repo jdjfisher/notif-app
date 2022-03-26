@@ -23,7 +23,7 @@ function RadioGroup<T>({ value, options, onSelect, customLabel, size = 20 }: Pro
       {Object.entries(options).map(([label, option]) => (
         <Pressable
           key={label}
-          style={tw`flex flex-row items-center p-1`}
+          style={tw`flex flex-row items-center px-2 py-1`}
           onPress={() => {
             if (onSelect) onSelect(option);
           }}

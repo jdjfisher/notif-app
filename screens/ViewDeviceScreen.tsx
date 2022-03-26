@@ -1,5 +1,5 @@
 import React, { ElementRef, useEffect, useRef } from 'react';
-import { Pressable, Alert, FlatList, View as DefaultView } from 'react-native';
+import { Alert, FlatList, View as DefaultView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import TextInputModal from '../components/ui/TextInputModal';
 import shallow from 'zustand/shallow';
@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import tw from 'twrnc';
 
 import { CliDevice, ModalScreenProps } from '../types';
-import { Text, View } from '../components/Themed';
+import { Text, View, Pressable } from '../components/Themed';
 import Menu from '../components/Menu';
 import api from '../api';
 import useStore from '../state/store';
@@ -139,8 +139,8 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
         {device.linkBroken ? <LinkBroken /> : null}
       </View>
 
-      <View style={tw`p-4 flex-1 shadow-sm mb-1`}>
-        <Text style={tw`text-xl mb-2`}>Pings</Text>
+      <View style={tw`flex-1 shadow-sm pt-4`}>
+        <Text style={tw`text-xl mx-4 mb-2`}>Pings</Text>
 
         {pings.length ? (
           <FlatList
@@ -148,7 +148,7 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
             keyExtractor={(ping) => ping.id}
             renderItem={({ item: ping }) => (
               <Pressable
-                style={tw`border-t border-gray-100 py-3 pr-3`}
+                style={tw`border-t border-gray-100 py-3 px-4`}
                 onPress={() => navigation.navigate('Ping', { ping })}
               >
                 {ping.message ? (

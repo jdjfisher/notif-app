@@ -11,8 +11,9 @@ import {
   Switch as DefaultSwitch,
   TextInput as DefaultTextInput,
   Pressable as DefaultPressable,
+  Platform,
 } from 'react-native';
-import { PressableProps } from 'react-native';
+import { PressableProps as DefaultPressableProps } from 'react-native';
 import tw from 'twrnc';
 
 import Colors from '../constants/Colors';
@@ -111,13 +112,26 @@ export const TextInput = React.forwardRef<any, DefaultTextInput['props']>((props
   );
 });
 
+type PressableProps = Omit<DefaultPressableProps, 'android_ripple'> & {
+  rippleRadius?: number,
+};
+
 export function Pressable(props: PressableProps) {
-  const { style, ...otherProps } = props;
+  const { style, rippleRadius, ...otherProps } = props;
+
+  const rippleColour = useThemeColor('pressableRipple');
 
   return (
     <DefaultPressable
       // @ts-ignore
-      style={({ pressed }) => [tw.style({ 'opacity-50': pressed }), style]}
+      style={({ pressed }) => [
+        tw.style({ 'opacity-50': Platform.OS !== 'android' && pressed }),
+        style,
+      ]}
+      android_ripple={{
+        color: rippleColour,
+        radius: rippleRadius,
+      }}
       {...otherProps}
     />
   );

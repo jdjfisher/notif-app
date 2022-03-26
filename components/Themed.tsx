@@ -38,7 +38,7 @@ export function View(props: DefaultView['props']) {
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
 }
 
-type ModalActions = { show: () => void; hide: () => void };
+type ModalActions = { show: () => void; hide: (delay?: number) => void };
 type ModalProps = DefaultModal['props'] & { onAccept?: () => void; acceptText?: string };
 
 export const Modal = React.forwardRef<ModalActions, ModalProps>((props, ref) => {
@@ -47,7 +47,9 @@ export const Modal = React.forwardRef<ModalActions, ModalProps>((props, ref) => 
 
   React.useImperativeHandle(ref, () => ({
     show: () => setVisible(true),
-    hide: () => setVisible(false),
+    hide: (delay = 0) => {
+      setTimeout(() => setVisible(false), delay);
+    },
   }));
 
   return (

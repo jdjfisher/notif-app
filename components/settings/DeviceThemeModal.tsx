@@ -1,13 +1,17 @@
-import RadioGroup, { RadioButtonProps } from 'react-native-radio-buttons-group';
 import React, { ElementRef, useRef } from 'react';
-import { ColorSchemeName } from 'react-native';
-import tw from 'twrnc';
+import { ColorSchemeName, PressableProps } from 'react-native';
 
-import { View, Modal, Pressable, useThemeColor } from '../Themed';
+import { Pressable } from '../Themed';
 import useStore from '../../state/store';
 import shallow from 'zustand/shallow';
+import RadioGroupModal from '../ui/RadioGroupModal';
 
-export default function ThemeModal(props: any) {
+type Props = {
+  children: React.ReactNode
+} & PressableProps;
+
+// TODO: Could inline this component?
+function DeviceThemeModal(props: Props) {
   const { children, ...otherProps } = props;
 
   const [deviceTheme, setDeviceTheme] = useStore(
@@ -15,57 +19,28 @@ export default function ThemeModal(props: any) {
     shallow
   );
 
-  const modalRef = useRef<ElementRef<typeof Modal>>(null);
-
-  const textColour = useThemeColor('text');
-
-  const radioButtons: RadioButtonProps[] = [
-    {
-      id: 'light',
-      label: 'Light',
-      value: 'light',
-      selected: deviceTheme === 'light',
-    },
-    {
-      id: 'dark',
-      label: 'Dark',
-      value: 'dark',
-      selected: deviceTheme === 'dark',
-    },
-    {
-      id: 'default',
-      label: 'Follow System',
-      value: undefined,
-      selected: !deviceTheme,
-    },
-  ].map(button => ({
-    ...button,
-    color: textColour,
-    labelStyle: { color: textColour },
-  }));
-
-  const onPressRadioButton = (radioButtonsArray: RadioButtonProps[]) => {
-    setDeviceTheme(radioButtonsArray.find((b) => b.selected)?.value as ColorSchemeName); // TODO: Remove type assert
-    modalRef.current?.hide();
-  }
+  const modalRef = useRef<ElementRef<typeof RadioGroupModal>>(null);
 
   return (
     <>
       {/* Plain Pressable for opening the modal */}
-      <Pressable onPress={() => modalRef.current?.show()} {...otherProps}>
+      <Pressable {...otherProps} onPress={() => modalRef.current?.show()}>
         {children}
       </Pressable>
 
       {/* The Modal */}
-      <Modal ref={modalRef}>
-        <View style={tw`p-2`}>
-          <RadioGroup
-            containerStyle={tw`items-start`}
-            radioButtons={radioButtons}
-            onPress={onPressRadioButton}
-          />
-        </View>
-      </Modal>
+      <RadioGroupModal<ColorSchemeName>
+        ref={modalRef}
+        value={deviceTheme}
+        setValue={setDeviceTheme}
+        options={{
+          'Light': 'light',
+          'Dark': 'dark',
+          'Follow System': null,
+        }}
+      />
     </>
   );
 }
+
+export default DeviceThemeModal;

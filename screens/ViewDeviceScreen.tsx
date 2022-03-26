@@ -12,12 +12,12 @@ import Menu from '../components/Menu';
 import api from '../api';
 import useStore from '../state/store';
 import LinkBroken from '../components/device/LinkBroken';
-import RadioButtonModal from '../components/ui/RadioButtonModal';
+import RadioGroupModal from '../components/ui/RadioGroupModal';
 
 export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps<'Device'>) {
   // Ref hooks
   const renameDeviceModalRef = useRef<ElementRef<typeof TextInputModal>>(null);
-  const changeIconModalRef = useRef<ElementRef<typeof RadioButtonModal>>(null);
+  const changeIconModalRef = useRef<ElementRef<typeof RadioGroupModal>>(null);
 
   // State hooks
   const [devices, allPings, clearPings, editDevice, removeDevice, recordBrokenLink] = useStore(
@@ -42,7 +42,7 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
     if (!device || device.linkBroken) return;
 
     const payload = { cliToken };
-  
+
     api
       .post('status', payload)
       .then((response) => {
@@ -68,7 +68,7 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
         />
       ),
     });
-  }, [ navigation, pings ]);
+  }, [navigation, pings]);
 
   // Abort if the device could not be found
   if (!device) {
@@ -168,22 +168,33 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
       </View>
 
       {/* TODO: Preview icons */}
-      <RadioButtonModal<CliDevice['icon']> 
-        ref={changeIconModalRef} 
+      <RadioGroupModal<CliDevice['icon']>
+        ref={changeIconModalRef}
         value={device.icon}
-        setValue={icon => {
+        setValue={(icon) => {
           if (icon) editDevice(device, { icon });
         }}
         options={{
-          'Laptop': 'laptop',
-          'Desktop': 'desktop-tower',
-          'Server': 'server',
-          'Docker': 'docker',
-          'AWS': 'aws',
-          'Google': 'google-cloud',
-          'Azure': 'microsoft-azure',
+          Laptop: 'laptop',
+          Desktop: 'desktop-tower',
+          Server: 'server',
+          Docker: 'docker',
+          AWS: 'aws',
+          Google: 'google-cloud',
+          Azure: 'microsoft-azure',
           'Digital Ocean': 'digital-ocean',
         }}
+        customLabel={(label, value) => (
+          <DefaultView style={tw`flex-row`}>
+            <MaterialCommunityIcons
+              name={value}
+              size={20}
+              color={tw.color('text-black')}
+              style={tw`mr-2`}
+            />
+            <Text>{label}</Text>
+          </DefaultView>
+        )}
       />
     </DefaultView>
   );

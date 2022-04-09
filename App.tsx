@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as Sentry from 'sentry-expo';
 import Constants from 'expo-constants';
@@ -22,9 +22,7 @@ Sentry.init({
 export default function App() {
   const isLoadingComplete = useCachedResources();
 
-  useEffect(() => {
-    usePushNotifications();
-  }, []);
+  usePushNotifications();
 
   if (!isLoadingComplete) {
     return null;

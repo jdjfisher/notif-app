@@ -52,6 +52,14 @@ export default function usePushNotifications(): void {
           lightColor: '#FF231F7C',
         });
       }
+
+      Notifications.setNotificationHandler({
+        handleNotification: async () => ({
+          shouldShowAlert: true,
+          shouldPlaySound: true,
+          shouldSetBadge: false,
+        }),
+      });
     })();
 
     const subscriptions = [

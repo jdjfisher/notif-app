@@ -7,7 +7,7 @@ import shallow from 'zustand/shallow';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import tw from 'twrnc';
 
-import axios from '../api';
+import NotifApi from '../lib/api/bindings';
 import useStore from '../state/store';
 import ThemeModal from '../components/settings/DeviceThemeModal';
 import TextInputModal from '../components/ui/TextInputModal';
@@ -49,7 +49,7 @@ export default function SettingsScreen() {
       };
 
       // Clean server links
-      await axios.post('unlink', payload);
+      await NotifApi.unlink(payload);
 
       // Clean local storage
       clearDevices();

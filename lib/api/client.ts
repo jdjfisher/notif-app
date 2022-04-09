@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Constants from 'expo-constants';
-import store from './state/store';
+import store from '../../state/store';
 
 const client = axios.create({
   baseURL: Constants.manifest?.extra?.apiUrl,

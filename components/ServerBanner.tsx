@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Text, Pressable } from 'react-native';
 import useStore from '../state/store';
-import api from '../api';
+import NotifApi from '../lib/api/bindings';
 import tw from 'twrnc';
 
 export default () => {
@@ -13,7 +13,7 @@ export default () => {
 
   const checkApiStatus = async () => {
     try {
-      await api.get('/health');
+      await NotifApi.health();
     } catch (error) {
       console.debug(error);     
     }

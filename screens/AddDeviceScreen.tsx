@@ -12,7 +12,7 @@ import Svg, { Path } from 'react-native-svg';
 import { ModalScreenProps, CliDevice } from '../types';
 import { Text, View } from '../components/Themed';
 import useStore from '../state/store';
-import api from '../api';
+import NotifApi from '../lib/api/bindings';
 import { getPushToken } from '../lib/helpers';
 
 
@@ -98,11 +98,12 @@ export default function AddDeviceScreen({ navigation }: ModalScreenProps<'Add De
         socketId: device.socketId,
         cliToken: device.token,
         mobileToken: pushToken,
-        mobileDeviceName: mobileDeviceName || Device.deviceName || Device.modelName,
+        mobileDeviceName: mobileDeviceName || Device.deviceName || Device.modelName || undefined,
       };
 
       // Request the link
-      await api.post('link', payload);
+      
+      await NotifApi.link(payload);
 
       // We don't want this anymore
       delete device.socketId; 

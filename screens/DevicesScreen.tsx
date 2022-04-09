@@ -5,7 +5,7 @@ import shallow from 'zustand/shallow';
 import dayjs from 'dayjs';
 import tw from 'twrnc';
 
-import api from '../api';
+import NotifApi from '../lib/api/bindings';
 import useStore from '../state/store';
 import { Text, View, Pressable } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
@@ -24,8 +24,8 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'Device
         mobileToken: await getPushToken(),
       };
 
-      api.post('status', payload).then((response) => {
-        const tokens = response?.data?.linkedCliTokens as string[] | undefined;
+      NotifApi.status(payload).then(response => {
+        const tokens = response?.data?.linkedCliTokens;
 
         if (tokens === undefined) return;
 

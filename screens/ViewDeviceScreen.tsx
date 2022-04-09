@@ -9,7 +9,7 @@ import tw from 'twrnc';
 import { CliDevice, ModalScreenProps } from '../types';
 import { Text, View, Pressable } from '../components/Themed';
 import Menu from '../components/Menu';
-import api from '../api';
+import NotifApi from '../lib/api/bindings';
 import useStore from '../state/store';
 import LinkBroken from '../components/device/LinkBroken';
 import RadioGroupModal from '../components/ui/RadioGroupModal';
@@ -43,10 +43,9 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
 
     const payload = { cliToken };
 
-    api
-      .post('status', payload)
+    NotifApi.status(payload)
       .then((response) => {
-        if (response?.data?.linked === false) {
+        if (response.data?.linked === false) {
           recordBrokenLink(device);
           Alert.alert('Link Broken', `${device.name} has been unlinked from this deivce`);
         }
@@ -96,7 +95,7 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
 
     try {
       // Unlink server-side
-      await api.post('unlink', payload);
+      await NotifApi.unlink(payload);
 
       // Remove from storage
       removeDevice(device);
@@ -163,7 +162,7 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
             )}
           />
         ) : (
-          <Text style={tw`text-gray-500`}>No ping history</Text>
+          <Text style={tw`text-gray-500 mx-4`}>No ping history</Text>
         )}
       </View>
 

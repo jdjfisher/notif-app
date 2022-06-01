@@ -27,12 +27,9 @@ export default function HelpScreen() {
       </View>
 
       <Pressable
-        style={tw.style(
-          'flex-row items-center rounded py-2 px-3 content-end bg-black',
-          {
-            'border border-white': colorScheme === 'dark',
-          }
-        )}
+        style={tw.style('flex-row items-center rounded py-2 px-3 content-end bg-black', {
+          'border border-white': colorScheme === 'dark',
+        })}
         onPress={() => Linking.openURL('https://github.com/jdjfisher/notif')}
       >
         <Text style={tw`mr-2 font-bold text-white`}>GitHub</Text>

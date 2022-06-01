@@ -174,13 +174,13 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
           if (icon) editDevice(device, { icon });
         }}
         options={{
-          Laptop: 'laptop',
-          Desktop: 'desktop-tower',
-          Server: 'server',
-          Docker: 'docker',
-          AWS: 'aws',
-          Google: 'google-cloud',
-          Azure: 'microsoft-azure',
+          'Laptop': 'laptop',
+          'Desktop': 'desktop-tower',
+          'Server': 'server',
+          'Docker': 'docker',
+          'AWS': 'aws',
+          'Google': 'google-cloud',
+          'Azure': 'microsoft-azure',
           'Digital Ocean': 'digital-ocean',
         }}
         customLabel={(label, value) => (

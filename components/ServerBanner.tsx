@@ -5,7 +5,7 @@ import NotifApi from '../lib/api/bindings';
 import tw from 'twrnc';
 
 export default () => {
-  const apiStatus = useStore(state => state.apiStatus);
+  const apiStatus = useStore((state) => state.apiStatus);
 
   useEffect(() => {
     checkApiStatus();
@@ -15,15 +15,15 @@ export default () => {
     try {
       await NotifApi.health();
     } catch (error) {
-      console.debug(error);     
+      console.debug(error);
     }
-  }
+  };
 
   if (apiStatus !== 'connected')
     return (
       <Pressable style={tw`bg-red-500 p-4`} onPress={checkApiStatus}>
         <Text style={tw`text-center text-white font-bold`}>
-          { apiStatus === 'maintenance' ? 'Server under maintenance' : 'Lost connection to Server' }
+          {apiStatus === 'maintenance' ? 'Server under maintenance' : 'Lost connection to Server'}
         </Text>
       </Pressable>
     );

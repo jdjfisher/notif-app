@@ -1,4 +1,3 @@
-
 export default {
   light: {
     text: '#000',

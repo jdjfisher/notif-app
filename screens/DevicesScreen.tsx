@@ -24,7 +24,7 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'Device
         mobileToken: await getPushToken(),
       };
 
-      NotifApi.status(payload).then(response => {
+      NotifApi.status(payload).then((response) => {
         const tokens = response?.data?.linkedCliTokens;
 
         if (tokens === undefined) return;

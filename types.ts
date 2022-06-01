@@ -38,8 +38,8 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
 
 export type ModalParamList = {
   'Add Device': undefined;
-  Device: { cliToken: string };
-  Ping: { ping: Ping };
+  'Device': { cliToken: string };
+  'Ping': { ping: Ping };
 };
 
 export type ModalScreenProps<Screen extends keyof ModalParamList> = NativeStackScreenProps<

@@ -22,8 +22,8 @@ const linking: LinkingOptions<RootStackParamList> = {
       },
       Modal: {
         screens: {
-          Device: {},
-          Ping: {},
+          'Device': {},
+          'Ping': {},
           'Add Device': {},
         },
       },

@@ -7,7 +7,7 @@ import shallow from 'zustand/shallow';
 import RadioGroupModal from '../ui/RadioGroupModal';
 
 type Props = {
-  children: React.ReactNode
+  children: React.ReactNode;
 } & PressableProps;
 
 // TODO: Could inline this component?

@@ -113,7 +113,7 @@ export const TextInput = React.forwardRef<any, DefaultTextInput['props']>((props
 });
 
 type PressableProps = Omit<DefaultPressableProps, 'android_ripple'> & {
-  rippleRadius?: number,
+  rippleRadius?: number;
 };
 
 export function Pressable(props: PressableProps) {

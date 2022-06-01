@@ -74,24 +74,31 @@ export default function SettingsScreen() {
     ]);
   };
 
-  const capitalizeFirstLetter = (string: string) => string.charAt(0).toUpperCase() + string.slice(1);
+  const capitalizeFirstLetter = (string: string) =>
+    string.charAt(0).toUpperCase() + string.slice(1);
 
   return (
     <DefaultView style={tw`mt-1`}>
       <SettingGroup title="General">
         <ThemeModal style={tw`flex-row justify-between items-center py-3 px-4`}>
           <DefaultView style={tw`flex-row items-center`}>
-            <MaterialCommunityIcons name="theme-light-dark" size={25} color={tw.color('gray-400')} />
+            <MaterialCommunityIcons
+              name="theme-light-dark"
+              size={25}
+              color={tw.color('gray-400')}
+            />
             <Text style={tw`ml-2`}>Theme</Text>
             <Text style={tw`text-red-500`}> (WIP)</Text>
           </DefaultView>
 
-          <Text style={tw`text-right`}>{deviceTheme ? capitalizeFirstLetter(deviceTheme) : 'System Default'}</Text>
+          <Text style={tw`text-right`}>
+            {deviceTheme ? capitalizeFirstLetter(deviceTheme) : 'System Default'}
+          </Text>
         </ThemeModal>
 
-        <TextInputModal 
+        <TextInputModal
           style={tw`flex-row justify-between items-center py-3 px-4`}
-          title='Device Name'
+          title="Device Name"
           value={mobileDeviceName}
           setValue={setMobileDeviceName}
           placeholderValue={Device.deviceName || Device.modelName || undefined}
@@ -102,9 +109,7 @@ export default function SettingsScreen() {
             <Text style={tw`ml-2`}>Name</Text>
           </DefaultView>
 
-          <Text>
-            {mobileDeviceName || Device.deviceName || Device.modelName || ''}
-          </Text>
+          <Text>{mobileDeviceName || Device.deviceName || Device.modelName || ''}</Text>
         </TextInputModal>
 
         <View style={tw`flex-row justify-between items-center px-4`}>
@@ -137,9 +142,9 @@ export default function SettingsScreen() {
 
       {/* TODO: Test server health if changed */}
       <SettingGroup title="Advanced">
-        <TextInputModal 
+        <TextInputModal
           style={tw`flex-row justify-between items-center py-3 px-4`}
-          title='Server'
+          title="Server"
           value={customApiUrl}
           setValue={setCustomApiUrl}
           placeholderValue={Constants.manifest?.extra?.apiUrl}
@@ -151,7 +156,9 @@ export default function SettingsScreen() {
           </DefaultView>
 
           <Text>
-            {customApiUrl && customApiUrl !== Constants.manifest?.extra?.apiUrl ? 'Custom' : 'Default'}
+            {customApiUrl && customApiUrl !== Constants.manifest?.extra?.apiUrl
+              ? 'Custom'
+              : 'Default'}
           </Text>
         </TextInputModal>
       </SettingGroup>

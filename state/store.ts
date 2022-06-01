@@ -6,7 +6,7 @@ import createDeviceSlice, { DeviceSlice } from './slices/device';
 import createPingSlice, { PingSlice } from './slices/ping';
 
 interface State extends SettingsSlice, DeviceSlice, PingSlice {
-  apiStatus: 'connected' | 'disconnected' | 'maintenance'
+  apiStatus: 'connected' | 'disconnected' | 'maintenance';
 }
 
 export type Slice<T extends object, E extends object = T> = (

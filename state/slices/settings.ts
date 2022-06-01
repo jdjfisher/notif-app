@@ -1,5 +1,5 @@
-import { ColorSchemeName } from "react-native";
-import { Slice } from "../store";
+import { ColorSchemeName } from 'react-native';
+import { Slice } from '../store';
 
 export interface SettingsSlice {
   confirmNewDevices: boolean;

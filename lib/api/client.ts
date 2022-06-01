@@ -7,7 +7,7 @@ const client = axios.create({
 });
 
 client.interceptors.request.use((config) => {
-  const customBaseURL = store.getState().customApiUrl; 
+  const customBaseURL = store.getState().customApiUrl;
 
   if (customBaseURL) {
     config.baseURL = customBaseURL;

@@ -20,17 +20,19 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
   const changeIconModalRef = useRef<ElementRef<typeof RadioGroupModal>>(null);
 
   // State hooks
-  const [devices, allPings, clearPings, editDevice, removeDevice, recordBrokenLink] = useStore(
-    (state) => [
-      state.devices,
-      state.pings,
-      state.clearPings,
-      state.editDevice,
-      state.removeDevice,
-      state.recordBrokenLink,
-    ],
-    shallow
-  );
+  const [devices, allPings, clearPings, pullPings, editDevice, removeDevice, recordBrokenLink] =
+    useStore(
+      (state) => [
+        state.devices,
+        state.pings,
+        state.clearPings,
+        state.pullPings,
+        state.editDevice,
+        state.removeDevice,
+        state.recordBrokenLink,
+      ],
+      shallow
+    );
 
   // Fetch the device data
   const cliToken = route.params.cliToken;
@@ -44,13 +46,16 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
     const payload = { cliToken };
 
     NotifApi.status(payload)
-      .then((response) => {
+      .then(async (response) => {
         if (response.data?.linked === false) {
           recordBrokenLink(device);
           Alert.alert('Link Broken', `${device.name} has been unlinked from this deivce`);
+          return;
         }
+
+        await pullPings(device.token);
       })
-      .catch((error) => console.debug(error));
+      .catch(console.debug);
   }, []);
 
   //
@@ -157,7 +162,7 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
                 ) : (
                   <Text style={tw`text-gray-500 italic`}>No message provided</Text>
                 )}
-                <Text style={tw`text-right text-gray-400`}>{dayjs(ping.timestamp).fromNow()}</Text>
+                <Text style={tw`text-right text-gray-400`}>{dayjs(ping.sentAt).fromNow()}</Text>
               </Pressable>
             )}
           />

@@ -12,6 +12,9 @@ export default {
   unlink: async (payload: { mobileToken: string } | { cliToken: string }) =>
     client.post<{ linkedCliTokens?: string[] }>('/unlink', payload),
 
+  pull: async (payload: { mobileToken: string; cliToken: string; lastPingAt: number }) =>
+    client.post<{ message?: string; sent_at: number }[]>('/pull', payload),
+
   link: async (payload: {
     socketId?: string;
     cliToken: string;

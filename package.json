@@ -7,7 +7,7 @@
     "build:preview": "eas build --platform android --profile preview",
     "test": "jest --passWithNoTests",
     "format": "prettier --write .",
-    "check": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
     "eas-build-pre-install": "echo $FCM_CONFIG > ./google-services.json"
   },
   "jest": {

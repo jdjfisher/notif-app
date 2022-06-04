@@ -60,5 +60,5 @@ export interface CliDevice {
 export interface Ping {
   id: string;
   message?: string;
-  sentAt: number;
+  sentAt: string;
 }

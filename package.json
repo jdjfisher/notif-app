@@ -8,7 +8,7 @@
     "test": "jest --passWithNoTests",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . --ignore-path .gitignore",
+    "lint": "eslint . --ext .ts,.tsx --ignore-path .gitignore",
     "eas-build-pre-install": "echo $FCM_CONFIG > ./google-services.json"
   },
   "jest": {

@@ -8,7 +8,7 @@ import useStore from '../state/store';
 import { Ping } from '../types';
 import { navigationRef } from '../navigation/index';
 
-const BACKGROUND_TASK: string = 'BACKGROUND-NOTIFICATION-TASK';
+const BACKGROUND_TASK = 'BACKGROUND-NOTIFICATION-TASK';
 
 TaskManager.defineTask(BACKGROUND_TASK, ({ data, error }: TaskManager.TaskManagerTaskBody) => {
   if (error) {

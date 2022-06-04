@@ -9,7 +9,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 declare global {
+  // eslint-disable-next-line
   namespace ReactNavigation {
+    // eslint-disable-next-line
     interface RootParamList extends RootStackParamList {}
   }
 }

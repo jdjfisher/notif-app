@@ -12,7 +12,7 @@ export default function ViewPingScreen({ route }: ModalScreenProps<'Ping'>) {
   return (
     <View style={tw`flex p-4`}>
       <View style={tw`flex-row justify-between mb-4`}>
-        <Text>{dayjs(ping.sentAt).toString()}</Text>
+        <Text>{dayjs(ping.sentAt).format('llll')}</Text>
         <Text style={tw`text-xs text-gray-400`}>{dayjs(ping.sentAt).fromNow()}</Text>
       </View>
 

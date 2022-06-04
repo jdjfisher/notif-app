@@ -68,6 +68,8 @@
     "@typescript-eslint/parser": "^5.27.0",
     "eas-cli": "^0.47.0",
     "eslint": "^8.17.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "expo": "^44.0.0",
     "expo-cli": "^4.12.0",
     "jest": "^27.4.7",

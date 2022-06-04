@@ -7,7 +7,8 @@
     "build:preview": "eas build --platform android --profile preview",
     "test": "jest --passWithNoTests",
     "format": "prettier --write .",
-    "check": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext .ts,.tsx --ignore-path .gitignore",
     "eas-build-pre-install": "echo $FCM_CONFIG > ./google-services.json"
   },
   "jest": {
@@ -63,7 +64,12 @@
     "@types/react": "~17.0.21",
     "@types/react-native": "~0.64.12",
     "@types/react-test-renderer": "^17.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
     "eas-cli": "^0.47.0",
+    "eslint": "^8.17.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "expo": "^44.0.0",
     "expo-cli": "^4.12.0",
     "jest": "^27.4.7",

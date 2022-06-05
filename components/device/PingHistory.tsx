@@ -37,7 +37,7 @@ export default function PingHistory({ device, pings }: Props) {
     <FlatList
       data={pings}
       keyExtractor={(ping) => ping.id}
-      onRefresh={refresh}
+      onRefresh={device.linkBroken ? undefined : refresh}
       refreshing={refreshing}
       renderItem={({ item: ping }) => (
         <Pressable

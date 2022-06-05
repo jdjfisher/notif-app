@@ -1,4 +1,4 @@
-import React, { ElementRef, useEffect, useRef } from 'react';
+import React, { ElementRef, useEffect, useRef, useState } from 'react';
 import { Alert, FlatList, View as DefaultView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import TextInputModal from '../components/ui/TextInputModal';
@@ -112,6 +112,18 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
     }
   };
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  const refresh = async () => {
+    setRefreshing(true);
+
+    try {
+      await pullPings(device.token);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   return (
     <DefaultView style={tw`h-full`}>
       <View style={tw`p-3 flex flex-row justify-between items-center shadow-sm mb-1`}>
@@ -150,6 +162,8 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
           <FlatList
             data={pings}
             keyExtractor={(ping) => ping.id}
+            onRefresh={refresh}
+            refreshing={refreshing}
             renderItem={({ item: ping }) => (
               <Pressable
                 style={tw`border-t border-gray-100 py-3 px-4`}

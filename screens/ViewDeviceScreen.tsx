@@ -1,5 +1,5 @@
-import React, { ElementRef, useEffect, useRef, useState } from 'react';
-import { Alert, FlatList, View as DefaultView } from 'react-native';
+import React, { ElementRef, useEffect, useRef } from 'react';
+import { Alert, View as DefaultView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import TextInputModal from '../components/ui/TextInputModal';
 import shallow from 'zustand/shallow';
@@ -7,12 +7,13 @@ import dayjs from 'dayjs';
 import tw from 'twrnc';
 
 import { CliDevice, ModalScreenProps } from '../types';
-import { Text, View, Pressable } from '../components/Themed';
+import { Text, View } from '../components/Themed';
 import Menu from '../components/Menu';
 import NotifApi from '../lib/api/bindings';
 import useStore from '../state/store';
 import LinkBroken from '../components/device/LinkBroken';
 import RadioGroupModal from '../components/ui/RadioGroupModal';
+import PingHistory from '../components/device/PingHistory';
 
 export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps<'Device'>) {
   // Ref hooks
@@ -112,18 +113,6 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
     }
   };
 
-  const [refreshing, setRefreshing] = useState(false);
-
-  const refresh = async () => {
-    setRefreshing(true);
-
-    try {
-      await pullPings(device.token);
-    } finally {
-      setRefreshing(false);
-    }
-  };
-
   return (
     <DefaultView style={tw`h-full`}>
       <View style={tw`p-3 flex flex-row justify-between items-center shadow-sm mb-1`}>
@@ -158,31 +147,7 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
       <View style={tw`flex-1 shadow-sm pt-4`}>
         <Text style={tw`text-xl mx-4 mb-2`}>Pings</Text>
 
-        {pings.length ? (
-          <FlatList
-            data={pings}
-            keyExtractor={(ping) => ping.id}
-            onRefresh={refresh}
-            refreshing={refreshing}
-            renderItem={({ item: ping }) => (
-              <Pressable
-                style={tw`border-t border-gray-100 py-3 px-4`}
-                onPress={() => navigation.navigate('Ping', { ping })}
-              >
-                {ping.message ? (
-                  <Text numberOfLines={1} ellipsizeMode="tail">
-                    {ping.message}
-                  </Text>
-                ) : (
-                  <Text style={tw`text-gray-500 italic`}>No message provided</Text>
-                )}
-                <Text style={tw`text-right text-gray-400`}>{dayjs(ping.sentAt).fromNow()}</Text>
-              </Pressable>
-            )}
-          />
-        ) : (
-          <Text style={tw`text-gray-500 mx-4`}>No ping history</Text>
-        )}
+        <PingHistory device={device} pings={pings} />
       </View>
 
       {/* TODO: Preview icons */}

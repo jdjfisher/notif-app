@@ -55,6 +55,7 @@ export interface CliDevice {
   token: string;
   linkedAt: string;
   linkBroken: boolean;
+  lastPullAt?: string;
 }
 
 export interface Ping {

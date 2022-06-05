@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Button, FlatList, View as DefaultView } from 'react-native';
 import shallow from 'zustand/shallow';
@@ -13,8 +13,16 @@ import LinkBroken from '../components/device/LinkBroken';
 import { getPushToken } from '../lib/helpers';
 
 export default function DevicesScreen({ navigation }: RootTabScreenProps<'Devices'>) {
-  const [devices, pings, latestPing, recordBrokenLink] = useStore(
-    (state) => [state.devices, state.pings, state.latestPing, state.recordBrokenLink],
+  const [refreshing, setRefreshing] = useState(false);
+
+  const [devices, latestPing, pings, pullPings, recordBrokenLink] = useStore(
+    (state) => [
+      state.devices,
+      state.latestPing,
+      state.pings,
+      state.pullPings,
+      state.recordBrokenLink,
+    ],
     shallow
   );
 
@@ -38,6 +46,22 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'Device
     })();
   }, []);
 
+  const linkedDevices = devices.filter((d) => !d.linkBroken);
+
+  const refresh = async () => {
+    setRefreshing(true);
+
+    const refreshable = linkedDevices.filter((device) =>
+      dayjs(device.lastPullAt).isBefore(dayjs().subtract(30, 'second'))
+    );
+
+    try {
+      await Promise.all(refreshable.map(pullPings));
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   if (!devices.length) {
     return (
       <DefaultView style={tw`flex-grow justify-center items-center`}>
@@ -53,6 +77,8 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'Device
       <FlatList
         data={devices}
         keyExtractor={(device) => device.token}
+        onRefresh={linkedDevices.length ? refresh : undefined}
+        refreshing={refreshing}
         renderItem={({ item: device }) => (
           <Pressable
             key={device.token}
@@ -80,8 +106,6 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'Device
               <Text style={tw`text-xs text-gray-400`}>
                 {dayjs(latestPing(device.token)?.sentAt ?? device.linkedAt).fromNow()}
               </Text>
-
-              {/* sxt style={tw`text-xs bg-gray-200 rounded-xl p-1 text-center mt-1`}>5</Text> */}
 
               {device.linkBroken ? <LinkBroken /> : null}
             </DefaultView>

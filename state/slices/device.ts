@@ -7,7 +7,7 @@ export interface DeviceSlice {
   addDevice: (device: CliDevice) => void;
   editDevice: (
     device: CliDevice,
-    attributes: Partial<Pick<CliDevice, 'name' | 'icon'> & { linkBroken: true }>
+    attributes: Partial<Pick<CliDevice, 'name' | 'icon' | 'lastPullAt'> & { linkBroken: true }>
   ) => void;
   removeDevice: (device: CliDevice) => void;
   recordBrokenLink: (device: CliDevice) => void;

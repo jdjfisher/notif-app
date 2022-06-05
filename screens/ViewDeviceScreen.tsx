@@ -54,7 +54,7 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
           return;
         }
 
-        await pullPings(device.token);
+        await pullPings(device);
       })
       .catch(console.debug);
   }, []);

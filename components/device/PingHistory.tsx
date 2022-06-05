@@ -23,7 +23,7 @@ export default function PingHistory({ device, pings }: Props) {
     setRefreshing(true);
 
     try {
-      await pullPings(device.token);
+      await pullPings(device);
     } finally {
       setRefreshing(false);
     }

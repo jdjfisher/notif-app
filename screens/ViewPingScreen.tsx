@@ -12,8 +12,8 @@ export default function ViewPingScreen({ route }: ModalScreenProps<'Ping'>) {
   return (
     <View style={tw`flex p-4`}>
       <View style={tw`flex-row justify-between mb-4`}>
-        <Text>{dayjs(ping.timestamp).toString()}</Text>
-        <Text style={tw`text-xs text-gray-400`}>{dayjs(ping.timestamp).fromNow()}</Text>
+        <Text>{dayjs(ping.sentAt).format('llll')}</Text>
+        <Text style={tw`text-xs text-gray-400`}>{dayjs(ping.sentAt).fromNow()}</Text>
       </View>
 
       <Text style={tw`font-bold text-lg mb-2`}>Message</Text>

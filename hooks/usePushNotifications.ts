@@ -1,26 +1,8 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import * as Device from 'expo-device';
-import * as Sentry from 'sentry-expo';
 import * as Notifications from 'expo-notifications';
-import * as TaskManager from 'expo-task-manager';
 import { Platform, unstable_batchedUpdates } from 'react-native';
 import useStore from '../state/store';
-import { Ping } from '../types';
-import { navigationRef } from '../navigation/index';
-
-const BACKGROUND_TASK = 'BACKGROUND-NOTIFICATION-TASK';
-
-TaskManager.defineTask(BACKGROUND_TASK, ({ data, error }: TaskManager.TaskManagerTaskBody) => {
-  if (error) {
-    Sentry.Native.captureMessage(error.message);
-    return;
-  }
-
-  // @ts-ignore
-  handlePing(data.notification);
-});
-
-Notifications.registerTaskAsync(BACKGROUND_TASK);
 
 export default function usePushNotifications(): void {
   useEffect(() => {
@@ -74,33 +56,24 @@ export default function usePushNotifications(): void {
 }
 
 const handlePing = (notification: Notifications.Notification): void => {
-  const date = notification.date;
-  const { body } = notification.request.content;
-  const cliToken = notification.request.content.data.cliToken as string | undefined; // TODO: Replace with an ID
-  const pingId = notification.request.identifier;
+  const {
+    content: {
+      data: { cliToken },
+    },
+    trigger,
+  } = notification.request;
 
-  if (!cliToken) return;
+  // Validate
+  if (typeof cliToken !== 'string' || trigger.type !== 'push') return;
 
-  const ping: Ping = {
-    id: pingId,
-    message: body || undefined,
-    timestamp: date,
-  };
-
-  // Persist the ping
-  unstable_batchedUpdates(() => useStore.getState().recordPing(cliToken, ping));
+  unstable_batchedUpdates(() => {
+    // TODO: Avoid pulling everytime a ping comes in
+    useStore.getState().pullPings(cliToken);
+  });
 };
 
 const handlePress = ({ notification }: Notifications.NotificationResponse): void => {
   const cliToken = notification.request.content.data.cliToken as string | undefined;
-  const pingId = notification.request.identifier;
 
-  if (cliToken && pingId) {
-    const ping = useStore.getState().pings[cliToken]?.find((ping) => ping.id === pingId);
-
-    if (ping && navigationRef.isReady()) {
-      // @ts-ignore
-      navigationRef.navigate('Ping', { ping });
-    }
-  }
+  // TODO: Redo
 };

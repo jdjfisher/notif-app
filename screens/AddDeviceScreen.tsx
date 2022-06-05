@@ -5,7 +5,6 @@ import * as Device from 'expo-device';
 import * as Sentry from 'sentry-expo';
 import { Platform, Alert, Button } from 'react-native';
 import shallow from 'zustand/shallow';
-import dayjs from 'dayjs';
 import tw from 'twrnc';
 import Svg, { Path } from 'react-native-svg';
 
@@ -63,7 +62,7 @@ export default function AddDeviceScreen({ navigation }: ModalScreenProps<'Add De
 
       device.icon = 'laptop';
       device.linkBroken = false;
-      device.linkedAt = dayjs().toString();
+      device.linkedAt = new Date().toISOString();
     } catch (error) {
       return; // Ignore the QR
     }

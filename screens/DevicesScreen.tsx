@@ -78,7 +78,7 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'Device
 
             <DefaultView style={tw`items-end`}>
               <Text style={tw`text-xs text-gray-400`}>
-                {dayjs(latestPing(device.token)?.timestamp ?? device.linkedAt).fromNow()}
+                {dayjs(latestPing(device.token)?.sentAt ?? device.linkedAt).fromNow()}
               </Text>
 
               {/* sxt style={tw`text-xs bg-gray-200 rounded-xl p-1 text-center mt-1`}>5</Text> */}

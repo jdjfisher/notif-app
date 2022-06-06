@@ -2,14 +2,14 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="1242"
-   height="2436"
-   viewBox="0 0 328.6125 644.52504"
+   width="657.83301"
+   height="657.83301"
+   viewBox="0 0 174.05165 174.05166"
    version="1.1"
    id="svg5"
-   sodipodi:docname="splash.svg"
+   sodipodi:docname="adaptive-icon.svg"
    inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
-   inkscape:export-filename="C:\Users\steph\Documents\Programming\TypeScript Projects\notif\app\assets\images\icon\splash.png"
+   inkscape:export-filename="C:\Users\steph\Documents\Programming\TypeScript Projects\notif\app\assets\images\icon\adaptive-icon.png"
    inkscape:export-xdpi="149.44"
    inkscape:export-ydpi="149.44"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -26,9 +26,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      showgrid="false"
-     inkscape:zoom="0.091635497"
-     inkscape:cx="-4059.5622"
-     inkscape:cy="1653.2894"
+     inkscape:zoom="0.51836865"
+     inkscape:cx="299.015"
+     inkscape:cy="334.70388"
      inkscape:window-width="1826"
      inkscape:window-height="1051"
      inkscape:window-x="85"
@@ -119,8 +119,8 @@
        gradientTransform="matrix(0.83306601,0,0,0.88785995,-324.04889,-802.04553)" />
   </defs>
   <g
-     id="g1947"
-     transform="matrix(0.79902117,0,0,0.79902117,94.770777,252.72703)">
+     id="g1068"
+     transform="matrix(0.66686024,0,0,0.66686024,28.991764,28.991765)">
     <path
        style="fill:none;stroke:#4dbde5;stroke-width:13.2292;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 118.98603,118.28772 H 52.861416"

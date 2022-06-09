@@ -14,7 +14,7 @@ export default {
     sentryDsn: process.env.SENTRY_DSN,
   },
   splash: {
-    image: './assets/images/splash.png',
+    image: './assets/images/icon/splash.png',
     resizeMode: 'contain',
     backgroundColor: '#ffffff',
   },

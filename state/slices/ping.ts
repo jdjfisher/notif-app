@@ -1,7 +1,8 @@
 import { getPushToken } from '../../lib/helpers';
-import { Ping } from '../../types';
+import { CliDevice, Ping } from '../../types';
 import { Slice } from '../store';
 import NotifApi from '../../lib/api/bindings';
+import { DeviceSlice } from './device';
 
 export interface PingSlice {
   pings: { [deviceToken: string]: Ping[] };
@@ -9,11 +10,11 @@ export interface PingSlice {
   clearPings: (deviceToken: string) => void;
   clearAllPings: () => void;
   latestPing: (deviceToken: string) => Ping | null;
-  pullPings: (deviceToken: string) => Promise<void>;
+  pullPings: (device: CliDevice) => Promise<void>;
 }
 
 // TODO: Tidy
-const createPingSlice: Slice<PingSlice> = (set, get) => ({
+const createPingSlice: Slice<PingSlice, DeviceSlice> = (set, get) => ({
   pings: {},
   recordPing: (deviceToken, ping) => {
     const clone = { ...get().pings };
@@ -33,11 +34,11 @@ const createPingSlice: Slice<PingSlice> = (set, get) => ({
     return get().pings[deviceToken]?.[0];
   },
 
-  pullPings: async (deviceToken) => {
+  pullPings: async (device) => {
     const payload = {
-      cliToken: deviceToken,
+      cliToken: device.token,
       mobileToken: await getPushToken(),
-      lastPingAt: get().pings[deviceToken]?.[0]?.sentAt,
+      lastPingAt: get().pings[device.token]?.[0]?.sentAt,
     };
 
     const response = await NotifApi.pull(payload);
@@ -52,8 +53,9 @@ const createPingSlice: Slice<PingSlice> = (set, get) => ({
 
     const clone = { ...get().pings };
 
-    clone[deviceToken] = [...pings, ...(clone[deviceToken] ?? [])];
+    clone[device.token] = [...pings, ...(clone[device.token] ?? [])];
     set({ pings: clone });
+    get().editDevice(device, { lastPullAt: new Date().toISOString() });
   },
 });
 

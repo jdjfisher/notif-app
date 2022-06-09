@@ -66,9 +66,12 @@ const handlePing = (notification: Notifications.Notification): void => {
   // Validate
   if (typeof cliToken !== 'string' || trigger.type !== 'push') return;
 
+  const device = useStore.getState().devices.find((device) => device.token === cliToken);
+
+  if (!device) return;
+
   unstable_batchedUpdates(() => {
-    // TODO: Avoid pulling everytime a ping comes in
-    useStore.getState().pullPings(cliToken);
+    useStore.getState().pullPings(device);
   });
 };
 

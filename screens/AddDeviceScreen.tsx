@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { Camera } from 'expo-camera';
+import { Camera, CameraType } from 'expo-camera';
 import React, { useEffect, useRef, useState } from 'react';
 import * as Device from 'expo-device';
 import * as Sentry from 'sentry-expo';
@@ -117,7 +117,7 @@ export default function AddDeviceScreen({ navigation }: ModalScreenProps<'Add De
     <View style={tw`flex-grow`}>
       <Camera
         style={tw`flex-grow items-center justify-center`}
-        type="back"
+        type={CameraType.back}
         ratio="16:9"
         ref={cameraRef}
         onBarCodeScanned={!scanned ? handleBarCodeScanned : undefined}

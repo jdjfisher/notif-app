@@ -11,19 +11,19 @@ export default function HelpScreen() {
 
   return (
     <DefaultView style={tw`py-4 flex-grow items-center justify-between`}>
-      <View style={tw`px-4 py-2 w-full flex items-center shadow-sm`}>
+      <View style={tw`py-2 w-full flex items-center shadow-sm`}>
         <Text style={tw`text-xl font-bold`}>Install the CLI</Text>
-        <Image style={styles.image} source={require('../assets/images/help-install.png')} />
+        <Image style={styles.image} source={require('../assets/images/help/install.png')} />
       </View>
 
-      <View style={tw`px-4 py-2 w-full flex items-center shadow-sm`}>
+      <View style={tw`py-2 w-full flex items-center shadow-sm`}>
         <Text style={tw`text-xl font-bold`}>Link CLI to App</Text>
-        <Image style={styles.image} source={require('../assets/images/help-link.png')} />
+        <Image style={styles.image} source={require('../assets/images/help/link.png')} />
       </View>
 
-      <View style={tw`px-4 py-2 w-full flex items-center shadow-sm`}>
+      <View style={tw`py-2 w-full flex items-center shadow-sm`}>
         <Text style={tw`text-xl font-bold`}>Send a Ping</Text>
-        <Image style={styles.image} source={require('../assets/images/help-ping.png')} />
+        <Image style={styles.image} source={require('../assets/images/help/ping.png')} />
       </View>
 
       <Pressable
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   image: {
     height: 85,
     marginVertical: 10,
-    // width: '90%',
+    width: '85%',
     resizeMode: 'contain',
   },
 });

@@ -3,8 +3,8 @@
   "paddingHorizontal": "0px",
   "backgroundImage": null,
   "backgroundImageSelection": null,
-  "backgroundMode": "color",
-  "backgroundColor": "rgba(171, 184, 195, 1)",
+  "backgroundMode": "image",
+  "backgroundColor": "rgba(171,184,195,0.83)",
   "dropShadow": false,
   "dropShadowOffsetY": "20px",
   "dropShadowBlurRadius": "68px",
@@ -23,5 +23,5 @@
   "squaredImage": false,
   "hiddenCharacters": false,
   "name": "",
-  "width": "230"
+  "width": "260"
 }

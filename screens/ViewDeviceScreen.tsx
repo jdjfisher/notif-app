@@ -15,7 +15,7 @@ import LinkBroken from '../components/device/LinkBroken';
 import RadioGroupModal from '../components/ui/RadioGroupModal';
 import PingHistory from '../components/device/PingHistory';
 
-export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps<'Device'>) {
+export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps<'view-device'>) {
   // Ref hooks
   const renameDeviceModalRef = useRef<ElementRef<typeof TextInputModal>>(null);
   const changeIconModalRef = useRef<ElementRef<typeof RadioGroupModal>>(null);

@@ -12,7 +12,7 @@ import { RootTabScreenProps } from '../types';
 import LinkBroken from '../components/device/LinkBroken';
 import { getPushToken } from '../lib/helpers';
 
-export default function DevicesScreen({ navigation }: RootTabScreenProps<'Devices'>) {
+export default function DevicesScreen({ navigation }: RootTabScreenProps<'device-list'>) {
   const [refreshing, setRefreshing] = useState(false);
 
   const [devices, latestPing, pings, pullPings, recordBrokenLink] = useStore(
@@ -67,7 +67,7 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'Device
       <DefaultView style={tw`flex-grow justify-center items-center`}>
         <Text style={tw`pb-5 text-2xl`}> No Devices linked </Text>
         {/* @ts-ignore */}
-        <Button title={'Link Device'} onPress={() => navigation.navigate('Add Device')} />
+        <Button title={'Link Device'} onPress={() => navigation.navigate('add-device')} />
       </DefaultView>
     );
   }
@@ -81,10 +81,10 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'Device
         refreshing={refreshing}
         renderItem={({ item: device }) => (
           <Pressable
-            key={device.token}
             // @ts-ignore
-            onPress={() => navigation.navigate('Device', { cliToken: device.token })}
+            onPress={() => navigation.navigate('view-device', { cliToken: device.token })}
             style={tw`p-3 flex-row border-t border-gray-100 justify-between items-start`}
+            key={device.token}
           >
             <DefaultView style={tw`flex-row items-center`}>
               <MaterialCommunityIcons

@@ -13,21 +13,21 @@ const linking: LinkingOptions<RootStackParamList> = {
   prefixes: [Linking.makeUrl('/')],
   config: {
     screens: {
-      Root: {
+      'root': {
         screens: {
-          Devices: {},
-          Help: {},
-          Settings: {},
+          'device-list': {},
+          'help': {},
+          'settings': {},
         },
       },
-      Modal: {
+      'modal': {
         screens: {
-          'Device': {},
-          'Ping': {},
-          'Add Device': {},
+          'view-device': {},
+          'view-ping': {},
+          'add-device': {},
         },
       },
-      NotFound: '*',
+      'not-found': '*',
     },
   },
 };

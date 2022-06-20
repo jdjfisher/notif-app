@@ -6,7 +6,7 @@ import tw from 'twrnc';
 import dayjs from 'dayjs';
 
 // TODO: Redo this screen
-export default function ViewPingScreen({ route }: ModalScreenProps<'Ping'>) {
+export default function ViewPingScreen({ route }: ModalScreenProps<'view-ping'>) {
   const { ping } = route.params;
 
   return (

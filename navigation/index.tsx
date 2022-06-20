@@ -53,15 +53,23 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
-      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+      <Stack.Screen name="root" component={BottomTabNavigator} options={{ headerShown: false }} />
+      <Stack.Screen name="not-found" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
+        <Stack.Screen
+          // @ts-ignore
+          name="add-device"
+          component={AddDeviceScreen}
+          options={{ title: 'Add Device' }}
+        />
+        <Stack.Screen
+          // @ts-ignore
+          name="view-device"
+          component={ViewDeviceScreen}
+          options={{ title: 'Devices' }}
+        />
         {/* @ts-ignore */}
-        <Stack.Screen name="Add Device" component={AddDeviceScreen} />
-        {/* @ts-ignore */}
-        <Stack.Screen name="Device" component={ViewDeviceScreen} />
-        {/* @ts-ignore */}
-        <Stack.Screen name="Ping" component={ViewPingScreen} />
+        <Stack.Screen name="view-ping" component={ViewPingScreen} options={{ title: 'Ping' }} />
       </Stack.Group>
     </Stack.Navigator>
   );
@@ -78,7 +86,7 @@ function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="Devices"
+      initialRouteName="device-list"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
         tabBarHideOnKeyboard: true,
@@ -88,9 +96,9 @@ function BottomTabNavigator() {
       }}
     >
       <BottomTab.Screen
-        name="Devices"
+        name="device-list"
         component={DevicesScreen}
-        options={({ navigation }: RootTabScreenProps<'Devices'>) => ({
+        options={({ navigation }: RootTabScreenProps<'device-list'>) => ({
           title: 'Devices',
           tabBarIcon: ({ color }) => <TabBarIcon name="devices" color={color} />,
           headerRight: () => (
@@ -106,7 +114,7 @@ function BottomTabNavigator() {
         })}
       />
       <BottomTab.Screen
-        name="Help"
+        name="help"
         component={HelpScreen}
         options={{
           title: 'Help',
@@ -114,7 +122,7 @@ function BottomTabNavigator() {
         }}
       />
       <BottomTab.Screen
-        name="Settings"
+        name="settings"
         component={SettingsScreen}
         options={{
           title: 'Settings',

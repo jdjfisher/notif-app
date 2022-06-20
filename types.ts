@@ -17,9 +17,9 @@ declare global {
 }
 
 export type RootStackParamList = {
-  Root: NavigatorScreenParams<RootTabParamList> | undefined;
-  Modal: NavigatorScreenParams<ModalParamList> | undefined;
-  NotFound: undefined;
+  'root': NavigatorScreenParams<RootTabParamList> | undefined;
+  'modal': NavigatorScreenParams<ModalParamList> | undefined;
+  'not-found': undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
@@ -28,9 +28,9 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> = Nati
 >;
 
 export type RootTabParamList = {
-  Devices: undefined;
-  Help: undefined;
-  Settings: undefined;
+  'device-list': undefined;
+  'help': undefined;
+  'settings': undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<
@@ -39,9 +39,9 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
 >;
 
 export type ModalParamList = {
-  'Add Device': undefined;
-  'Device': { cliToken: string };
-  'Ping': { ping: Ping };
+  'add-device': undefined;
+  'view-device': { cliToken: string };
+  'view-ping': { ping: Ping };
 };
 
 export type ModalScreenProps<Screen extends keyof ModalParamList> = NativeStackScreenProps<

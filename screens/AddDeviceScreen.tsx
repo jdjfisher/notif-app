@@ -18,7 +18,7 @@ interface LinkingCliDevice extends CliDevice {
   socketId?: string;
 }
 
-export default function AddDeviceScreen({ navigation }: ModalScreenProps<'Add Device'>) {
+export default function AddDeviceScreen({ navigation }: ModalScreenProps<'add-device'>) {
   const cameraRef = useRef<Camera>(null);
 
   const [hasPermission, setHasPermission] = useState(false);

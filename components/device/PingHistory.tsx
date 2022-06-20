@@ -42,7 +42,7 @@ export default function PingHistory({ device, pings }: Props) {
       renderItem={({ item: ping }) => (
         <Pressable
           // @ts-ignore
-          onPress={() => navigation.navigate('Ping', { ping })}
+          onPress={() => navigation.navigate('view-ping', { ping })}
           style={tw`border-t border-gray-100 py-3 px-4`}
         >
           {ping.message ? (

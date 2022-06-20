@@ -1,8 +1,11 @@
 {
   "name": "notif-app",
+  "version": "0.0.0",
+  "description": "",
   "keywords": [],
-  "author": "jdjfisher",
+  "homepage": "https://github.com/jdjfisher/notif-app#readme",
   "license": "MIT",
+  "author": "jdjfisher",
   "scripts": {
     "start": "expo start",
     "build:preview": "eas build --platform android --profile preview",

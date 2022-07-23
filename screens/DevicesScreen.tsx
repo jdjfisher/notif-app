@@ -86,7 +86,7 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'device
             style={tw`p-3 flex-row border-t border-gray-100 justify-between items-start`}
             key={device.token}
           >
-            <DefaultView style={tw`flex-row items-center`}>
+            <DefaultView style={tw`flex-row items-center flex-shrink`}>
               <MaterialCommunityIcons
                 name={device.icon}
                 size={35}

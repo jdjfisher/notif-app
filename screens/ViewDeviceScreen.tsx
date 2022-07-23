@@ -116,7 +116,7 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
   return (
     <DefaultView style={tw`h-full`}>
       <View style={tw`p-3 flex flex-row justify-between items-center shadow-sm mb-1`}>
-        <DefaultView style={tw`flex-row items-center`}>
+        <DefaultView style={tw`flex-row items-center flex-shrink`}>
           <MaterialCommunityIcons
             name={device.icon}
             size={35}

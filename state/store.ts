@@ -4,8 +4,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import createSettingsSlice, { SettingsSlice } from './slices/settings';
 import createDeviceSlice, { DeviceSlice } from './slices/device';
 import createPingSlice, { PingSlice } from './slices/ping';
+import createCryptSlice, { CryptSlice } from './slices/crypt';
 
-interface State extends SettingsSlice, DeviceSlice, PingSlice {
+interface State extends SettingsSlice, DeviceSlice, PingSlice, CryptSlice {
   apiStatus: 'connected' | 'disconnected' | 'maintenance';
 }
 
@@ -24,6 +25,7 @@ const useStore = create<State>(
       ...createDeviceSlice(set, get),
       ...createPingSlice(set, get),
       ...createSettingsSlice(set, get),
+      ...createCryptSlice(set, get),
     }),
     {
       name: 'notif',

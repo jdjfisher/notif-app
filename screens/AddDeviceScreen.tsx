@@ -24,8 +24,14 @@ export default function AddDeviceScreen({ navigation }: ModalScreenProps<'add-de
   const [hasPermission, setHasPermission] = useState(false);
   const [scanned, setScanned] = useState(false);
 
-  const [devices, addDevice, mobileDeviceName, confirmNewDevices] = useStore(
-    (state) => [state.devices, state.addDevice, state.mobileDeviceName, state.confirmNewDevices],
+  const [devices, addDevice, mobileDeviceName, confirmNewDevices, publicKey] = useStore(
+    (state) => [
+      state.devices,
+      state.addDevice,
+      state.mobileDeviceName,
+      state.confirmNewDevices,
+      state.publicKey,
+    ],
     shallow
   );
 
@@ -91,6 +97,7 @@ export default function AddDeviceScreen({ navigation }: ModalScreenProps<'add-de
       const payload = {
         socketId: device.socketId,
         cliToken: device.token,
+        publicKey: publicKey,
         mobileToken: pushToken,
         mobileDeviceName: mobileDeviceName || Device.deviceName || Device.modelName || undefined,
       };

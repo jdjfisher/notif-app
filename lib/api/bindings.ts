@@ -19,6 +19,7 @@ export default {
     socketId?: string;
     cliToken: string;
     mobileToken: string;
+    publicKey: string;
     mobileDeviceName?: string;
   }) => client.post('/link', payload),
 };

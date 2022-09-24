@@ -3,6 +3,7 @@ import { CliDevice, Ping } from '../../types';
 import { Slice } from '../store';
 import NotifApi from '../../lib/api/bindings';
 import { DeviceSlice } from './device';
+import { CryptSlice } from './crypt';
 
 export interface PingSlice {
   pings: { [deviceToken: string]: Ping[] };
@@ -14,7 +15,7 @@ export interface PingSlice {
 }
 
 // TODO: Tidy
-const createPingSlice: Slice<PingSlice, DeviceSlice> = (set, get) => ({
+const createPingSlice: Slice<PingSlice, DeviceSlice & CryptSlice> = (set, get) => ({
   pings: {},
   recordPing: (deviceToken, ping) => {
     const clone = { ...get().pings };
@@ -45,7 +46,7 @@ const createPingSlice: Slice<PingSlice, DeviceSlice> = (set, get) => ({
 
     const pings = response.data
       .map((raw) => ({
-        message: raw.message,
+        message: get().decrypt(raw.message),
         sentAt: raw.sent_at,
         id: Math.random().toString(36),
       }))

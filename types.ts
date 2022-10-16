@@ -40,7 +40,7 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
 
 export type ModalParamList = {
   'add-device': undefined;
-  'view-device': { cliToken: string };
+  'view-device': { linkId: number };
   'view-ping': { ping: Ping };
 };
 
@@ -49,17 +49,17 @@ export type ModalScreenProps<Screen extends keyof ModalParamList> = NativeStackS
   Screen
 >;
 
-export interface CliDevice {
+export interface Link {
+  id: number;
   name: string;
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
-  token: string;
   linkedAt: string;
-  linkBroken: boolean;
+  broken: boolean;
   lastPullAt?: string;
 }
 
 export interface Ping {
-  id: string;
+  id: number;
   message?: string;
   sentAt: string;
 }

@@ -12,7 +12,6 @@ import useStore from '../state/store';
 import ThemeModal from '../components/settings/DeviceThemeModal';
 import TextInputModal from '../components/ui/TextInputModal';
 import { View, Text, Switch, Pressable } from '../components/Themed';
-import { getPushToken } from '../lib/helpers';
 
 export default function SettingsScreen() {
   const [
@@ -23,7 +22,7 @@ export default function SettingsScreen() {
     deviceTheme,
     confirmNewDevices,
     toggleConfirmNewDevices,
-    clearDevices,
+    clearLinks,
     clearAllPings,
   ] = useStore(
     (state) => [
@@ -34,7 +33,7 @@ export default function SettingsScreen() {
       state.deviceTheme,
       state.confirmNewDevices,
       state.toggleConfirmNewDevices,
-      state.clearDevices,
+      state.clearLinks,
       state.clearAllPings,
     ],
     shallow
@@ -42,17 +41,11 @@ export default function SettingsScreen() {
 
   const unlinkAllDevices = async () => {
     try {
-      const pushToken = await getPushToken();
-
-      const payload = {
-        mobileToken: pushToken,
-      };
-
       // Clean server links
-      await NotifApi.unlink(payload);
+      await NotifApi.unlink();
 
       // Clean local storage
-      clearDevices();
+      clearLinks();
     } catch (error) {
       Sentry.Native.captureException(error);
 

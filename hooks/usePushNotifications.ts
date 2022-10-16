@@ -3,6 +3,14 @@ import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { Platform, unstable_batchedUpdates } from 'react-native';
 import useStore from '../state/store';
+import {
+  AndroidNotificationPriority,
+  Notification,
+  NotificationHandler,
+  NotificationResponse,
+} from 'expo-notifications';
+import NotifApi from '../lib/api/bindings';
+import { getPushToken } from '../lib/helpers';
 
 export default function usePushNotifications(): void {
   useEffect(() => {
@@ -36,17 +44,13 @@ export default function usePushNotifications(): void {
       }
 
       Notifications.setNotificationHandler({
-        handleNotification: async () => ({
-          shouldShowAlert: true,
-          shouldPlaySound: true,
-          shouldSetBadge: false,
-        }),
+        handleNotification: handleNotificationBehaviour,
       });
     })();
 
     const subscriptions = [
-      Notifications.addNotificationResponseReceivedListener(handlePress),
-      Notifications.addNotificationReceivedListener(handlePing),
+      Notifications.addNotificationResponseReceivedListener(handleNotificationInteraction),
+      Notifications.addNotificationReceivedListener(handleNotificationRecieved),
     ];
 
     return () => {
@@ -55,28 +59,62 @@ export default function usePushNotifications(): void {
   }, []);
 }
 
-const handlePing = (notification: Notifications.Notification): void => {
-  const {
-    content: {
-      data: { cliToken },
-    },
-    trigger,
-  } = notification.request;
+const handleNotificationBehaviour: NotificationHandler['handleNotification'] = async (
+  notification
+) => {
+  const isPing = notification.request.content.data.type === 'ping';
+
+  return {
+    shouldShowAlert: isPing,
+    shouldPlaySound: isPing,
+    shouldSetBadge: false,
+    priority: isPing ? AndroidNotificationPriority.DEFAULT : AndroidNotificationPriority.MIN,
+  };
+};
+
+const handleNotificationRecieved = (notification: Notification): void => {
+  if (notification.request.trigger.type !== 'push') {
+    return;
+  }
+
+  switch (notification.request.content.data.type) {
+    case 'ping':
+      handlePing(notification);
+      break;
+
+    case 'register':
+      handleRegister(notification);
+      break;
+  }
+};
+
+const handlePing = (notification: Notification): void => {
+  const linkId = notification.request.content.data.link_id;
 
   // Validate
-  if (typeof cliToken !== 'string' || trigger.type !== 'push') return;
+  if (typeof linkId !== 'number') return;
 
-  const device = useStore.getState().devices.find((device) => device.token === cliToken);
+  const link = useStore.getState().links.find((link) => link.id === linkId);
 
-  if (!device) return;
+  if (!link) return;
 
   unstable_batchedUpdates(() => {
-    useStore.getState().pullPings(device);
+    useStore.getState().pullPings(link);
   });
 };
 
-const handlePress = ({ notification }: Notifications.NotificationResponse): void => {
-  const cliToken = notification.request.content.data.cliToken as string | undefined;
+const handleRegister = async (notification: Notification): Promise<void> => {
+  const pushToken = await getPushToken();
 
-  // TODO: Redo
+  const publicKey = useStore.getState().publicKey;
+
+  const signature = notification.request.content.data.signature as string;
+
+  const appId = await NotifApi.register.verify(pushToken, publicKey, signature);
+
+  useStore.getState().setAppId(appId);
+};
+
+const handleNotificationInteraction = ({ notification }: NotificationResponse): void => {
+  //
 };

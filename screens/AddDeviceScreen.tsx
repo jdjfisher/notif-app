@@ -7,16 +7,18 @@ import { Platform, Alert, Button } from 'react-native';
 import shallow from 'zustand/shallow';
 import tw from 'twrnc';
 import Svg, { Path } from 'react-native-svg';
+import { z } from 'zod';
 
-import { ModalScreenProps, CliDevice } from '../types';
+import { ModalScreenProps } from '../types';
 import { Text, View } from '../components/Themed';
 import useStore from '../state/store';
 import NotifApi from '../lib/api/bindings';
-import { getPushToken } from '../lib/helpers';
 
-interface LinkingCliDevice extends CliDevice {
-  socketId?: string;
-}
+const qrValidator = z.object({
+  name: z.string(),
+  code: z.string(),
+  socket: z.string(),
+});
 
 export default function AddDeviceScreen({ navigation }: ModalScreenProps<'add-device'>) {
   const cameraRef = useRef<Camera>(null);
@@ -24,14 +26,8 @@ export default function AddDeviceScreen({ navigation }: ModalScreenProps<'add-de
   const [hasPermission, setHasPermission] = useState(false);
   const [scanned, setScanned] = useState(false);
 
-  const [devices, addDevice, mobileDeviceName, confirmNewDevices, publicKey] = useStore(
-    (state) => [
-      state.devices,
-      state.addDevice,
-      state.mobileDeviceName,
-      state.confirmNewDevices,
-      state.publicKey,
-    ],
+  const [links, addLink, mobileDeviceName, confirmNewDevices] = useStore(
+    (state) => [state.links, state.addLink, state.mobileDeviceName, state.confirmNewDevices],
     shallow
   );
 
@@ -58,59 +54,45 @@ export default function AddDeviceScreen({ navigation }: ModalScreenProps<'add-de
     );
 
   const handleBarCodeScanned = ({ data }: { data: string }) => {
-    let device: CliDevice;
+    const validated = qrValidator.safeParse(JSON.parse(data));
 
-    try {
-      device = JSON.parse(data);
-
-      // Validate payload
-      if (!('name' in device && 'token' in device && 'socketId' in device)) throw 'invalid';
-
-      device.icon = 'laptop';
-      device.linkBroken = false;
-      device.linkedAt = new Date().toISOString();
-    } catch (error) {
-      return; // Ignore the QR
+    // Ignore the QR
+    if (!validated.success) {
+      return;
     }
 
     setScanned(true);
 
-    // TODO: Factor in broken links
-    if (devices.some((d) => d.token === device.token || d.name === device.name)) {
-      Alert.alert('Alert', `Device already linked (${device.name}).`, [
-        { text: 'OK', onPress: () => setScanned(false) },
-      ]);
-    } else if (confirmNewDevices) {
-      Alert.alert('Link Device', `${device.name}`, [
+    // TODO: Check for duplicates
+    // Alert.alert('Alert', `Device already linked (${link.name}).`, [
+    //   { text: 'OK', onPress: () => setScanned(false) },
+    // ]);
+
+    if (confirmNewDevices) {
+      Alert.alert('Link Device', `${validated.data.name}`, [
         { text: 'Cancel', style: 'cancel', onPress: () => setScanned(false) },
-        { text: 'Link', onPress: () => handleAddDevice(device) },
+        { text: 'Link', onPress: () => handleAddDevice(validated.data) },
       ]);
     } else {
-      handleAddDevice(device);
+      handleAddDevice(validated.data);
     }
   };
 
-  const handleAddDevice = async (device: LinkingCliDevice) => {
+  const handleAddDevice = async (data: z.infer<typeof qrValidator>) => {
     try {
-      const pushToken = await getPushToken();
-
-      const payload = {
-        socketId: device.socketId,
-        cliToken: device.token,
-        publicKey: publicKey,
-        mobileToken: pushToken,
-        mobileDeviceName: mobileDeviceName || Device.deviceName || Device.modelName || undefined,
-      };
+      const appDeviceName = mobileDeviceName || Device.deviceName || Device.modelName || undefined;
 
       // Request the link
-
-      await NotifApi.link(payload);
-
-      // We don't want this anymore
-      delete device.socketId;
+      const id = await NotifApi.link(data.code, data.socket, appDeviceName);
 
       // Persist via the global store
-      addDevice(device);
+      addLink({
+        id,
+        name: data.name,
+        icon: 'laptop',
+        broken: false,
+        linkedAt: new Date().toISOString(),
+      });
     } catch (error) {
       Sentry.Native.captureException(error);
 

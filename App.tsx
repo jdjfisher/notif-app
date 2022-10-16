@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as Sentry from 'sentry-expo';
 import Constants from 'expo-constants';
@@ -11,6 +11,9 @@ import usePushNotifications from './hooks/usePushNotifications';
 import useCachedResources from './hooks/useCachedResources';
 import ServerBanner from './components/ServerBanner';
 import Navigation from './navigation';
+import useStore from './state/store';
+import NotifApi from './lib/api/bindings';
+import { getPushToken } from './lib/helpers';
 
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
@@ -25,6 +28,18 @@ export default function App() {
   const isLoadingComplete = useCachedResources();
 
   usePushNotifications();
+
+  const appId = useStore((state) => state.appId);
+
+  useEffect(() => {
+    if (appId) {
+      return;
+    }
+
+    getPushToken().then((token) => {
+      NotifApi.register.apply(token);
+    });
+  }, []);
 
   if (!isLoadingComplete) {
     return null;

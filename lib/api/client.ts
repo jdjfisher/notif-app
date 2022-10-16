@@ -8,9 +8,14 @@ const client = axios.create({
 
 client.interceptors.request.use((config) => {
   const customBaseURL = store.getState().customApiUrl;
+  const token = store.getState().getToken();
 
   if (customBaseURL) {
     config.baseURL = customBaseURL;
+  }
+
+  if (token) {
+    config.headers.authorization = `Bearer ${token}`;
   }
 
   return config;

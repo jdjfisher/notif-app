@@ -1,17 +1,21 @@
 import { Slice } from '../store';
 import JSEncrypt from 'jsencrypt';
 
-export interface CryptSlice {
+export interface ProfileSlice {
+  appId?: number;
   privateKey: string;
   publicKey: string;
   decrypt: (data: string | undefined) => string | undefined;
+  setAppId: (id: number) => void;
+  getToken: () => string;
 }
 
 // Temporary instance to generate the keypair if not
 // already persisted in AsyncStorage
 const _rsa = new JSEncrypt();
 
-const createCryptSlice: Slice<CryptSlice> = (set, get) => ({
+const createProfileSlice: Slice<ProfileSlice> = (set, get) => ({
+  appId: undefined,
   privateKey: _rsa.getPrivateKey(),
   publicKey: _rsa.getPublicKey(),
 
@@ -25,6 +29,15 @@ const createCryptSlice: Slice<CryptSlice> = (set, get) => ({
 
     return rsa.decrypt(data) || undefined;
   },
+
+  setAppId: (id) => {
+    set({ appId: id });
+  },
+
+  getToken: () => {
+    // TODO: actual token
+    return String(get().appId);
+  },
 });
 
-export default createCryptSlice;
+export default createProfileSlice;

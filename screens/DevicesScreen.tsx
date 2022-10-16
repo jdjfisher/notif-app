@@ -10,14 +10,13 @@ import useStore from '../state/store';
 import { Text, View, Pressable } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 import LinkBroken from '../components/device/LinkBroken';
-import { getPushToken } from '../lib/helpers';
 
 export default function DevicesScreen({ navigation }: RootTabScreenProps<'device-list'>) {
   const [refreshing, setRefreshing] = useState(false);
 
-  const [devices, latestPing, pings, pullPings, recordBrokenLink] = useStore(
+  const [links, latestPing, pings, pullPings, recordBrokenLink] = useStore(
     (state) => [
-      state.devices,
+      state.links,
       state.latestPing,
       state.pings,
       state.pullPings,
@@ -27,26 +26,16 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'device
   );
 
   useEffect(() => {
-    (async () => {
-      const payload = {
-        mobileToken: await getPushToken(),
-      };
-
-      NotifApi.status(payload).then((response) => {
-        const tokens = response?.data?.linkedCliTokens;
-
-        if (tokens === undefined) return;
-
-        for (const device of devices) {
-          if (!tokens.includes(device.token)) {
-            recordBrokenLink(device);
-          }
+    NotifApi.status().then((linkIds) => {
+      for (const link of links) {
+        if (!linkIds.includes(link.id)) {
+          recordBrokenLink(link);
         }
-      });
-    })();
+      }
+    });
   }, []);
 
-  const linkedDevices = devices.filter((d) => !d.linkBroken);
+  const linkedDevices = links.filter((d) => !d.broken);
 
   const refresh = async () => {
     setRefreshing(true);
@@ -62,7 +51,7 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'device
     }
   };
 
-  if (!devices.length) {
+  if (!links.length) {
     return (
       <DefaultView style={tw`flex-grow justify-center items-center`}>
         <Text style={tw`pb-5 text-2xl`}> No Devices linked </Text>
@@ -75,39 +64,37 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'device
   return (
     <View style={tw`mt-1 shadow-sm`}>
       <FlatList
-        data={devices}
-        keyExtractor={(device) => device.token}
+        data={links}
+        keyExtractor={(link) => String(link.id)}
         onRefresh={linkedDevices.length ? refresh : undefined}
         refreshing={refreshing}
-        renderItem={({ item: device }) => (
+        renderItem={({ item: link }) => (
           <Pressable
             // @ts-ignore
-            onPress={() => navigation.navigate('view-device', { cliToken: device.token })}
+            onPress={() => navigation.navigate('view-device', { linkId: link.id })}
             style={tw`p-3 flex-row border-t border-gray-100 justify-between items-start`}
-            key={device.token}
+            key={link.id}
           >
             <DefaultView style={tw`flex-row items-center flex-shrink`}>
               <MaterialCommunityIcons
-                name={device.icon}
+                name={link.icon}
                 size={35}
                 color={tw.color('text-black')}
                 style={tw`mr-3`}
               />
 
               <DefaultView>
-                <Text style={tw`text-xl`}>{device.name}</Text>
-                <Text style={tw`text-xs text-gray-400`}>
-                  {latestPing(device.token)?.message ?? '-'}
-                </Text>
+                <Text style={tw`text-xl`}>{link.name}</Text>
+                <Text style={tw`text-xs text-gray-400`}>{latestPing(link)?.message ?? '-'}</Text>
               </DefaultView>
             </DefaultView>
 
             <DefaultView style={tw`items-end`}>
               <Text style={tw`text-xs text-gray-400`}>
-                {dayjs(latestPing(device.token)?.sentAt ?? device.linkedAt).fromNow()}
+                {dayjs(latestPing(link)?.sentAt ?? link.linkedAt).fromNow()}
               </Text>
 
-              {device.linkBroken ? <LinkBroken /> : null}
+              {link.broken ? <LinkBroken /> : null}
             </DefaultView>
           </Pressable>
         )}

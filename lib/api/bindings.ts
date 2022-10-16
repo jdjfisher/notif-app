@@ -1,25 +1,80 @@
 import client from './client';
+import { z } from 'zod';
+import { dateStringValidator } from '../helpers';
 
 export default {
   health: async () => client.get('/health'),
 
-  // TODO: Split into two routes
-  status: async <T extends { mobileToken: string } | { cliToken: string }>(payload: T) =>
-    client.post<
-      T extends { mobileToken: string } ? { linkedCliTokens?: string[] } : { linked?: boolean }
-    >('/status', payload),
+  register: {
+    apply: async (pushToken: string) => {
+      const payload = {
+        push_token: pushToken,
+      };
 
-  unlink: async (payload: { mobileToken: string } | { cliToken: string }) =>
-    client.post<{ linkedCliTokens?: string[] }>('/unlink', payload),
+      await client.post('/app/register/apply', payload);
+    },
 
-  pull: async (payload: { mobileToken: string; cliToken: string; lastPingAt: string }) =>
-    client.post<{ message?: string; sent_at: string }[]>('/pull', payload),
+    verify: async (pushToken: string, publicKey: string, signature: string): Promise<number> => {
+      const payload = {
+        push_token: pushToken,
+        public_key: publicKey,
+        signature,
+      };
 
-  link: async (payload: {
-    socketId?: string;
-    cliToken: string;
-    mobileToken: string;
-    publicKey: string;
-    mobileDeviceName?: string;
-  }) => client.post('/link', payload),
+      const response = await client.post('/app/register/verify', payload);
+
+      const validator = z.number();
+
+      return validator.parse(response.data.id);
+    },
+  },
+
+  status: async (): Promise<number[]> => {
+    const response = await client.get('/app/status');
+
+    const validator = z.array(z.number());
+
+    return validator.parse(response.data.link_ids);
+  },
+
+  unlink: async (linkId?: number) => {
+    const payload = {
+      link_id: linkId,
+    };
+
+    await client.post('/app/unlink', payload);
+  },
+
+  pull: async (linkId: number, lastPingAt: string) => {
+    const payload = {
+      link_id: linkId,
+      last_ping_at: lastPingAt,
+    };
+
+    const response = await client.post('/app/pull', payload);
+
+    const validator = z.array(
+      z.object({
+        id: z.number(),
+        message: z.string().optional().nullable(),
+        sent_at: dateStringValidator,
+      })
+    );
+
+    return validator.parse(response.data.pings);
+  },
+
+  link: async (linkCode: string, socketId?: string, appDeviceName?: string): Promise<number> => {
+    const payload = {
+      link_code: linkCode,
+      socket_id: socketId,
+      app_device_name: appDeviceName,
+    };
+
+    const response = await client.post('/app/link', payload);
+
+    const validator = z.number();
+
+    return validator.parse(response.data.id);
+  },
 };

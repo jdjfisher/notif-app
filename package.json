@@ -61,6 +61,7 @@
     "tailwind-rn": "^3.0.1",
     "tailwindcss": "^2.2.15",
     "twrnc": "^2.0.3",
+    "zod": "^3.19.1",
     "zustand": "^3.5.13"
   },
   "devDependencies": {

@@ -5,12 +5,12 @@ import { useNavigation } from '@react-navigation/native';
 import tw from 'twrnc';
 
 import { Text, Pressable } from '../Themed';
-import { CliDevice, Ping } from '../../types';
+import { Link, Ping } from '../../types';
 import useStore from '../../state/store';
 
 // TODO: Remove pings from props, infer from device
 interface Props {
-  device: CliDevice;
+  device: Link;
   pings: Ping[];
 }
 
@@ -36,8 +36,8 @@ export default function PingHistory({ device, pings }: Props) {
   return (
     <FlatList
       data={pings}
-      keyExtractor={(ping) => ping.id}
-      onRefresh={device.linkBroken ? undefined : refresh}
+      keyExtractor={(ping) => String(ping.id)}
+      onRefresh={device.broken ? undefined : refresh}
       refreshing={refreshing}
       renderItem={({ item: ping }) => (
         <Pressable

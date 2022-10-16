@@ -6,7 +6,7 @@ import shallow from 'zustand/shallow';
 import dayjs from 'dayjs';
 import tw from 'twrnc';
 
-import { CliDevice, ModalScreenProps } from '../types';
+import { Link, ModalScreenProps } from '../types';
 import { Text, View } from '../components/Themed';
 import Menu from '../components/Menu';
 import NotifApi from '../lib/api/bindings';
@@ -21,40 +21,38 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
   const changeIconModalRef = useRef<ElementRef<typeof RadioGroupModal>>(null);
 
   // State hooks
-  const [devices, allPings, clearPings, pullPings, editDevice, removeDevice, recordBrokenLink] =
-    useStore(
-      (state) => [
-        state.devices,
-        state.pings,
-        state.clearPings,
-        state.pullPings,
-        state.editDevice,
-        state.removeDevice,
-        state.recordBrokenLink,
-      ],
-      shallow
-    );
+  const [links, allPings, clearPings, pullPings, editLink, removeLink, recordBrokenLink] = useStore(
+    (state) => [
+      state.links,
+      state.pings,
+      state.clearPings,
+      state.pullPings,
+      state.editLink,
+      state.removeLink,
+      state.recordBrokenLink,
+      state.appId,
+    ],
+    shallow
+  );
 
   // Fetch the device data
-  const cliToken = route.params.cliToken;
-  const device = devices.find((d) => d.token === cliToken);
-  const pings = allPings[cliToken] ?? [];
+  const linkId = route.params.linkId;
+  const link = links.find((l) => l.id === linkId);
+  const pings = allPings[linkId] ?? [];
 
   useEffect(() => {
     // We know the link is broken, only this app can correct this, .*. don't verify again
-    if (!device || device.linkBroken) return;
+    if (!link || link.broken) return;
 
-    const payload = { cliToken };
-
-    NotifApi.status(payload)
-      .then(async (response) => {
-        if (response.data?.linked === false) {
-          recordBrokenLink(device);
-          Alert.alert('Link Broken', `${device.name} has been unlinked from this deivce`);
+    NotifApi.status()
+      .then(async (linkIds) => {
+        if (!linkIds.includes(link.id)) {
+          recordBrokenLink(link);
+          Alert.alert('Link Broken', `${link.name} has been unlinked from this deivce`);
           return;
         }
 
-        await pullPings(device);
+        await pullPings(link);
       })
       .catch(console.debug);
   }, []);
@@ -76,35 +74,31 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
   }, [navigation, pings]);
 
   // Abort if the device could not be found
-  if (!device) {
+  if (!link) {
     return null;
   }
 
   const promptClearPings = () => {
-    Alert.alert('Clear Pings', `Clear all ping history for ${device.name}`, [
+    Alert.alert('Clear Pings', `Clear all ping history for ${link.name}`, [
       { text: 'Cancel', style: 'cancel' },
-      { text: 'Clear', onPress: () => clearPings(device.token) },
+      { text: 'Clear', onPress: () => clearPings(link.id) },
     ]);
   };
 
   const promptRemove = () => {
-    Alert.alert('Remove Device', `Remove ${device.name}`, [
+    Alert.alert('Remove Device', `Remove ${link.name}`, [
       { text: 'Cancel', style: 'cancel' },
       { text: 'Remove', onPress: () => remove() },
     ]);
   };
 
   const remove = async () => {
-    const payload = {
-      cliToken: device.token,
-    };
-
     try {
       // Unlink server-side
-      await NotifApi.unlink(payload);
+      await NotifApi.unlink(link.id);
 
       // Remove from storage
-      removeDevice(device);
+      removeLink(link);
 
       // Return to devices screen
       navigation.popToTop();
@@ -118,7 +112,7 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
       <View style={tw`p-3 flex flex-row justify-between items-center shadow-sm mb-1`}>
         <DefaultView style={tw`flex-row items-center flex-shrink`}>
           <MaterialCommunityIcons
-            name={device.icon}
+            name={link.icon}
             size={35}
             color={tw.color('text-black')}
             style={tw`mr-3`}
@@ -128,34 +122,34 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
             <TextInputModal
               ref={renameDeviceModalRef}
               title="Rename Device"
-              value={device.name}
+              value={link.name}
               setValue={(name) => {
-                if (name) editDevice(device, { name });
+                if (name) editLink(link, { name });
               }}
               maxLength={20}
             >
-              <Text style={tw`text-xl`}>{device.name}</Text>
+              <Text style={tw`text-xl`}>{link.name}</Text>
             </TextInputModal>
 
-            <Text style={tw`text-gray-400 text-xs`}>Linked {dayjs(device.linkedAt).fromNow()}</Text>
+            <Text style={tw`text-gray-400 text-xs`}>Linked {dayjs(link.linkedAt).fromNow()}</Text>
           </DefaultView>
         </DefaultView>
 
-        {device.linkBroken ? <LinkBroken /> : null}
+        {link.broken ? <LinkBroken /> : null}
       </View>
 
       <View style={tw`flex-1 shadow-sm pt-4`}>
         <Text style={tw`text-xl mx-4 mb-2`}>Pings</Text>
 
-        <PingHistory device={device} pings={pings} />
+        <PingHistory device={link} pings={pings} />
       </View>
 
       {/* TODO: Preview icons */}
-      <RadioGroupModal<CliDevice['icon']>
+      <RadioGroupModal<Link['icon']>
         ref={changeIconModalRef}
-        value={device.icon}
+        value={link.icon}
         setValue={(icon) => {
-          if (icon) editDevice(device, { icon });
+          if (icon) editLink(link, { icon });
         }}
         options={{
           'Laptop': 'laptop',

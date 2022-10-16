@@ -1,62 +1,50 @@
-import { getPushToken } from '../../lib/helpers';
-import { CliDevice, Ping } from '../../types';
+import { Link, Ping } from '../../types';
 import { Slice } from '../store';
 import NotifApi from '../../lib/api/bindings';
-import { DeviceSlice } from './device';
-import { CryptSlice } from './crypt';
+import { LinkSlice } from './link';
+import { ProfileSlice } from './profile';
 
 export interface PingSlice {
-  pings: { [deviceToken: string]: Ping[] };
-  recordPing: (deviceToken: string, ping: Omit<Ping, 'id'>) => void;
-  clearPings: (deviceToken: string) => void;
+  pings: { [linkId: number]: Ping[] };
+  clearPings: (linkId: number) => void;
   clearAllPings: () => void;
-  latestPing: (deviceToken: string) => Ping | null;
-  pullPings: (device: CliDevice) => Promise<void>;
+  latestPing: (link: Link) => Ping | null;
+  pullPings: (link: Link) => Promise<void>;
 }
 
 // TODO: Tidy
-const createPingSlice: Slice<PingSlice, DeviceSlice & CryptSlice> = (set, get) => ({
+const createPingSlice: Slice<PingSlice, LinkSlice & ProfileSlice> = (set, get) => ({
   pings: {},
-  recordPing: (deviceToken, ping) => {
+  clearPings: (linkId) => {
     const clone = { ...get().pings };
-    const id = Math.random().toString(36);
-    clone[deviceToken] = [{ id, ...ping }, ...(clone[deviceToken] ?? [])];
-    set({ pings: clone });
-  },
-  clearPings: (deviceToken) => {
-    const clone = { ...get().pings };
-    delete clone[deviceToken];
+    delete clone[linkId];
     set({ pings: clone });
   },
   clearAllPings: () => {
     set({ pings: {} });
   },
-  latestPing: (deviceToken) => {
-    return get().pings[deviceToken]?.[0];
+  latestPing: (link) => {
+    return get().pings[link.id]?.[0];
   },
 
-  pullPings: async (device) => {
-    const payload = {
-      cliToken: device.token,
-      mobileToken: await getPushToken(),
-      lastPingAt: get().pings[device.token]?.[0]?.sentAt,
-    };
+  pullPings: async (link) => {
+    const lastPingAt = get().pings[link.id]?.[0]?.sentAt;
 
-    const response = await NotifApi.pull(payload);
+    const rawPings = await NotifApi.pull(link.id, lastPingAt);
 
-    const pings = response.data
-      .map((raw) => ({
-        message: get().decrypt(raw.message),
-        sentAt: raw.sent_at,
-        id: Math.random().toString(36),
+    const pings = rawPings
+      .map((p) => ({
+        id: p.id,
+        message: get().decrypt(p.message ?? undefined),
+        sentAt: p.sent_at.toISOString(),
       }))
       .reverse();
 
     const clone = { ...get().pings };
 
-    clone[device.token] = [...pings, ...(clone[device.token] ?? [])];
+    clone[link.id] = [...pings, ...(clone[link.id] ?? [])];
     set({ pings: clone });
-    get().editDevice(device, { lastPullAt: new Date().toISOString() });
+    get().editLink(link, { lastPullAt: new Date().toISOString() });
   },
 });
 

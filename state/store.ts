@@ -2,11 +2,11 @@ import create, { GetState, SetState } from 'zustand';
 import { persist } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import createSettingsSlice, { SettingsSlice } from './slices/settings';
-import createDeviceSlice, { DeviceSlice } from './slices/device';
+import createLinkSlice, { LinkSlice } from './slices/link';
 import createPingSlice, { PingSlice } from './slices/ping';
-import createCryptSlice, { CryptSlice } from './slices/crypt';
+import createProfileSlice, { ProfileSlice } from './slices/profile';
 
-interface State extends SettingsSlice, DeviceSlice, PingSlice, CryptSlice {
+interface State extends SettingsSlice, LinkSlice, PingSlice, ProfileSlice {
   apiStatus: 'connected' | 'disconnected' | 'maintenance';
 }
 
@@ -22,10 +22,10 @@ const useStore = create<State>(
       apiStatus: 'connected',
 
       // Merge Slices
-      ...createDeviceSlice(set, get),
+      ...createLinkSlice(set, get),
       ...createPingSlice(set, get),
       ...createSettingsSlice(set, get),
-      ...createCryptSlice(set, get),
+      ...createProfileSlice(set, get),
     }),
     {
       name: 'notif',

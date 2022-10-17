@@ -8,13 +8,13 @@ import { Text, Pressable } from '../Themed';
 import { Link, Ping } from '../../types';
 import useStore from '../../state/store';
 
-// TODO: Remove pings from props, infer from device
+// TODO: Remove pings from props, infer from link
 interface Props {
-  device: Link;
+  link: Link;
   pings: Ping[];
 }
 
-export default function PingHistory({ device, pings }: Props) {
+export default function PingHistory({ link, pings }: Props) {
   const [refreshing, setRefreshing] = useState(false);
   const pullPings = useStore((state) => state.pullPings);
   const navigation = useNavigation();
@@ -23,7 +23,7 @@ export default function PingHistory({ device, pings }: Props) {
     setRefreshing(true);
 
     try {
-      await pullPings(device);
+      await pullPings(link);
     } finally {
       setRefreshing(false);
     }
@@ -37,7 +37,7 @@ export default function PingHistory({ device, pings }: Props) {
     <FlatList
       data={pings}
       keyExtractor={(ping) => String(ping.id)}
-      onRefresh={device.broken ? undefined : refresh}
+      onRefresh={link.broken ? undefined : refresh}
       refreshing={refreshing}
       renderItem={({ item: ping }) => (
         <Pressable

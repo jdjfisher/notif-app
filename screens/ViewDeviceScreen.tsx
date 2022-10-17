@@ -141,7 +141,7 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
       <View style={tw`flex-1 shadow-sm pt-4`}>
         <Text style={tw`text-xl mx-4 mb-2`}>Pings</Text>
 
-        <PingHistory device={link} pings={pings} />
+        <PingHistory link={link} pings={pings} />
       </View>
 
       {/* TODO: Preview icons */}

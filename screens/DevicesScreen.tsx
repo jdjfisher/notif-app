@@ -40,8 +40,8 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'device
   const refresh = async () => {
     setRefreshing(true);
 
-    const refreshable = linkedDevices.filter((device) =>
-      dayjs(device.lastPullAt).isBefore(dayjs().subtract(30, 'second'))
+    const refreshable = linkedDevices.filter((link) =>
+      dayjs(link.lastPullAt).isBefore(dayjs().subtract(30, 'second'))
     );
 
     try {

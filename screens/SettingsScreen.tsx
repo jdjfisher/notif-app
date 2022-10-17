@@ -20,8 +20,8 @@ export default function SettingsScreen() {
     customApiUrl,
     setCustomApiUrl,
     deviceTheme,
-    confirmNewDevices,
-    toggleConfirmNewDevices,
+    confirmNewLinks,
+    toggleConfirmNewLinks,
     clearLinks,
     clearAllPings,
   ] = useStore(
@@ -31,15 +31,15 @@ export default function SettingsScreen() {
       state.customApiUrl,
       state.setCustomApiUrl,
       state.deviceTheme,
-      state.confirmNewDevices,
-      state.toggleConfirmNewDevices,
+      state.confirmNewLinks,
+      state.toggleConfirmNewLinks,
       state.clearLinks,
       state.clearAllPings,
     ],
     shallow
   );
 
-  const unlinkAllDevices = async () => {
+  const clearAllLinks = async () => {
     try {
       // Clean server links
       await NotifApi.unlink();
@@ -60,10 +60,10 @@ export default function SettingsScreen() {
     ]);
   };
 
-  const promptUnlinkAllDevices = async () => {
+  const promptClearAllLinks = async () => {
     Alert.alert('Clear Devices', 'This will remove all linked devices. This action is final.', [
       { text: 'Cancel', style: 'cancel' },
-      { text: 'OK', onPress: unlinkAllDevices },
+      { text: 'OK', onPress: clearAllLinks },
     ]);
   };
 
@@ -111,7 +111,7 @@ export default function SettingsScreen() {
             <Text style={tw`ml-2`}>Confirm new devices</Text>
           </DefaultView>
 
-          <Switch value={confirmNewDevices} onChange={toggleConfirmNewDevices} />
+          <Switch value={confirmNewLinks} onChange={toggleConfirmNewLinks} />
         </View>
       </SettingGroup>
 
@@ -125,7 +125,7 @@ export default function SettingsScreen() {
         </Pressable>
 
         <Pressable
-          onPress={() => promptUnlinkAllDevices()}
+          onPress={() => promptClearAllLinks()}
           style={tw`flex-row items-center py-3 px-4`}
         >
           <MaterialIcons name="delete" size={25} color={tw.color('gray-400')} />

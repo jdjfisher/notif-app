@@ -2,8 +2,8 @@ import { ColorSchemeName } from 'react-native';
 import { Slice } from '../store';
 
 export interface SettingsSlice {
-  confirmNewDevices: boolean;
-  toggleConfirmNewDevices: () => void;
+  confirmNewLinks: boolean;
+  toggleConfirmNewLinks: () => void;
 
   mobileDeviceName: string | undefined;
   setMobileDeviceName: (name?: string) => void;
@@ -19,8 +19,8 @@ export interface SettingsSlice {
 }
 
 const createSettingsSlice: Slice<SettingsSlice> = (set, get) => ({
-  confirmNewDevices: false,
-  toggleConfirmNewDevices: () => set((state) => ({ confirmNewDevices: !state.confirmNewDevices })),
+  confirmNewLinks: false,
+  toggleConfirmNewLinks: () => set((state) => ({ confirmNewLinks: !state.confirmNewLinks })),
 
   mobileDeviceName: '',
   setMobileDeviceName: (name) => set({ mobileDeviceName: name }),

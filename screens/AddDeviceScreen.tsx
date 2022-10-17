@@ -26,8 +26,8 @@ export default function AddDeviceScreen({ navigation }: ModalScreenProps<'add-de
   const [hasPermission, setHasPermission] = useState(false);
   const [scanned, setScanned] = useState(false);
 
-  const [links, addLink, mobileDeviceName, confirmNewDevices] = useStore(
-    (state) => [state.links, state.addLink, state.mobileDeviceName, state.confirmNewDevices],
+  const [links, addLink, mobileDeviceName, confirmNewLinks] = useStore(
+    (state) => [state.links, state.addLink, state.mobileDeviceName, state.confirmNewLinks],
     shallow
   );
 
@@ -68,17 +68,17 @@ export default function AddDeviceScreen({ navigation }: ModalScreenProps<'add-de
     //   { text: 'OK', onPress: () => setScanned(false) },
     // ]);
 
-    if (confirmNewDevices) {
+    if (confirmNewLinks) {
       Alert.alert('Link Device', `${validated.data.name}`, [
         { text: 'Cancel', style: 'cancel', onPress: () => setScanned(false) },
-        { text: 'Link', onPress: () => handleAddDevice(validated.data) },
+        { text: 'Link', onPress: () => handleAddLink(validated.data) },
       ]);
     } else {
-      handleAddDevice(validated.data);
+      handleAddLink(validated.data);
     }
   };
 
-  const handleAddDevice = async (data: z.infer<typeof qrValidator>) => {
+  const handleAddLink = async (data: z.infer<typeof qrValidator>) => {
     try {
       const appDeviceName = mobileDeviceName || Device.deviceName || Device.modelName || undefined;
 

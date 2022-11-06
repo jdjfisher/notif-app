@@ -104,7 +104,7 @@ function BottomTabNavigator() {
           headerRight: () => (
             <Pressable
               // @ts-ignore
-              onPress={() => navigation.navigate('Add Device')}
+              onPress={() => navigation.navigate('add-device')}
               rippleRadius={16}
               style={tw`p-1 mr-4`}
             >

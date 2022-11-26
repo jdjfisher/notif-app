@@ -12,6 +12,7 @@ import { z } from 'zod';
 import { ModalScreenProps } from '../types';
 import { Text, View } from '../components/Themed';
 import { useStore } from '../state/store';
+import { useSettingsStore } from '../state/settingsStore';
 import NotifApi from '../lib/api/bindings';
 
 const qrValidator = z.object({
@@ -26,8 +27,10 @@ export default function AddDeviceScreen({ navigation }: ModalScreenProps<'add-de
   const [hasPermission, setHasPermission] = useState(false);
   const [scanned, setScanned] = useState(false);
 
-  const [links, addLink, mobileDeviceName, confirmNewLinks] = useStore(
-    (state) => [state.links, state.addLink, state.mobileDeviceName, state.confirmNewLinks],
+  const [links, addLink] = useStore((state) => [state.links, state.addLink], shallow);
+
+  const [mobileDeviceName, confirmNewLinks] = useSettingsStore(
+    (state) => [state.mobileDeviceName, state.confirmNewLinks],
     shallow
   );
 

@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { Text, Pressable } from 'react-native';
-import { useStore } from '../state/store';
+import { useSettingsStore } from '../state/settingsStore';
 import NotifApi from '../lib/api/bindings';
 import tw from 'twrnc';
 
 export default () => {
-  const apiStatus = useStore((state) => state.apiStatus);
+  const apiStatus = useSettingsStore((state) => state.apiStatus);
 
   useEffect(() => {
     checkApiStatus();

@@ -32,7 +32,7 @@ export const useProfileStore = create<State>(
       },
     }),
     {
-      name: 'notif-profile',
+      name: 'notif.profile',
       getStorage: () => ({
         getItem: async (name: string) => await SecureStore.getItemAsync(name),
         setItem: async (name: string, value: string) => await SecureStore.setItemAsync(name, value),

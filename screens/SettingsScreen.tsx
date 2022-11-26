@@ -9,11 +9,17 @@ import tw from 'twrnc';
 
 import NotifApi from '../lib/api/bindings';
 import { useStore } from '../state/store';
+import { useSettingsStore } from '../state/settingsStore';
 import ThemeModal from '../components/settings/DeviceThemeModal';
 import TextInputModal from '../components/ui/TextInputModal';
 import { View, Text, Switch, Pressable } from '../components/Themed';
 
 export default function SettingsScreen() {
+  const [clearLinks, clearAllPings] = useStore(
+    (state) => [state.clearLinks, state.clearAllPings],
+    shallow
+  );
+
   const [
     mobileDeviceName,
     setMobileDeviceName,
@@ -22,9 +28,7 @@ export default function SettingsScreen() {
     deviceTheme,
     confirmNewLinks,
     toggleConfirmNewLinks,
-    clearLinks,
-    clearAllPings,
-  ] = useStore(
+  ] = useSettingsStore(
     (state) => [
       state.mobileDeviceName,
       state.setMobileDeviceName,
@@ -33,8 +37,6 @@ export default function SettingsScreen() {
       state.deviceTheme,
       state.confirmNewLinks,
       state.toggleConfirmNewLinks,
-      state.clearLinks,
-      state.clearAllPings,
     ],
     shallow
   );

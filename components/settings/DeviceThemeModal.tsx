@@ -2,7 +2,8 @@ import React, { ElementRef, useRef } from 'react';
 import { ColorSchemeName, PressableProps } from 'react-native';
 
 import { Pressable } from '../Themed';
-import { useStore } from '../../state/store';
+import { useSettingsStore } from '../../state/settingsStore';
+
 import shallow from 'zustand/shallow';
 import RadioGroupModal from '../ui/RadioGroupModal';
 
@@ -14,7 +15,7 @@ type Props = {
 function DeviceThemeModal(props: Props) {
   const { children, ...otherProps } = props;
 
-  const [deviceTheme, setDeviceTheme] = useStore(
+  const [deviceTheme, setDeviceTheme] = useSettingsStore(
     (state) => [state.deviceTheme, state.setDeviceTheme],
     shallow
   );

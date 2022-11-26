@@ -2,7 +2,7 @@ import React, { ElementRef, useRef } from 'react';
 import { ColorSchemeName, PressableProps } from 'react-native';
 
 import { Pressable } from '../Themed';
-import useStore from '../../state/store';
+import { useStore } from '../../state/store';
 import shallow from 'zustand/shallow';
 import RadioGroupModal from '../ui/RadioGroupModal';
 

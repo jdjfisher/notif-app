@@ -6,7 +6,7 @@ import tw from 'twrnc';
 
 import { Text, Pressable } from '../Themed';
 import { Link, Ping } from '../../types';
-import useStore from '../../state/store';
+import { useStore } from '../../state/store';
 
 // TODO: Remove pings from props, infer from link
 interface Props {

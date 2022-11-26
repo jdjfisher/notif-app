@@ -2,7 +2,7 @@ import { Link, Ping } from '../../types';
 import { Slice } from '../store';
 import NotifApi from '../../lib/api/bindings';
 import { LinkSlice } from './link';
-import { ProfileSlice } from './profile';
+import { useProfileStore } from '../profileStore';
 
 export interface PingSlice {
   pings: { [linkId: number]: Ping[] };
@@ -13,7 +13,7 @@ export interface PingSlice {
 }
 
 // TODO: Tidy
-const createPingSlice: Slice<PingSlice, LinkSlice & ProfileSlice> = (set, get) => ({
+const createPingSlice: Slice<PingSlice, LinkSlice> = (set, get) => ({
   pings: {},
   clearPings: (linkId) => {
     const clone = { ...get().pings };
@@ -35,7 +35,7 @@ const createPingSlice: Slice<PingSlice, LinkSlice & ProfileSlice> = (set, get) =
     const pings = rawPings
       .map((p) => ({
         id: p.id,
-        message: get().decrypt(p.message ?? undefined),
+        message: useProfileStore.getState().decrypt(p.message ?? undefined),
         sentAt: p.sent_at.toISOString(),
       }))
       .reverse();

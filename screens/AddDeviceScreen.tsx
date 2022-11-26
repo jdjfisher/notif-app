@@ -11,7 +11,7 @@ import { z } from 'zod';
 
 import { ModalScreenProps } from '../types';
 import { Text, View } from '../components/Themed';
-import useStore from '../state/store';
+import { useStore } from '../state/store';
 import NotifApi from '../lib/api/bindings';
 
 const qrValidator = z.object({

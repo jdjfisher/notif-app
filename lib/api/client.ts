@@ -1,14 +1,15 @@
 import axios from 'axios';
 import Constants from 'expo-constants';
-import store from '../../state/store';
+import { useStore } from '../../state/store';
+import { useProfileStore } from '../../state/profileStore';
 
 const client = axios.create({
   baseURL: Constants.manifest?.extra?.apiUrl,
 });
 
 client.interceptors.request.use((config) => {
-  const customBaseURL = store.getState().customApiUrl;
-  const token = store.getState().bearerToken;
+  const customBaseURL = useStore.getState().customApiUrl;
+  const token = useProfileStore.getState().bearerToken;
 
   if (customBaseURL) {
     config.baseURL = customBaseURL;
@@ -23,14 +24,14 @@ client.interceptors.request.use((config) => {
 
 client.interceptors.response.use(
   (response) => {
-    store.setState({ apiStatus: 'connected' });
+    useStore.setState({ apiStatus: 'connected' });
     return response;
   },
   (error) => {
     if (error.response === undefined || error.response.status === 502) {
-      store.setState({ apiStatus: 'disconnected' });
+      useStore.setState({ apiStatus: 'disconnected' });
     } else if (error.response.status === 503) {
-      store.setState({ apiStatus: 'maintenance' });
+      useStore.setState({ apiStatus: 'maintenance' });
     }
 
     return Promise.reject(error);

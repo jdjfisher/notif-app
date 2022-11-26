@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import tw from 'twrnc';
 
 import NotifApi from '../lib/api/bindings';
-import useStore from '../state/store';
+import { useStore } from '../state/store';
 import { Text, View, Pressable } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 import LinkBroken from '../components/device/LinkBroken';

@@ -2,7 +2,8 @@ import { useEffect } from 'react';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { Platform, unstable_batchedUpdates } from 'react-native';
-import useStore from '../state/store';
+import { useStore } from '../state/store';
+import { useProfileStore } from '../state/profileStore';
 import {
   AndroidNotificationPriority,
   Notification,
@@ -10,7 +11,6 @@ import {
   NotificationResponse,
 } from 'expo-notifications';
 import NotifApi from '../lib/api/bindings';
-import { getPushToken } from '../lib/helpers';
 
 export default function usePushNotifications(): void {
   useEffect(() => {
@@ -104,13 +104,13 @@ const handlePing = (notification: Notification): void => {
 };
 
 const handleRegister = async (notification: Notification): Promise<void> => {
-  const publicKey = useStore.getState().publicKey;
+  const publicKey = useProfileStore.getState().publicKey;
 
   const registerToken = notification.request.content.data.register_token as string;
 
   const bearerToken = await NotifApi.register.verify(registerToken, publicKey);
 
-  useStore.getState().bearerToken = bearerToken;
+  useProfileStore.getState().bearerToken = bearerToken;
 };
 
 const handleNotificationInteraction = ({ notification }: NotificationResponse): void => {

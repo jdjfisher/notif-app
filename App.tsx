@@ -11,7 +11,7 @@ import usePushNotifications from './hooks/usePushNotifications';
 import useCachedResources from './hooks/useCachedResources';
 import ServerBanner from './components/ServerBanner';
 import Navigation from './navigation';
-import useStore from './state/store';
+import { useProfileStore } from './state/profileStore';
 import NotifApi from './lib/api/bindings';
 import { getPushToken } from './lib/helpers';
 
@@ -29,7 +29,7 @@ export default function App() {
 
   usePushNotifications();
 
-  const bearerToken = useStore((state) => state.bearerToken);
+  const bearerToken = useProfileStore((state) => state.bearerToken);
 
   useEffect(() => {
     if (bearerToken) {

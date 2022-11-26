@@ -4,9 +4,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import createSettingsSlice, { SettingsSlice } from './slices/settings';
 import createLinkSlice, { LinkSlice } from './slices/link';
 import createPingSlice, { PingSlice } from './slices/ping';
-import createProfileSlice, { ProfileSlice } from './slices/profile';
 
-interface State extends SettingsSlice, LinkSlice, PingSlice, ProfileSlice {
+interface State extends SettingsSlice, LinkSlice, PingSlice {
   apiStatus: 'connected' | 'disconnected' | 'maintenance';
 }
 
@@ -15,7 +14,7 @@ export type Slice<T extends object, E extends object = T> = (
   get: GetState<E extends T ? E : E & T>
 ) => T;
 
-const useStore = create<State>(
+export const useStore = create<State>(
   persist(
     (set: SetState<any>, get) => ({
       // Assume we're connected to start with
@@ -25,7 +24,6 @@ const useStore = create<State>(
       ...createLinkSlice(set, get),
       ...createPingSlice(set, get),
       ...createSettingsSlice(set, get),
-      ...createProfileSlice(set, get),
     }),
     {
       name: 'notif',
@@ -33,5 +31,3 @@ const useStore = create<State>(
     }
   )
 );
-
-export default useStore;

@@ -10,7 +10,7 @@ import { Link, ModalScreenProps } from '../types';
 import { Text, View } from '../components/Themed';
 import Menu from '../components/Menu';
 import NotifApi from '../lib/api/bindings';
-import useStore from '../state/store';
+import { useStore } from '../state/store';
 import LinkBroken from '../components/device/LinkBroken';
 import RadioGroupModal from '../components/ui/RadioGroupModal';
 import PingHistory from '../components/device/PingHistory';
@@ -30,7 +30,6 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
       state.editLink,
       state.removeLink,
       state.recordBrokenLink,
-      state.bearerToken,
     ],
     shallow
   );

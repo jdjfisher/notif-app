@@ -14,11 +14,10 @@ export default {
       await client.post('/app/register/apply', payload);
     },
 
-    verify: async (pushToken: string, publicKey: string, signature: string): Promise<string> => {
+    verify: async (registerToken: string, publicKey: string): Promise<string> => {
       const payload = {
-        push_token: pushToken,
+        register_token: registerToken,
         public_key: publicKey,
-        signature,
       };
 
       const response = await client.post('/app/register/verify', payload);

@@ -104,15 +104,13 @@ const handlePing = (notification: Notification): void => {
 };
 
 const handleRegister = async (notification: Notification): Promise<void> => {
-  const pushToken = await getPushToken();
-
   const publicKey = useStore.getState().publicKey;
 
-  const signature = notification.request.content.data.signature as string;
+  const registerToken = notification.request.content.data.register_token as string;
 
-  const token = await NotifApi.register.verify(pushToken, publicKey, signature);
+  const bearerToken = await NotifApi.register.verify(registerToken, publicKey);
 
-  useStore.getState().bearerToken = token;
+  useStore.getState().bearerToken = bearerToken;
 };
 
 const handleNotificationInteraction = ({ notification }: NotificationResponse): void => {

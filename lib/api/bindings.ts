@@ -14,7 +14,7 @@ export default {
       await client.post('/app/register/apply', payload);
     },
 
-    verify: async (pushToken: string, publicKey: string, signature: string): Promise<number> => {
+    verify: async (pushToken: string, publicKey: string, signature: string): Promise<string> => {
       const payload = {
         push_token: pushToken,
         public_key: publicKey,
@@ -23,9 +23,9 @@ export default {
 
       const response = await client.post('/app/register/verify', payload);
 
-      const validator = z.number();
+      const validator = z.string();
 
-      return validator.parse(response.data.id);
+      return validator.parse(response.data.token);
     },
   },
 

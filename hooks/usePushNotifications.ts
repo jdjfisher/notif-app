@@ -110,9 +110,9 @@ const handleRegister = async (notification: Notification): Promise<void> => {
 
   const signature = notification.request.content.data.signature as string;
 
-  const appId = await NotifApi.register.verify(pushToken, publicKey, signature);
+  const token = await NotifApi.register.verify(pushToken, publicKey, signature);
 
-  useStore.getState().setAppId(appId);
+  useStore.getState().bearerToken = token;
 };
 
 const handleNotificationInteraction = ({ notification }: NotificationResponse): void => {

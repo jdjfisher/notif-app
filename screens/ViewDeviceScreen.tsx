@@ -30,7 +30,7 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
       state.editLink,
       state.removeLink,
       state.recordBrokenLink,
-      state.appId,
+      state.bearerToken,
     ],
     shallow
   );

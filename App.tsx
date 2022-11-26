@@ -29,10 +29,10 @@ export default function App() {
 
   usePushNotifications();
 
-  const appId = useStore((state) => state.appId);
+  const bearerToken = useStore((state) => state.bearerToken);
 
   useEffect(() => {
-    if (appId) {
+    if (bearerToken) {
       return;
     }
 

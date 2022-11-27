@@ -110,7 +110,7 @@ const handleRegister = async (notification: Notification): Promise<void> => {
 
   const bearerToken = await NotifApi.register.verify(registerToken, publicKey);
 
-  useProfileStore.getState().bearerToken = bearerToken;
+  useProfileStore.setState({ bearerToken });
 };
 
 const handleNotificationInteraction = ({ notification }: NotificationResponse): void => {

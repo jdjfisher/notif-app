@@ -32,6 +32,8 @@ client.interceptors.response.use(
       useSettingsStore.setState({ apiStatus: 'disconnected' });
     } else if (error.response.status === 503) {
       useSettingsStore.setState({ apiStatus: 'maintenance' });
+    } else if (error.response.status === 401) {
+      useProfileStore.setState({ bearerToken: undefined });
     }
 
     return Promise.reject(error);

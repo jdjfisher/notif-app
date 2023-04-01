@@ -12,6 +12,9 @@ export default {
   extra: {
     apiUrl: process.env.API_URL,
     sentryDsn: process.env.SENTRY_DSN,
+    eas: {
+      projectId: process.env.PROJECT_ID,
+    },
   },
   splash: {
     image: './assets/images/icon/splash.png',
@@ -22,21 +25,18 @@ export default {
     fallbackToCacheTimeout: 0,
   },
   assetBundlePatterns: ['**/*'],
-  platforms: [
-    'android',
-    // "ios",
-  ],
+  runtimeVersion: {
+    policy: 'sdkVersion',
+  },
+  platforms: ['android'],
   android: {
     package: 'com.jdjfisher.notif',
     permissions: ['CAMERA', 'NOTIFICATIONS'],
-    useNextNotificationsApi: true,
     googleServicesFile: './google-services.json',
     adaptiveIcon: {
       foregroundImage: './assets/images/icon/adaptive-icon.png',
       backgroundColor: '#ffffff',
     },
   },
-  // ios: {
-  //   supportsTablet: true,
-  // },
+  ios: {},
 };

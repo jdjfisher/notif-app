@@ -2,7 +2,14 @@ import * as Notifications from 'expo-notifications';
 import { z } from 'zod';
 
 export async function getPushToken(): Promise<string> {
-  return (await Notifications.getExpoPushTokenAsync()).data;
+  // TODO: ...
+  const projectId = undefined;
+
+  const token = await Notifications.getExpoPushTokenAsync({
+    projectId,
+  });
+
+  return token.data;
 }
 
 export const dateStringValidator = z.preprocess((arg) => {

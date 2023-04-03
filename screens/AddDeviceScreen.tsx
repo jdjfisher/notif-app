@@ -18,7 +18,6 @@ import NotifApi from '../lib/api/bindings';
 const qrValidator = z.object({
   name: z.string(),
   code: z.string(),
-  socket: z.string(),
 });
 
 export default function AddDeviceScreen({ navigation }: ModalScreenProps<'add-device'>) {
@@ -86,7 +85,7 @@ export default function AddDeviceScreen({ navigation }: ModalScreenProps<'add-de
       const appDeviceName = mobileDeviceName || Device.deviceName || Device.modelName || undefined;
 
       // Request the link
-      const id = await NotifApi.link(data.code, data.socket, appDeviceName);
+      const id = await NotifApi.link(data.code, appDeviceName);
 
       // Persist via the global store
       addLink({

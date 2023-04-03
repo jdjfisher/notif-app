@@ -63,10 +63,9 @@ export default {
     return validator.parse(response.data.pings);
   },
 
-  link: async (linkCode: string, socketId?: string, appDeviceName?: string): Promise<number> => {
+  link: async (linkCode: string, appDeviceName?: string): Promise<number> => {
     const payload = {
       link_code: linkCode,
-      socket_id: socketId,
       app_device_name: appDeviceName,
     };
 

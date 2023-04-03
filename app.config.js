@@ -25,9 +25,6 @@ export default {
     fallbackToCacheTimeout: 0,
   },
   assetBundlePatterns: ['**/*'],
-  runtimeVersion: {
-    policy: 'sdkVersion',
-  },
   platforms: ['android'],
   android: {
     package: 'com.jdjfisher.notif',

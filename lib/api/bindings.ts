@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { dateStringValidator } from '../helpers';
 
 export default {
-  health: async () => client.get('/health'),
+  health: async () => client.get('/api/health'),
 
   register: {
     apply: async (pushToken: string) => {
@@ -11,7 +11,7 @@ export default {
         push_token: pushToken,
       };
 
-      await client.post('/app/register/apply', payload);
+      await client.post('/api/app/register/apply', payload);
     },
 
     verify: async (registerToken: string, publicKey: string): Promise<string> => {
@@ -20,7 +20,7 @@ export default {
         public_key: publicKey,
       };
 
-      const response = await client.post('/app/register/verify', payload);
+      const response = await client.post('/api/app/register/verify', payload);
 
       const validator = z.string();
 
@@ -29,7 +29,7 @@ export default {
   },
 
   status: async (): Promise<number[]> => {
-    const response = await client.get('/app/status');
+    const response = await client.get('/api/app/status');
 
     const validator = z.array(z.number());
 
@@ -41,7 +41,7 @@ export default {
       link_id: linkId,
     };
 
-    await client.post('/app/unlink', payload);
+    await client.post('/api/app/unlink', payload);
   },
 
   pull: async (linkId: number, lastPingAt: string) => {
@@ -50,7 +50,7 @@ export default {
       last_ping_at: lastPingAt,
     };
 
-    const response = await client.post('/app/pull', payload);
+    const response = await client.post('/api/app/pull', payload);
 
     const validator = z.array(
       z.object({
@@ -69,7 +69,7 @@ export default {
       app_device_name: appDeviceName,
     };
 
-    const response = await client.post('/app/link', payload);
+    const response = await client.post('/api/app/link', payload);
 
     const validator = z.number();
 

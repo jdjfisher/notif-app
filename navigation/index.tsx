@@ -59,17 +59,24 @@ function RootNavigator() {
         <Stack.Screen
           // @ts-ignore
           name="add-device"
+          // @ts-ignore
           component={AddDeviceScreen}
           options={{ title: 'Add Device' }}
         />
         <Stack.Screen
           // @ts-ignore
           name="view-device"
+          // @ts-ignore
           component={ViewDeviceScreen}
           options={{ title: 'Devices' }}
         />
-        {/* @ts-ignore */}
-        <Stack.Screen name="view-ping" component={ViewPingScreen} options={{ title: 'Ping' }} />
+        <Stack.Screen
+          // @ts-ignore
+          name="view-ping"
+          // @ts-ignore
+          component={ViewPingScreen}
+          options={{ title: 'Ping' }}
+        />
       </Stack.Group>
     </Stack.Navigator>
   );

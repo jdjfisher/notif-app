@@ -1,21 +1,27 @@
 import React, { ElementRef, useEffect, useRef } from 'react';
 import { Alert, View as DefaultView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import TextInputModal from '../components/ui/TextInputModal';
+import TextInputModal from '../../../components/ui/TextInputModal';
 import shallow from 'zustand/shallow';
 import dayjs from 'dayjs';
 import tw from 'twrnc';
 
-import { Link, ModalScreenProps } from '../types';
-import { Text, View } from '../components/Themed';
-import Menu from '../components/Menu';
-import NotifApi from '../lib/api/bindings';
-import { useStore } from '../state/store';
-import LinkBroken from '../components/device/LinkBroken';
-import RadioGroupModal from '../components/ui/RadioGroupModal';
-import PingHistory from '../components/device/PingHistory';
+import { Link } from '../../../types';
+import { Text, View } from '../../../components/Themed';
+import Menu from '../../../components/Menu';
+import NotifApi from '../../../lib/api/bindings';
+import { useStore } from '../../../state/store';
+import LinkBroken from '../../../components/device/LinkBroken';
+import RadioGroupModal from '../../../components/ui/RadioGroupModal';
+import PingHistory from '../../../components/device/PingHistory';
+import { useNavigation, useRouter, useSearchParams } from 'expo-router';
+import { z } from 'zod';
 
-export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps<'view-device'>) {
+export default function ViewDevice() {
+  const params = useSearchParams();
+  const router = useRouter();
+  const navigation = useNavigation();
+
   // Ref hooks
   const renameDeviceModalRef = useRef<ElementRef<typeof TextInputModal>>(null);
   const changeIconModalRef = useRef<ElementRef<typeof RadioGroupModal>>(null);
@@ -35,7 +41,7 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
   );
 
   // Fetch the device data
-  const linkId = route.params.linkId;
+  const linkId = z.preprocess(Number, z.number()).parse(params.linkId);
   const link = links.find((l) => l.id === linkId);
   const pings = allPings[linkId] ?? [];
 
@@ -56,7 +62,6 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
       .catch(console.debug);
   }, []);
 
-  //
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -100,7 +105,7 @@ export default function ViewDeviceScreen({ route, navigation }: ModalScreenProps
       removeLink(link);
 
       // Return to devices screen
-      navigation.popToTop();
+      router.replace('/');
     } catch {
       Alert.alert('Alert', 'Failed to unlink device', [{ text: 'OK' }]);
     }

@@ -5,13 +5,13 @@ import shallow from 'zustand/shallow';
 import dayjs from 'dayjs';
 import tw from 'twrnc';
 
-import NotifApi from '../lib/api/bindings';
-import { useStore } from '../state/store';
-import { Text, View, Pressable } from '../components/Themed';
-import { RootTabScreenProps } from '../types';
-import LinkBroken from '../components/device/LinkBroken';
+import NotifApi from '../../lib/api/bindings';
+import { useStore } from '../../state/store';
+import { Text, View, Pressable } from '../../components/Themed';
+import LinkBroken from '../../components/device/LinkBroken';
+import { Link } from 'expo-router';
 
-export default function DevicesScreen({ navigation }: RootTabScreenProps<'device-list'>) {
+export default function Devices() {
   const [refreshing, setRefreshing] = useState(false);
 
   const [links, latestPing, pings, pullPings, recordBrokenLink] = useStore(
@@ -55,8 +55,9 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'device
     return (
       <DefaultView style={tw`flex-grow justify-center items-center`}>
         <Text style={tw`pb-5 text-2xl`}> No Devices linked </Text>
-        {/* @ts-ignore */}
-        <Button title={'Link Device'} onPress={() => navigation.navigate('add-device')} />
+
+        {/* TODO: Restyle */}
+        <Link href="/devices/add">Link Device</Link>
       </DefaultView>
     );
   }
@@ -69,9 +70,8 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'device
         onRefresh={linkedDevices.length ? refresh : undefined}
         refreshing={refreshing}
         renderItem={({ item: link }) => (
-          <Pressable
-            // @ts-ignore
-            onPress={() => navigation.navigate('view-device', { linkId: link.id })}
+          <Link
+            href={`/devices/${link.id}`}
             style={tw`p-3 flex-row border-t border-gray-100 justify-between items-start`}
             key={link.id}
           >
@@ -96,7 +96,7 @@ export default function DevicesScreen({ navigation }: RootTabScreenProps<'device
 
               {link.broken ? <LinkBroken /> : null}
             </DefaultView>
-          </Pressable>
+          </Link>
         )}
       />
     </View>

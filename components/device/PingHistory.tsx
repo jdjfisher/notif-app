@@ -1,23 +1,21 @@
 import React, { useState } from 'react';
 import { FlatList } from 'react-native';
 import dayjs from 'dayjs';
-import { useNavigation } from '@react-navigation/native';
 import tw from 'twrnc';
-
-import { Text, Pressable } from '../Themed';
-import { Link, Ping } from '../../types';
+import { Text } from '../Themed';
+import { Link as LinkType, Ping } from '../../types';
 import { useStore } from '../../state/store';
+import { Link } from 'expo-router';
 
 // TODO: Remove pings from props, infer from link
 interface Props {
-  link: Link;
+  link: LinkType;
   pings: Ping[];
 }
 
 export default function PingHistory({ link, pings }: Props) {
   const [refreshing, setRefreshing] = useState(false);
   const pullPings = useStore((state) => state.pullPings);
-  const navigation = useNavigation();
 
   const refresh = async () => {
     setRefreshing(true);
@@ -40,9 +38,8 @@ export default function PingHistory({ link, pings }: Props) {
       onRefresh={link.broken ? undefined : refresh}
       refreshing={refreshing}
       renderItem={({ item: ping }) => (
-        <Pressable
-          // @ts-ignore
-          onPress={() => navigation.navigate('view-ping', { ping })}
+        <Link
+          href={`/devices/${link.id}/pings/${ping.id}`}
           style={tw`border-t border-gray-100 py-3 px-4`}
         >
           {ping.message ? (
@@ -53,7 +50,7 @@ export default function PingHistory({ link, pings }: Props) {
             <Text style={tw`text-gray-500 italic`}>No message provided</Text>
           )}
           <Text style={tw`text-right text-gray-400`}>{dayjs(ping.sentAt).fromNow()}</Text>
-        </Pressable>
+        </Link>
       )}
     />
   );

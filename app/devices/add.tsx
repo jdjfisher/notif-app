@@ -9,19 +9,20 @@ import tw from 'twrnc';
 import Svg, { Path } from 'react-native-svg';
 import { z } from 'zod';
 
-import { ModalScreenProps } from '../types';
-import { Text, View } from '../components/Themed';
-import { useStore } from '../state/store';
-import { useSettingsStore } from '../state/settingsStore';
-import NotifApi from '../lib/api/bindings';
+import { Text, View } from '../../components/Themed';
+import { useStore } from '../../state/store';
+import { useSettingsStore } from '../../state/settingsStore';
+import NotifApi from '../../lib/api/bindings';
+import { useRouter } from 'expo-router';
 
 const qrValidator = z.object({
   name: z.string(),
   code: z.string(),
 });
 
-export default function AddDeviceScreen({ navigation }: ModalScreenProps<'add-device'>) {
+export default function AddDevice() {
   const cameraRef = useRef<Camera>(null);
+  const router = useRouter();
 
   const [hasPermission, setHasPermission] = useState(false);
   const [scanned, setScanned] = useState(false);
@@ -100,7 +101,7 @@ export default function AddDeviceScreen({ navigation }: ModalScreenProps<'add-de
 
       Alert.alert('Alert', 'Failed to link device', [{ text: 'OK' }]);
     } finally {
-      navigation.popToTop();
+      router.replace('/');
     }
   };
 

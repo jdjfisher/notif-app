@@ -1,13 +1,26 @@
 import React from 'react';
 
-import { Text, View } from '../components/Themed';
-import { ModalScreenProps } from '../types';
+import { Text, View } from '../../../../components/Themed';
 import tw from 'twrnc';
 import dayjs from 'dayjs';
+import { useSearchParams } from 'expo-router';
+import { useStore } from '../../../../state/store';
+import { z } from 'zod';
 
 // TODO: Redo this screen
-export default function ViewPingScreen({ route }: ModalScreenProps<'view-ping'>) {
-  const { ping } = route.params;
+export default function ViewPing() {
+  const params = useSearchParams();
+
+  const linkId = z.preprocess(Number, z.number()).parse(params.linkId);
+  const pingId = z.preprocess(Number, z.number()).parse(params.pingId);
+
+  const pings = useStore((state) => state.pings);
+
+  const ping = pings[linkId].find((ping) => ping.id === pingId);
+
+  if (!ping) {
+    return;
+  }
 
   return (
     <View style={tw`flex p-4`}>

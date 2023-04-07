@@ -3,27 +3,27 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Linking, StyleSheet, Image, Pressable, View as DefaultView } from 'react-native';
 import tw from 'twrnc';
 
-import { Text, View } from '../components/Themed';
-import useColorScheme from '../hooks/useColorScheme';
+import { Text, View } from '../../components/Themed';
+import useColorScheme from '../../hooks/useColorScheme';
 
-export default function HelpScreen() {
+export default function Help() {
   const colorScheme = useColorScheme();
 
   return (
     <DefaultView style={tw`py-4 flex-grow items-center justify-between`}>
       <View style={tw`py-2 w-full flex items-center shadow-sm`}>
         <Text style={tw`text-xl font-bold`}>Install the CLI</Text>
-        <Image style={styles.image} source={require('../assets/images/help/install.png')} />
+        <Image style={styles.image} source={require('../../assets/images/help/install.png')} />
       </View>
 
       <View style={tw`py-2 w-full flex items-center shadow-sm`}>
         <Text style={tw`text-xl font-bold`}>Link CLI to App</Text>
-        <Image style={styles.image} source={require('../assets/images/help/link.png')} />
+        <Image style={styles.image} source={require('../../assets/images/help/link.png')} />
       </View>
 
       <View style={tw`py-2 w-full flex items-center shadow-sm`}>
         <Text style={tw`text-xl font-bold`}>Send a Ping</Text>
-        <Image style={styles.image} source={require('../assets/images/help/ping.png')} />
+        <Image style={styles.image} source={require('../../assets/images/help/ping.png')} />
       </View>
 
       <Pressable

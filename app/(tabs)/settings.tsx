@@ -7,14 +7,14 @@ import shallow from 'zustand/shallow';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import tw from 'twrnc';
 
-import NotifApi from '../lib/api/bindings';
-import { useStore } from '../state/store';
-import { useSettingsStore } from '../state/settingsStore';
-import ThemeModal from '../components/settings/DeviceThemeModal';
-import TextInputModal from '../components/ui/TextInputModal';
-import { View, Text, Switch, Pressable } from '../components/Themed';
+import NotifApi from '../../lib/api/bindings';
+import { useStore } from '../../state/store';
+import { useSettingsStore } from '../../state/settingsStore';
+import ThemeModal from '../../components/settings/DeviceThemeModal';
+import TextInputModal from '../../components/ui/TextInputModal';
+import { View, Text, Switch, Pressable } from '../../components/Themed';
 
-export default function SettingsScreen() {
+export default function Settings() {
   const [clearLinks, clearAllPings] = useStore(
     (state) => [state.clearLinks, state.clearAllPings],
     shallow

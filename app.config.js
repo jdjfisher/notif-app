@@ -4,6 +4,7 @@ export default {
   name: 'Notif',
   slug: 'notif',
   version: '0.1.0',
+  owner: 'jdjfisher',
   orientation: 'portrait',
   icon: './assets/images/icon/icon.png',
   scheme: 'notif',

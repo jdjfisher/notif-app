@@ -56,8 +56,9 @@ export default function Devices() {
       <DefaultView style={tw`flex-grow justify-center items-center`}>
         <Text style={tw`pb-5 text-2xl`}> No Devices linked </Text>
 
-        {/* TODO: Restyle */}
-        <Link href="/devices/add">Link Device</Link>
+        <Link href="/devices/add" asChild>
+          <Button title="Link Device" />
+        </Link>
       </DefaultView>
     );
   }
@@ -70,32 +71,32 @@ export default function Devices() {
         onRefresh={linkedDevices.length ? refresh : undefined}
         refreshing={refreshing}
         renderItem={({ item: link }) => (
-          <Link
-            href={`/devices/${link.id}`}
-            style={tw`p-3 flex-row border-t border-gray-100 justify-between items-start`}
-            key={link.id}
-          >
-            <DefaultView style={tw`flex-row items-center flex-shrink`}>
-              <MaterialCommunityIcons
-                name={link.icon}
-                size={35}
-                color={tw.color('text-black')}
-                style={tw`mr-3`}
-              />
+          <Link href={`/devices/${link.id}`} key={link.id} asChild>
+            <Pressable
+              style={tw`p-3 flex-row border-t border-gray-100 justify-between items-start`}
+            >
+              <DefaultView style={tw`flex-row items-center flex-shrink`}>
+                <MaterialCommunityIcons
+                  name={link.icon}
+                  size={35}
+                  color={tw.color('text-black')}
+                  style={tw`mr-3`}
+                />
 
-              <DefaultView>
-                <Text style={tw`text-xl`}>{link.name}</Text>
-                <Text style={tw`text-xs text-gray-400`}>{latestPing(link)?.message ?? '-'}</Text>
+                <DefaultView>
+                  <Text style={tw`text-xl`}>{link.name}</Text>
+                  <Text style={tw`text-xs text-gray-400`}>{latestPing(link)?.message ?? '-'}</Text>
+                </DefaultView>
               </DefaultView>
-            </DefaultView>
 
-            <DefaultView style={tw`items-end`}>
-              <Text style={tw`text-xs text-gray-400`}>
-                {dayjs(latestPing(link)?.sentAt ?? link.linkedAt).fromNow()}
-              </Text>
+              <DefaultView style={tw`items-end`}>
+                <Text style={tw`text-xs text-gray-400`}>
+                  {dayjs(latestPing(link)?.sentAt ?? link.linkedAt).fromNow()}
+                </Text>
 
-              {link.broken ? <LinkBroken /> : null}
-            </DefaultView>
+                {link.broken ? <LinkBroken /> : null}
+              </DefaultView>
+            </Pressable>
           </Link>
         )}
       />

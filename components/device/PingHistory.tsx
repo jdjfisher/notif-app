@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FlatList } from 'react-native';
 import dayjs from 'dayjs';
 import tw from 'twrnc';
-import { Text } from '../Themed';
+import { Text, Pressable } from '../Themed';
 import { Link as LinkType, Ping } from '../../types';
 import { useStore } from '../../state/store';
 import { Link } from 'expo-router';
@@ -38,18 +38,17 @@ export default function PingHistory({ link, pings }: Props) {
       onRefresh={link.broken ? undefined : refresh}
       refreshing={refreshing}
       renderItem={({ item: ping }) => (
-        <Link
-          href={`/devices/${link.id}/pings/${ping.id}`}
-          style={tw`border-t border-gray-100 py-3 px-4`}
-        >
-          {ping.message ? (
-            <Text numberOfLines={1} ellipsizeMode="tail">
-              {ping.message}
-            </Text>
-          ) : (
-            <Text style={tw`text-gray-500 italic`}>No message provided</Text>
-          )}
-          <Text style={tw`text-right text-gray-400`}>{dayjs(ping.sentAt).fromNow()}</Text>
+        <Link href={`/devices/${link.id}/pings/${ping.id}`} asChild>
+          <Pressable style={tw`border-t border-gray-100 py-3 px-4`}>
+            {ping.message ? (
+              <Text numberOfLines={1} ellipsizeMode="tail">
+                {ping.message}
+              </Text>
+            ) : (
+              <Text style={tw`text-gray-500 italic`}>No message provided</Text>
+            )}
+            <Text style={tw`text-right text-gray-400`}>{dayjs(ping.sentAt).fromNow()}</Text>
+          </Pressable>
         </Link>
       )}
     />

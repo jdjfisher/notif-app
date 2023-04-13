@@ -116,7 +116,7 @@ type PressableProps = Omit<DefaultPressableProps, 'android_ripple'> & {
   rippleRadius?: number;
 };
 
-export function Pressable(props: PressableProps) {
+export const Pressable = React.forwardRef<any, PressableProps>((props, ref) => {
   const { style, rippleRadius, ...otherProps } = props;
 
   const rippleColour = useThemeColor('pressableRipple');
@@ -132,7 +132,8 @@ export function Pressable(props: PressableProps) {
         color: rippleColour,
         radius: rippleRadius,
       }}
+      ref={ref}
       {...otherProps}
     />
   );
-}
+});

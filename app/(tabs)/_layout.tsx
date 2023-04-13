@@ -27,7 +27,7 @@ export default function TabLayout() {
           title: 'Devices',
           tabBarIcon: ({ color }) => <TabBarIcon name="devices" color={color} />,
           headerRight: () => (
-            <Link href="/devices/add">
+            <Link href="/devices/add" asChild>
               <Pressable rippleRadius={16}>
                 <MaterialIcons
                   name="add"

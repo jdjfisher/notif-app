@@ -2,7 +2,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useProfileStore } from '../state/profileStore';
 import { useSettingsStore } from '../state/settingsStore';
 import NotifApi from '../lib/api/bindings';
@@ -11,6 +11,7 @@ import { View, Text, Pressable } from '../components/Themed';
 import tw from 'twrnc';
 import usePushNotifications from '../hooks/usePushNotifications';
 import useColorScheme from '../hooks/useColorScheme';
+import { Button } from 'react-native';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -39,22 +40,32 @@ export default function RootLayout() {
     return <SplashScreen />;
   }
 
-  return <Hiya />;
+  return <Auth />;
 }
 
-function Hiya() {
+function Auth() {
   const bearerToken = useProfileStore((state) => state.bearerToken);
   const apiStatus = useSettingsStore((state) => state.apiStatus);
 
-  useEffect(() => {
-    if (bearerToken) {
-      return;
-    }
+  const [registrationFailed, setRegistrationFailed] = useState(false);
 
-    getPushToken().then((pushToken) => {
-      NotifApi.register.apply(pushToken);
-    });
+  useEffect(() => {
+    if (!bearerToken) {
+      register();
+    }
   }, [bearerToken]);
+
+  const register = async () => {
+    setRegistrationFailed(false);
+
+    const pushToken = await getPushToken();
+
+    try {
+      await NotifApi.register.apply(pushToken);
+    } catch (error) {
+      setRegistrationFailed(true);
+    }
+  };
 
   const checkApiStatus = async () => {
     try {
@@ -76,7 +87,14 @@ function Hiya() {
   if (!bearerToken) {
     return (
       <View style={tw`flex-grow items-center justify-center`}>
-        <Text>Authenticating</Text>
+        {registrationFailed ? (
+          <View style={tw`flex gap-4`}>
+            <Text style={tw`text-xl`}>Connection failed</Text>
+            <Button title="Retry" onPress={register} />
+          </View>
+        ) : (
+          <Text style={tw`text-xl`}>Connecting</Text>
+        )}
       </View>
     );
   }

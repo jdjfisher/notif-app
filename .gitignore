@@ -8,13 +8,14 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+secrets
 
 # macOS
 .DS_Store
 
 # env
 .env
-.env.prod* 
+.env.prod*
 
 # Logs
 logs
@@ -24,5 +25,5 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
-# 
+#
 google-services.json

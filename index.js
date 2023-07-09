@@ -10,7 +10,7 @@ dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
 
 Sentry.init({
-  dsn: Constants.manifest?.extra?.sentryDsn,
+  dsn: Constants.expoConfig?.extra?.sentryDsn,
   enableInExpoDevelopment: true,
   tracesSampleRate: 1.0,
 });

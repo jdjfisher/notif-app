@@ -17,7 +17,7 @@ export default {
       projectId: process.env.PROJECT_ID,
     },
   },
-  plugins: ['sentry-expo'],
+  plugins: ['expo-router', 'sentry-expo'],
   splash: {
     image: './assets/images/icon/splash.png',
     resizeMode: 'contain',

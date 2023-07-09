@@ -142,7 +142,7 @@ export default function Settings() {
           title="Server"
           value={customApiUrl}
           setValue={setCustomApiUrl}
-          placeholderValue={Constants.manifest?.extra?.apiUrl}
+          placeholderValue={Constants.expoConfig?.extra?.apiUrl}
           maxLength={50}
         >
           <DefaultView style={tw`flex-row items-center`}>
@@ -151,7 +151,7 @@ export default function Settings() {
           </DefaultView>
 
           <Text>
-            {customApiUrl && customApiUrl !== Constants.manifest?.extra?.apiUrl
+            {customApiUrl && customApiUrl !== Constants.expoConfig?.extra?.apiUrl
               ? 'Custom'
               : 'Default'}
           </Text>

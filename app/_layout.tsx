@@ -18,26 +18,23 @@ export {
   ErrorBoundary,
 } from 'expo-router';
 
-export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
-};
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   usePushNotifications();
 
-  const [loaded, error] = useFonts({
+  const [fontsLoaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     ...FontAwesome.font,
   });
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
-  }, [error]);
+    if (fontsLoaded) SplashScreen.hideAsync();
+  }, [error, fontsLoaded]);
 
-  if (!loaded) {
-    return <SplashScreen />;
+  if (!fontsLoaded) {
+    return null;
   }
 
   return <Auth />;

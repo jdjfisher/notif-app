@@ -10,6 +10,9 @@ export interface State {
   confirmNewLinks: boolean;
   toggleConfirmNewLinks: () => void;
 
+  errorReporting: boolean;
+  toggleErrorReporting: () => void;
+
   mobileDeviceName: string | undefined;
   setMobileDeviceName: (name?: string) => void;
 
@@ -31,6 +34,9 @@ export const useSettingsStore = create<State>(
 
       confirmNewLinks: false,
       toggleConfirmNewLinks: () => set((state) => ({ confirmNewLinks: !state.confirmNewLinks })),
+
+      errorReporting: true,
+      toggleErrorReporting: () => set((state) => ({ errorReporting: !state.errorReporting })),
 
       mobileDeviceName: '',
       setMobileDeviceName: (name) => set({ mobileDeviceName: name }),

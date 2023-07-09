@@ -28,6 +28,8 @@ export default function Settings() {
     deviceTheme,
     confirmNewLinks,
     toggleConfirmNewLinks,
+    errorReporting,
+    toggleErrorReporting,
   ] = useSettingsStore(
     (state) => [
       state.mobileDeviceName,
@@ -37,6 +39,8 @@ export default function Settings() {
       state.deviceTheme,
       state.confirmNewLinks,
       state.toggleConfirmNewLinks,
+      state.errorReporting,
+      state.toggleErrorReporting,
     ],
     shallow
   );
@@ -156,6 +160,15 @@ export default function Settings() {
               : 'Default'}
           </Text>
         </TextInputModal>
+
+        <View style={tw`flex-row justify-between items-center px-4`}>
+          <DefaultView style={tw`flex-row items-center py-3`}>
+            <MaterialIcons name="bug-report" size={25} color={tw.color('gray-400')} />
+            <Text style={tw`ml-2`}>Error reporting</Text>
+          </DefaultView>
+
+          <Switch value={errorReporting} onChange={toggleErrorReporting} />
+        </View>
       </SettingGroup>
     </DefaultView>
   );

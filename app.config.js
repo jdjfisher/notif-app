@@ -3,7 +3,7 @@ import 'dotenv/config';
 export default {
   name: 'Notif',
   slug: 'notif',
-  version: '0.1.0',
+  version: '0.1.1',
   owner: 'jdjfisher',
   orientation: 'portrait',
   icon: './assets/images/icon/icon.png',

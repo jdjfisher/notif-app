@@ -4,7 +4,7 @@ import { useSettingsStore } from '../../state/settingsStore';
 import { useProfileStore } from '../../state/profileStore';
 
 const client = axios.create({
-  baseURL: Constants.manifest?.extra?.apiUrl,
+  baseURL: Constants.expoConfig?.extra?.apiUrl,
 });
 
 client.interceptors.request.use((config) => {

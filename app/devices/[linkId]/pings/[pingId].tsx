@@ -3,13 +3,13 @@ import React from 'react';
 import { Text, View } from '../../../../components/Themed';
 import tw from 'twrnc';
 import dayjs from 'dayjs';
-import { useSearchParams } from 'expo-router';
+import { useGlobalSearchParams } from 'expo-router';
 import { useStore } from '../../../../state/store';
 import { z } from 'zod';
 
 // TODO: Redo this screen
 export default function ViewPing() {
-  const params = useSearchParams();
+  const params = useGlobalSearchParams();
 
   const linkId = z.preprocess(Number, z.number()).parse(params.linkId);
   const pingId = z.preprocess(Number, z.number()).parse(params.pingId);

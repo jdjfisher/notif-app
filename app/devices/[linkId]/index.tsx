@@ -14,12 +14,11 @@ import { useStore } from '../../../state/store';
 import LinkBroken from '../../../components/device/LinkBroken';
 import RadioGroupModal from '../../../components/ui/RadioGroupModal';
 import PingHistory from '../../../components/device/PingHistory';
-import { useNavigation, useRouter, useSearchParams } from 'expo-router';
+import { useNavigation, useGlobalSearchParams } from 'expo-router';
 import { z } from 'zod';
 
 export default function ViewDevice() {
-  const params = useSearchParams();
-  const router = useRouter();
+  const params = useGlobalSearchParams();
   const navigation = useNavigation();
 
   // Ref hooks

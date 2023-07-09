@@ -13,7 +13,7 @@ import { Text, View } from '../../components/Themed';
 import { useStore } from '../../state/store';
 import { useSettingsStore } from '../../state/settingsStore';
 import NotifApi from '../../lib/api/bindings';
-import { useRouter } from 'expo-router';
+import { useNavigation } from 'expo-router';
 
 const qrValidator = z.object({
   name: z.string(),
@@ -22,7 +22,7 @@ const qrValidator = z.object({
 
 export default function AddDevice() {
   const cameraRef = useRef<Camera>(null);
-  const router = useRouter();
+  const navigation = useNavigation();
 
   const [hasPermission, setHasPermission] = useState(false);
   const [scanned, setScanned] = useState(false);
@@ -101,7 +101,7 @@ export default function AddDevice() {
 
       Alert.alert('Alert', 'Failed to link device', [{ text: 'OK' }]);
     } finally {
-      router.replace('/');
+      navigation.dispatch({ type: 'POP_TO_TOP' });
     }
   };
 

@@ -105,7 +105,7 @@ export default function ViewDevice() {
       removeLink(link);
 
       // Return to devices screen
-      router.replace('/');
+      navigation.dispatch({ type: 'POP_TO_TOP' });
     } catch {
       Alert.alert('Alert', 'Failed to unlink device', [{ text: 'OK' }]);
     }

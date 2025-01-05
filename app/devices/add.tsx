@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { Camera, CameraType } from 'expo-camera';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import React, { useEffect, useRef, useState } from 'react';
 import * as Device from 'expo-device';
 import * as Sentry from 'sentry-expo';
@@ -21,10 +21,9 @@ const qrValidator = z.object({
 });
 
 export default function AddDevice() {
-  const cameraRef = useRef<Camera>(null);
+  const cameraRef = useRef<CameraView>(null);
   const navigation = useNavigation();
 
-  const [hasPermission, setHasPermission] = useState(false);
   const [scanned, setScanned] = useState(false);
 
   const [links, addLink] = useStore((state) => [state.links, state.addLink], shallow);
@@ -33,6 +32,8 @@ export default function AddDevice() {
     (state) => [state.mobileDeviceName, state.confirmNewLinks],
     shallow
   );
+
+  const [cameraPermission, requestCameraPermission] = useCameraPermissions();
 
   useEffect(() => {
     requestCameraPermission();
@@ -43,12 +44,7 @@ export default function AddDevice() {
     else cameraRef.current?.resumePreview();
   }, [scanned]);
 
-  const requestCameraPermission = async () => {
-    const { status } = await Camera.requestCameraPermissionsAsync();
-    setHasPermission(status === 'granted');
-  };
-
-  if (!hasPermission)
+  if (!cameraPermission?.granted)
     return (
       <View style={tw`flex-grow justify-center items-center`}>
         <Text style={tw`mb-4 text-2xl`}>Camera access required</Text>
@@ -107,12 +103,15 @@ export default function AddDevice() {
 
   return (
     <View style={tw`flex-grow`}>
-      <Camera
+      <CameraView
         style={tw`flex-grow items-center justify-center`}
-        type={CameraType.back}
+        facing="back"
         ratio="16:9"
         ref={cameraRef}
-        onBarCodeScanned={!scanned ? handleBarCodeScanned : undefined}
+        onBarcodeScanned={!scanned ? handleBarCodeScanned : undefined}
+        barcodeScannerSettings={{
+          barcodeTypes: ['qr'],
+        }}
       >
         {/* TODO: Customise */}
         <Svg width={258} height={258} viewBox="0 0 258 258" fill="none">
@@ -121,7 +120,7 @@ export default function AddDevice() {
             fill="#fff"
           />
         </Svg>
-      </Camera>
+      </CameraView>
 
       <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
     </View>

@@ -9,6 +9,7 @@ export default {
   icon: './assets/images/icon/icon.png',
   scheme: 'notif',
   githubUrl: 'https://github.com/jdjfisher/notif',
+  newArchEnabled: true,
   userInterfaceStyle: 'automatic',
   extra: {
     apiUrl: process.env.API_URL,
@@ -17,7 +18,7 @@ export default {
       projectId: process.env.PROJECT_ID,
     },
   },
-  plugins: ['expo-router', 'sentry-expo'],
+  plugins: ['expo-router', 'sentry-expo', 'expo-asset', 'expo-font', 'expo-secure-store'],
   splash: {
     image: './assets/images/icon/splash.png',
     resizeMode: 'contain',

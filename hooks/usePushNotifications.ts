@@ -11,6 +11,7 @@ import {
   NotificationResponse,
 } from 'expo-notifications';
 import NotifApi from '../lib/api/bindings';
+import { z } from 'zod';
 
 export default function usePushNotifications(): void {
   useEffect(() => {
@@ -73,7 +74,15 @@ const handleNotificationBehaviour: NotificationHandler['handleNotification'] = a
 };
 
 const handleNotificationRecieved = (notification: Notification): void => {
-  if (notification.request.trigger.type !== 'push') {
+  const trigger = notification.request.trigger;
+
+  const validator = z.object({
+    type: z.literal('push'),
+  });
+
+  const { success } = validator.safeParse(trigger);
+
+  if (!success) {
     return;
   }
 

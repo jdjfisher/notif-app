@@ -103,24 +103,19 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="devices/add"
-            options={{ title: 'Add Device', presentation: 'modal' }}
-          />
-          <Stack.Screen
-            name="devices/[linkId]/index"
-            options={{ title: 'Device', presentation: 'modal' }}
-          />
-          <Stack.Screen
-            name="devices/[linkId]/pings/[pingId]"
-            options={{ title: 'Ping', presentation: 'modal' }}
-          />
-        </Stack>
-      </ThemeProvider>
-    </>
+    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="devices/add" options={{ title: 'Add Device', presentation: 'modal' }} />
+        <Stack.Screen
+          name="devices/[linkId]/index"
+          options={{ title: 'Device', presentation: 'modal' }}
+        />
+        <Stack.Screen
+          name="devices/[linkId]/pings/[pingId]"
+          options={{ title: 'Ping', presentation: 'modal' }}
+        />
+      </Stack>
+    </ThemeProvider>
   );
 }

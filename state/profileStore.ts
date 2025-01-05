@@ -1,7 +1,7 @@
 import JSEncrypt from 'jsencrypt';
-import SecureStore from 'expo-secure-store';
-import create from 'zustand';
-import { persist } from 'zustand/middleware';
+import * as SecureStore from 'expo-secure-store';
+import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 export interface State {
   bearerToken?: string;
@@ -13,7 +13,7 @@ export interface State {
 // Temporary instance to generate the keypair if not already persisted
 const _rsa = new JSEncrypt();
 
-export const useProfileStore = create<State>(
+export const useProfileStore = create<State>()(
   persist(
     (set, get) => ({
       bearerToken: undefined,
@@ -25,19 +25,23 @@ export const useProfileStore = create<State>(
           return undefined;
         }
 
+        console.log('Decrypting:', data);
+
         const rsa = new JSEncrypt();
         rsa.setPrivateKey(get().privateKey);
+
+        console.log('Decrypted:', rsa.decrypt(data));
 
         return rsa.decrypt(data) || undefined;
       },
     }),
     {
       name: 'notif.profile',
-      getStorage: () => ({
+      storage: createJSONStorage(() => ({
         getItem: async (name: string) => await SecureStore.getItemAsync(name),
         setItem: async (name: string, value: string) => await SecureStore.setItemAsync(name, value),
         removeItem: async (name: string) => await SecureStore.deleteItemAsync(name),
-      }),
+      })),
     }
   )
 );

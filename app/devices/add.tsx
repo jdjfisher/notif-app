@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as Device from 'expo-device';
 import * as Sentry from 'sentry-expo';
 import { Platform, Alert, Button } from 'react-native';
-import shallow from 'zustand/shallow';
 import tw from 'twrnc';
 import Svg, { Path } from 'react-native-svg';
 import { z } from 'zod';
@@ -14,6 +13,7 @@ import { useStore } from '../../state/store';
 import { useSettingsStore } from '../../state/settingsStore';
 import NotifApi from '../../lib/api/bindings';
 import { useNavigation } from 'expo-router';
+import { useShallow } from 'zustand/react/shallow';
 
 const qrValidator = z.object({
   name: z.string(),
@@ -26,11 +26,10 @@ export default function AddDevice() {
 
   const [scanned, setScanned] = useState(false);
 
-  const [links, addLink] = useStore((state) => [state.links, state.addLink], shallow);
+  const [links, addLink] = useStore(useShallow((state) => [state.links, state.addLink]));
 
   const [mobileDeviceName, confirmNewLinks] = useSettingsStore(
-    (state) => [state.mobileDeviceName, state.confirmNewLinks],
-    shallow
+    useShallow((state) => [state.mobileDeviceName, state.confirmNewLinks])
   );
 
   const [cameraPermission, requestCameraPermission] = useCameraPermissions();

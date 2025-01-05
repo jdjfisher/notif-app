@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Button, FlatList, View as DefaultView } from 'react-native';
-import shallow from 'zustand/shallow';
 import dayjs from 'dayjs';
 import tw from 'twrnc';
 
@@ -15,14 +15,13 @@ export default function Devices() {
   const [refreshing, setRefreshing] = useState(false);
 
   const [links, latestPing, pings, pullPings, recordBrokenLink] = useStore(
-    (state) => [
+    useShallow((state) => [
       state.links,
       state.latestPing,
       state.pings,
       state.pullPings,
       state.recordBrokenLink,
-    ],
-    shallow
+    ])
   );
 
   useEffect(() => {

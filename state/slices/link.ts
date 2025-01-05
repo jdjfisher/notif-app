@@ -1,5 +1,5 @@
+import { StateCreator } from 'zustand';
 import { Link } from '../../types';
-import { Slice } from '../store';
 import { PingSlice } from './ping';
 
 export interface LinkSlice {
@@ -13,7 +13,8 @@ export interface LinkSlice {
   recordBrokenLink: (link: Link) => void;
   clearLinks: () => void;
 }
-const createLinkSlice: Slice<LinkSlice, PingSlice> = (set, get) => {
+
+const createLinkSlice: StateCreator<LinkSlice & PingSlice, [], [], LinkSlice> = (set, get) => {
   // Helper
   const otherLinks = (link: Link) => get().links.filter((d) => d.id !== link.id);
 

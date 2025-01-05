@@ -2,7 +2,6 @@ import React, { ElementRef, useEffect, useRef } from 'react';
 import { Alert, View as DefaultView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import TextInputModal from '../../../components/ui/TextInputModal';
-import shallow from 'zustand/shallow';
 import dayjs from 'dayjs';
 import tw from 'twrnc';
 
@@ -16,6 +15,7 @@ import RadioGroupModal from '../../../components/ui/RadioGroupModal';
 import PingHistory from '../../../components/device/PingHistory';
 import { useNavigation, useGlobalSearchParams } from 'expo-router';
 import { z } from 'zod';
+import { useShallow } from 'zustand/react/shallow';
 
 export default function ViewDevice() {
   const params = useGlobalSearchParams();
@@ -27,7 +27,7 @@ export default function ViewDevice() {
 
   // State hooks
   const [links, allPings, clearPings, pullPings, editLink, removeLink, recordBrokenLink] = useStore(
-    (state) => [
+    useShallow((state) => [
       state.links,
       state.pings,
       state.clearPings,
@@ -35,8 +35,7 @@ export default function ViewDevice() {
       state.editLink,
       state.removeLink,
       state.recordBrokenLink,
-    ],
-    shallow
+    ])
   );
 
   // Fetch the device data

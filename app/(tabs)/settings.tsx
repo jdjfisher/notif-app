@@ -3,7 +3,6 @@ import { Alert, View as DefaultView } from 'react-native';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import * as Sentry from 'sentry-expo';
-import shallow from 'zustand/shallow';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import tw from 'twrnc';
 
@@ -13,11 +12,11 @@ import { useSettingsStore } from '../../state/settingsStore';
 import ThemeModal from '../../components/settings/DeviceThemeModal';
 import TextInputModal from '../../components/ui/TextInputModal';
 import { View, Text, Switch, Pressable } from '../../components/Themed';
+import { useShallow } from 'zustand/react/shallow';
 
 export default function Settings() {
   const [clearLinks, clearAllPings] = useStore(
-    (state) => [state.clearLinks, state.clearAllPings],
-    shallow
+    useShallow((state) => [state.clearLinks, state.clearAllPings])
   );
 
   const [
@@ -31,7 +30,7 @@ export default function Settings() {
     errorReporting,
     toggleErrorReporting,
   ] = useSettingsStore(
-    (state) => [
+    useShallow((state) => [
       state.mobileDeviceName,
       state.setMobileDeviceName,
       state.customApiUrl,
@@ -41,8 +40,7 @@ export default function Settings() {
       state.toggleConfirmNewLinks,
       state.errorReporting,
       state.toggleErrorReporting,
-    ],
-    shallow
+    ])
   );
 
   const clearAllLinks = async () => {

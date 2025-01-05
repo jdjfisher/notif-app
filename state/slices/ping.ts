@@ -1,5 +1,5 @@
 import { Link, Ping } from '../../types';
-import { Slice } from '../store';
+import { StateCreator } from 'zustand';
 import NotifApi from '../../lib/api/bindings';
 import { LinkSlice } from './link';
 import { useProfileStore } from '../profileStore';
@@ -13,7 +13,7 @@ export interface PingSlice {
 }
 
 // TODO: Tidy
-const createPingSlice: Slice<PingSlice, LinkSlice> = (set, get) => ({
+const createPingSlice: StateCreator<LinkSlice & PingSlice, [], [], PingSlice> = (set, get) => ({
   pings: {},
   clearPings: (linkId) => {
     const clone = { ...get().pings };

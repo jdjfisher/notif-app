@@ -1,5 +1,5 @@
-import create from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ColorSchemeName } from 'react-native';
 
@@ -26,7 +26,7 @@ export interface State {
   setDeviceTheme: (theme: ColorSchemeName) => void;
 }
 
-export const useSettingsStore = create<State>(
+export const useSettingsStore = create<State>()(
   persist(
     (set, get) => ({
       // Assume we're connected to start with
@@ -52,7 +52,7 @@ export const useSettingsStore = create<State>(
     }),
     {
       name: 'notif.settings',
-      getStorage: () => AsyncStorage,
+      storage: createJSONStorage(() => AsyncStorage),
     }
   )
 );
